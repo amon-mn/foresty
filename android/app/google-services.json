@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "883889030916",
+    "project_id": "forest-traceability",
+    "storage_bucket": "forest-traceability.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883889030916:android:9abdf031b737127cfa7251",
+        "android_client_info": {
+          "package_name": "com.example.foresty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883889030916-jfdoc96g5g93hi1g1qb6isabo4q20ea8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1WLHtdFen8QLgF2X4vMC_UVGXP2E-R3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883889030916-h8h18th7digm2kep8ebp2rm4cdmghgck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
