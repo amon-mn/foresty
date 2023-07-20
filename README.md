@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # foresty
 
 A new Flutter project.
@@ -14,3 +15,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# foresty
+>>>>>>> 26b213334eda3fd6b57c645024b5becdd8298e6e
