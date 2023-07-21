@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:foresty/autentication/screens/components/my_button.dart';
-import 'package:foresty/autentication/screens/components/my_textfild.dart';
-import 'package:foresty/autentication/screens/components/square_tile.dart';
+import 'package:foresty/components/my_button.dart';
+import 'package:foresty/components/my_textfild.dart';
+import 'package:foresty/components/square_tile.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
