@@ -29,6 +29,13 @@
             {
               "client_id": "883889030916-h8h18th7digm2kep8ebp2rm4cdmghgck.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "883889030916-rhrg32gli7kh20efa6lmn8s1goe71kkg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.foresty"
+              }
             }
           ]
         }
