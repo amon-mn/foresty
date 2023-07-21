@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:foresty/components/my_button.dart';
-import 'package:foresty/components/my_textfild.dart';
-import 'package:foresty/components/square_tile.dart';
+import '../../components/my_button.dart';
+import '../../components/my_textfild.dart';
+import '../../components/square_tile.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -23,16 +23,16 @@ class LoginPage extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 50),
-      
+
                 // logo
                 const Icon(
                   Icons.forest,
                   size: 150,
                   color: Color.fromARGB(255, 0, 90, 3),
-                  ),
-                  
-                  const SizedBox(height: 80),
-      
+                ),
+
+                const SizedBox(height: 80),
+
                 // welcome
                 const Text(
                   'Bem Vindo!',
@@ -42,42 +42,38 @@ class LoginPage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-      
+
                 const SizedBox(height: 25),
-      
+
                 // username textfield
                 MyTextField(
                   controller: usernameController,
                   hintText: 'Digite seu nome de usuário',
                   obscureText: false,
                 ),
-      
+
                 const SizedBox(height: 10),
-      
+
                 // password textfield
                 MyTextField(
                   controller: passwordController,
                   hintText: 'Digite sua senha',
                   obscureText: true,
                 ),
-                
+
                 // forgot password?
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 35.0,
                     vertical: 5.0,
                   ),
-                  
                   child: TextButton(
-                    onPressed: (){}, 
-                    child: Text(
-                      'Esqueceu a senha?',
-                      style: TextStyle(color: Colors.black),  
-                    )
-                    ),
-                  
-                  
-                  
+                      onPressed: () {},
+                      child: Text(
+                        'Esqueceu a senha?',
+                        style: TextStyle(color: Colors.black),
+                      )),
+
                   /*Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -87,17 +83,15 @@ class LoginPage extends StatelessWidget {
                       )
                     ],
                   ), */
-                  ),
+                ),
 
-
-      
                 // sign in button
                 MyButton(
                   onTap: signUserIn,
+                  text_button: 'Entrar',
                 ),
 
                 const SizedBox(height: 50),
-                
 
                 // or continue with
                 const Padding(
@@ -128,7 +122,7 @@ class LoginPage extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 30),
-                
+
                 // google / facebook / yahoo sign in buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -145,10 +139,9 @@ class LoginPage extends StatelessWidget {
 
                     // yahoo button
                     SquareTite(imagePath: 'lib/assets/yahoo.png'),
-                 
                   ],
                 )
-                  
+
                 // not a member? register now
               ],
             ),

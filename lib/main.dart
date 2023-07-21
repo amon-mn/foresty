@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foresty/authentication/screens/welcome.dart';
 import 'authentication/screens/login_page.dart';
 
 void main() async {
@@ -11,8 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-    ); // Material App
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: WelcomeScreen(),
+    );
   }
 }
