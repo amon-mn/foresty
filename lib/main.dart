@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foresty/authentication/screens/welcome.dart';
+import 'package:foresty/authentication/screens/register_page.dart';
+import 'package:foresty/authentication/screens/welcome_page.dart';
 import 'authentication/screens/login_page.dart';
 
 void main() async {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: WelcomeScreen(),
+      home: RegisterScreen(),
     );
   }
 }

@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
-  final controller;
+  final TextEditingController controller;
   final String hintText;
   final bool obscureText;
-  
+  final String? Function(String?)? validator;
+
   const MyTextField({
-    super.key,
+    Key? key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
-    });
+    this.validator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -32,6 +34,8 @@ class MyTextField extends StatelessWidget {
           filled: true,
           hintText: hintText,
         ),
+        validator:
+            validator, // Usa o validator fornecido diretamente no TextFormField
       ),
     );
   }

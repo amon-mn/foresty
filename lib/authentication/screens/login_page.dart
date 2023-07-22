@@ -22,16 +22,16 @@ class LoginPage extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 46),
 
                 // logo
                 const Icon(
                   Icons.forest,
-                  size: 150,
+                  size: 146,
                   color: Color.fromARGB(255, 0, 90, 3),
                 ),
 
-                const SizedBox(height: 80),
+                const SizedBox(height: 84),
 
                 // welcome
                 const Text(
@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 16),
 
                 // username textfield
                 MyTextField(
@@ -52,7 +52,7 @@ class LoginPage extends StatelessWidget {
                   obscureText: false,
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 08),
 
                 // password textfield
                 MyTextField(
