@@ -1,17 +1,97 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
 import '../../components/square_tile.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   // text editing controllers
   final usernameController = TextEditingController();
+
   final passwordController = TextEditingController();
 
-  // sign user in method
-  void signUserIn() {}
+// sign google user in method
+signInWithGoogle() async {
+
+  GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  AuthCredential credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken
+  );
+
+  UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
+
+}
+
+// sign facebook user in method
+
+
+
+
+// sign user in method
+void signUserIn() async {
+  if (mounted) {
+    // show loading circle
+    showDialog(
+      context: context, 
+      barrierDismissible: false,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+
+  try {
+    // try sign in
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: usernameController.text, 
+      password: passwordController.text,
+    );
+
+    if (mounted) {
+      // Login bem-sucedido, então remova o dialog do loading circle
+      Navigator.pop(context);
+    }
+    
+  } on FirebaseAuthException catch (e) {
+    if (mounted) {
+      // Se ocorrer um erro durante o login, também é importante remover o dialog do loading circle.
+      Navigator.pop(context);
+
+      // WRONG EMAIL
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        // show error to user
+        wrongEmailPasswordMessage();
+      }
+    }
+  }
+}
+
+  // wrong email message popup
+  void wrongEmailPasswordMessage(){
+    showDialog(
+      context: context, 
+      builder: (context){
+        return const AlertDialog(
+          title: Text('Email ou senha incorretos.'),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +128,7 @@ class LoginPage extends StatelessWidget {
                 // username textfield
                 MyTextField(
                   controller: usernameController,
-                  hintText: 'Digite seu nome de usuário',
+                  hintText: 'Digite seu email',
                   obscureText: false,
                 ),
 
@@ -128,8 +208,11 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // google button
-                    SquareTite(imagePath: 'lib/assets/google.png'),
-
+                    GestureDetector(
+                      onTap: signInWithGoogle,
+                      child: SquareTite(imagePath: 'lib/assets/google.png'),
+                    ),
+                    
                     const SizedBox(width: 15),
 
                     // facebook button
