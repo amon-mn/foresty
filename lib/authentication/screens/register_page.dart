@@ -241,7 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             _selectedCity = value!;
                           });
                         },
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Cidade',
                         ),
                       ),
