@@ -15,7 +15,6 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +35,13 @@ class WelcomeScreen extends StatelessWidget {
                   color: Color.fromARGB(255, 0, 90, 3),
                   size: 150,
                 ),
-
                 const SizedBox(height: 84),
-
-               MyButton(
-                onTap: () {signUserIn(context);},
-                text_button: 'Login',
+                MyButton(
+                  onTap: () {
+                    signUserIn(context);
+                  },
+                  text_button: 'Login',
                 ),
-
                 TextButton(
                   onPressed: () {},
                   child: Text(
