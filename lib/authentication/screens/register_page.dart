@@ -70,6 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // Add more cities of Amapá if needed
     ],
     'Amazonas': [
+      '',
       'Alvarães',
       'Amaturá',
       'Anamã',
@@ -270,7 +271,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors
               .black87, // Define a cor de plano de fundo da barra de status
           statusBarIconBrightness: Brightness.light,
@@ -278,12 +279,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Colors.green[700],
         elevation: 0,
         centerTitle: true,
-        leading: Icon(
+        leading: const Icon(
           Icons.forest,
           size: 40,
           color: Colors.white,
         ),
-        title: Text(
+        title: const Text(
           'Cadastro',
           style: TextStyle(
             color: Colors.white,
@@ -453,6 +454,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         .then((String? erro) {
       if (erro != null) {
         showSnackBar(context: context, mensagem: erro);
+      } else {
+        showSnackBar(
+            context: context,
+            mensagem: 'Cadrastro realizado com sucesso!',
+            isErro: false);
       }
     });
   }
