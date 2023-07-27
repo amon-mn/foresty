@@ -19,79 +19,71 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
 // sign google user in method
-signInWithGoogle() async {
+  signInWithGoogle() async {
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-  GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 
-  AuthCredential credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken
-  );
-
-  UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
-
-}
+    UserCredential user =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+  }
 
 // sign facebook user in method
 
-
-
-
 // sign user in method
-void signUserIn() async {
-  if (mounted) {
-    // show loading circle
-    showDialog(
-      context: context, 
-      barrierDismissible: false,
-      builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-  }
-
-  try {
-    // try sign in
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: usernameController.text, 
-      password: passwordController.text,
-    );
-
+  void signUserIn() async {
     if (mounted) {
-      // Login bem-sucedido, então remova o dialog do loading circle
-      Navigator.pop(context);
+      // show loading circle
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
     }
-    
-  } on FirebaseAuthException catch (e) {
-    if (mounted) {
-      // Se ocorrer um erro durante o login, também é importante remover o dialog do loading circle.
-      Navigator.pop(context);
 
-      // WRONG EMAIL
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-        // show error to user
-        wrongEmailPasswordMessage();
+    try {
+      // try sign in
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: usernameController.text,
+        password: passwordController.text,
+      );
+
+      if (mounted) {
+        // Login bem-sucedido, então remova o dialog do loading circle
+        Navigator.pop(context);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        // Se ocorrer um erro durante o login, também é importante remover o dialog do loading circle.
+        Navigator.pop(context);
+
+        // WRONG EMAIL
+        if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+          // show error to user
+          wrongEmailPasswordMessage();
+        }
       }
     }
   }
-}
 
   // wrong email message popup
-  void wrongEmailPasswordMessage(){
+  void wrongEmailPasswordMessage() {
     showDialog(
-      context: context, 
-      builder: (context){
+      context: context,
+      builder: (context) {
         return const AlertDialog(
           title: Text('Email ou senha incorretos.'),
         );
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -107,11 +99,11 @@ void signUserIn() async {
                 // logo
                 const Icon(
                   Icons.forest,
-                  size: 146,
+                  size: 128,
                   color: Color.fromARGB(255, 0, 90, 3),
                 ),
 
-                const SizedBox(height: 84),
+                const SizedBox(height: 76),
 
                 // welcome
                 const Text(
@@ -127,6 +119,7 @@ void signUserIn() async {
 
                 // username textfield
                 MyTextField(
+                  prefixIcon: Icons.email,
                   controller: usernameController,
                   hintText: 'Digite seu email',
                   obscureText: false,
@@ -136,6 +129,7 @@ void signUserIn() async {
 
                 // password textfield
                 MyTextField(
+                  prefixIcon: Icons.lock,
                   controller: passwordController,
                   hintText: 'Digite sua senha',
                   obscureText: true,
@@ -212,7 +206,7 @@ void signUserIn() async {
                       onTap: signInWithGoogle,
                       child: SquareTite(imagePath: 'lib/assets/google.png'),
                     ),
-                    
+
                     const SizedBox(width: 15),
 
                     // facebook button
