@@ -22,12 +22,20 @@ class _LoginPageState extends State<LoginPage> {
 // sign google user in method
   signInWithGoogle() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  signInWithGoogle() async {
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
     AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+    AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 
+    UserCredential user =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+  }
     UserCredential user =
         await FirebaseAuth.instance.signInWithCredential(credential);
   }
@@ -60,6 +68,19 @@ class _LoginPageState extends State<LoginPage> {
         },
       );
     }
+  void signUserIn() async {
+    if (mounted) {
+      // show loading circle
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+    }
 
     try {
       // try sign in
@@ -67,7 +88,21 @@ class _LoginPageState extends State<LoginPage> {
         email: usernameController.text,
         password: passwordController.text,
       );
+    try {
+      // try sign in
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: usernameController.text,
+        password: passwordController.text,
+      );
 
+      if (mounted) {
+        // Login bem-sucedido, então remova o dialog do loading circle
+        Navigator.pop(context);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        // Se ocorrer um erro durante o login, também é importante remover o dialog do loading circle.
+        Navigator.pop(context);
       if (mounted) {
         // Login bem-sucedido, então remova o dialog do loading circle
         Navigator.pop(context);
@@ -85,10 +120,21 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
+        // WRONG EMAIL
+        if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+          // show error to user
+          wrongEmailPasswordMessage();
+        }
+      }
+    }
+  }
 
   // wrong email message popup
   void wrongEmailPasswordMessage() {
+  void wrongEmailPasswordMessage() {
     showDialog(
+      context: context,
+      builder: (context) {
       context: context,
       builder: (context) {
         return const AlertDialog(
@@ -112,11 +158,11 @@ class _LoginPageState extends State<LoginPage> {
                 // logo
                 const Icon(
                   Icons.forest,
-                  size: 146,
+                  size: 128,
                   color: Color.fromARGB(255, 0, 90, 3),
                 ),
 
-                const SizedBox(height: 84),
+                const SizedBox(height: 76),
 
                 // welcome
                 const Text(
@@ -132,6 +178,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // username textfield
                 MyTextField(
+                  prefixIcon: Icons.email,
                   controller: usernameController,
                   hintText: 'Digite seu email',
                   obscureText: false,
@@ -141,6 +188,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // password textfield
                 MyTextField(
+                  prefixIcon: Icons.lock,
                   controller: passwordController,
                   hintText: 'Digite sua senha',
                   obscureText: true,
@@ -217,6 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: signInWithGoogle,
                       child: SquareTite(imagePath: 'lib/assets/google.png'),
                     ),
+
 
                     const SizedBox(width: 15),
 

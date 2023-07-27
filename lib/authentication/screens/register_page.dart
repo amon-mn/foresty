@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foresty/components/my_dropdown.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
 import '../../components/show_snackbar.dart';
 import '../services/auth_service.dart';
+import 'package:flutter/services.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key? key}) : super(key: key);
@@ -22,7 +24,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   // variables
   List<String> statesList = [
-    '',
     'Acre',
     'Alagoas',
     'Amapá',
@@ -53,17 +54,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   ];
 
   Map<String, List<String>> citiesByState = {
-    'São Paulo': [
-      '',
-      'São Paulo',
-      'Campinas',
-      // Adicione mais cidades de São Paulo conforme necessário
+    'Acre': [
+      'Rio Branco',
+      'Cruzeiro do Sul',
+      // Add more cities of Acre if needed
     ],
-    'Rio de Janeiro': [
-      '',
-      'Rio de Janeiro',
-      'Niterói',
-      // Adicione mais cidades do Rio de Janeiro conforme necessário
+    'Alagoas': [
+      'Maceió',
+      'Arapiraca',
+      // Add more cities of Alagoas if needed
+    ],
+    'Amapá': [
+      'Macapá',
+      'Santana',
+      // Add more cities of Amapá if needed
     ],
     'Amazonas': [
       '',
@@ -124,10 +128,139 @@ class _RegisterScreenState extends State<RegisterScreen> {
       'Urucará',
       'Urucurituba',
     ],
+    'Bahia': [
+      'Salvador',
+      'Feira de Santana',
+      // Add more cities of Bahia if needed
+    ],
+    'Ceará': [
+      'Fortaleza',
+      'Caucaia',
+      // Add more cities of Ceará if needed
+    ],
+    'Distrito Federal': [
+      'Brasília',
+      'Planaltina',
+      // Add more cities of Distrito Federal if needed
+    ],
+    'Espírito Santo': [
+      'Vitória',
+      'Vila Velha',
+      // Add more cities of Espírito Santo if needed
+    ],
+    'Goiás': [
+      'Goiânia',
+      'Aparecida de Goiânia',
+      // Add more cities of Goiás if needed
+    ],
+    'Maranhão': [
+      'São Luís',
+      'Imperatriz',
+      // Add more cities of Maranhão if needed
+    ],
+    'Mato Grosso': [
+      'Cuiabá',
+      'Várzea Grande',
+      // Add more cities of Mato Grosso if needed
+    ],
+    'Mato Grosso do Sul': [
+      'Campo Grande',
+      'Dourados',
+      // Add more cities of Mato Grosso do Sul if needed
+    ],
+    'Minas Gerais': [
+      'Belo Horizonte',
+      'Uberlândia',
+      // Add more cities of Minas Gerais if needed
+    ],
+    'Pará': [
+      'Belém',
+      'Ananindeua',
+      // Add more cities of Pará if needed
+    ],
+    'Paraíba': [
+      'João Pessoa',
+      'Campina Grande',
+      // Add more cities of Paraíba if needed
+    ],
+    'Paraná': [
+      'Curitiba',
+      'Londrina',
+      // Add more cities of Paraná if needed
+    ],
+    'Pernambuco': [
+      'Recife',
+      'Jaboatão dos Guararapes',
+      // Add more cities of Pernambuco if needed
+    ],
+    'Piauí': [
+      'Teresina',
+      'Parnaíba',
+      // Add more cities of Piauí if needed
+    ],
+    'Rio de Janeiro': [
+      'Rio de Janeiro',
+      'Niterói',
+      // Add more cities of Rio de Janeiro if needed
+    ],
+    'Rio Grande do Norte': [
+      'Natal',
+      'Mossoró',
+      // Add more cities of Rio Grande do Norte if needed
+    ],
+    'Rio Grande do Sul': [
+      'Porto Alegre',
+      'Caxias do Sul',
+      // Add more cities of Rio Grande do Sul if needed
+    ],
+    'Rondônia': [
+      'Porto Velho',
+      'Ji-Paraná',
+      // Add more cities of Rondônia if needed
+    ],
+    'Roraima': [
+      'Boa Vista',
+      'Caracaraí',
+      // Add more cities of Roraima if needed
+    ],
+    'Santa Catarina': [
+      'Florianópolis',
+      'Joinville',
+      // Add more cities of Santa Catarina if needed
+    ],
+    'São Paulo': [
+      'São Paulo',
+      'Campinas',
+      // Add more cities of São Paulo if needed
+    ],
+    'Sergipe': [
+      'Aracaju',
+      'Nossa Senhora do Socorro',
+      // Add more cities of Sergipe if needed
+    ],
+    'Tocantins': [
+      'Palmas',
+      'Araguaína',
+      // Add more cities of Tocantins if needed
+    ],
   };
 
   String _selectedState = '';
   String _selectedCity = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Define os valores iniciais para _selectedState e _selectedCity
+    if (statesList.isNotEmpty) {
+      _selectedState = statesList.first;
+      if (citiesByState.containsKey(_selectedState) &&
+          citiesByState[_selectedState]!.isNotEmpty) {
+        _selectedCity = citiesByState[_selectedState]!.first;
+      }
+    }
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -137,39 +270,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
+      appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors
+              .black87, // Define a cor de plano de fundo da barra de status
+          statusBarIconBrightness: Brightness.light,
+        ),
+        backgroundColor: Colors.green[700],
+        elevation: 0,
+        centerTitle: true,
+        leading: const Icon(
+          Icons.forest,
+          size: 40,
+          color: Colors.white,
+        ),
+        title: const Text(
+          'Cadastro',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height: 46),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // logo
-                    Icon(
-                      Icons.forest,
-                      size: 80,
-                      color: Color.fromARGB(255, 0, 90, 3),
-                    ),
-                    // welcome
-                    Text(
-                      'Cadastro',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 0, 90, 3),
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 26),
                 const Text(
                   'Dados pessoais',
                   style: TextStyle(
                     color: Color.fromARGB(255, 0, 90, 3),
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -179,12 +313,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       const SizedBox(height: 16),
                       MyTextField(
+                        prefixIcon: Icons.person,
                         controller: _nameController,
                         hintText: 'Nome completo',
                         obscureText: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "O nome deve ser preenchido";
+                          } else {
+                            null;
+                          }
+                        },
                       ),
                       const SizedBox(height: 8),
                       MyTextField(
+                        prefixIcon: Icons.person,
+                        controller: _cpfController,
+                        hintText: 'Digite seu CPF',
+                        obscureText: false,
+                        validator: (value) {
+                          // ... (código de validação do CPF aqui)
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      MyTextField(
+                        prefixIcon: Icons.email,
                         controller: _emailController,
                         hintText: 'Digite seu e-mail',
                         obscureText: false,
@@ -202,17 +355,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 8),
                       MyTextField(
-                        controller: _cpfController,
-                        hintText: 'Digite seu CPF',
-                        obscureText: true,
-                        validator: (value) {
-                          // ... (código de validação do CPF aqui)
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      MyTextField(
+                        prefixIcon: Icons.lock,
                         controller: _passwordController,
-                        hintText: 'Digite sua senha',
+                        hintText: 'Defina sua senha',
                         obscureText: true,
                         validator: (value) {
                           // ... (código de validação do CPF aqui)
@@ -220,57 +365,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 8),
                       MyTextField(
+                        prefixIcon: Icons.lock,
                         controller: _confirmationController,
-                        hintText: 'Digite sua senha novamente',
+                        hintText: 'Confirme sua senha',
                         obscureText: true,
                         validator: (value) {
                           // ... (código de validação do CPF aqui)
                         },
                       ),
                       const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        value: _selectedState,
-                        items: statesList.map((estado) {
-                          return DropdownMenuItem<String>(
-                            value: estado,
-                            child: Text(estado),
-                          );
-                        }).toList(),
+                      MyDropdownFormField(
+                        selectedValue: _selectedState,
+                        itemsList: statesList,
                         onChanged: (value) {
                           setState(() {
                             _selectedState = value!;
-                            // Ao selecionar um estado, resetar a cidade selecionada
                             _selectedCity = '';
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Estado',
-                        ),
+                        labelText: 'Estado',
+                        prefixIcon: Icons.location_on,
                       ),
                       const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        value: _selectedCity,
-                        items: _selectedState.isEmpty
+                      MyDropdownFormField(
+                        selectedValue: _selectedCity,
+                        itemsList: _selectedState.isEmpty
                             ? null
-                            : citiesByState[_selectedState]?.map((cidade) {
-                                return DropdownMenuItem<String>(
-                                  value: cidade,
-                                  child: Text(cidade),
-                                );
-                              }).toList(),
+                            : citiesByState[_selectedState]?.toList() ?? [],
                         onChanged: (value) {
                           setState(() {
                             _selectedCity = value!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          labelText: 'Cidade',
-                        ),
+                        labelText: 'Cidade',
+                        prefixIcon: Icons.location_on,
                       ),
                       const SizedBox(height: 16),
                       MyButton(
                         onTap: sendRegisterUser,
-                        text_button: 'Entrar',
+                        text_button: 'Cadastrar',
                       ),
                     ],
                   ),
