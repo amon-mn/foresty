@@ -22,47 +22,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   // variables
   List<String> statesList = [
-    "Acre",
-    "Alagoas",
-    "Amapá",
-    "Amazonas",
-    "Bahia",
-    "Ceará",
-    "Distrito Federal",
-    "Espírito Santo",
-    "Goiás",
-    "Maranhão",
-    "Mato Grosso",
-    "Mato Grosso do Sul",
-    "Minas Gerais",
-    "Pará",
-    "Paraíba",
-    "Paraná",
-    "Pernambuco",
-    "Piauí",
-    "Rio de Janeiro",
-    "Rio Grande do Norte",
-    "Rio Grande do Sul",
-    "Rondônia",
-    "Roraima",
-    "Santa Catarina",
-    "São Paulo",
-    "Sergipe",
-    "Tocantins",
+    '',
+    'Acre',
+    'Alagoas',
+    'Amapá',
+    'Amazonas',
+    'Bahia',
+    'Ceará',
+    'Distrito Federal',
+    'Espírito Santo',
+    'Goiás',
+    'Maranhão',
+    'Mato Grosso',
+    'Mato Grosso do Sul',
+    'Minas Gerais',
+    'Pará',
+    'Paraíba',
+    'Paraná',
+    'Pernambuco',
+    'Piauí',
+    'Rio de Janeiro',
+    'Rio Grande do Norte',
+    'Rio Grande do Sul',
+    'Rondônia',
+    'Roraima',
+    'Santa Catarina',
+    'São Paulo',
+    'Sergipe',
+    'Tocantins',
   ];
 
   Map<String, List<String>> citiesByState = {
     'São Paulo': [
+      '',
       'São Paulo',
       'Campinas',
       // Adicione mais cidades de São Paulo conforme necessário
     ],
     'Rio de Janeiro': [
+      '',
       'Rio de Janeiro',
       'Niterói',
       // Adicione mais cidades do Rio de Janeiro conforme necessário
     ],
     'Amazonas': [
+      '',
       'Alvarães',
       'Amaturá',
       'Anamã',
@@ -206,6 +210,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                       const SizedBox(height: 8),
+                      MyTextField(
+                        controller: _passwordController,
+                        hintText: 'Digite sua senha',
+                        obscureText: true,
+                        validator: (value) {
+                          // ... (código de validação do CPF aqui)
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      MyTextField(
+                        controller: _confirmationController,
+                        hintText: 'Digite sua senha novamente',
+                        obscureText: true,
+                        validator: (value) {
+                          // ... (código de validação do CPF aqui)
+                        },
+                      ),
+                      const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
                         value: _selectedState,
                         items: statesList.map((estado) {
@@ -299,6 +321,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         .then((String? erro) {
       if (erro != null) {
         showSnackBar(context: context, mensagem: erro);
+      } else {
+        showSnackBar(
+            context: context,
+            mensagem: 'Cadrastro realizado com sucesso!',
+            isErro: false);
       }
     });
   }
