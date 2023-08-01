@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
 import '../../components/show_snackbar.dart';
@@ -23,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   AuthService authService = AuthService();
 
 // sign google user in method
+
   signInWithGoogle() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -36,6 +38,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // sign facebook user in method
+
+  Future<UserCredential> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+    // Once signed in, return the UserCredential
+    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  }
 
 // sign user in method
   void signUserIn() {
@@ -173,7 +187,10 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(width: 15),
 
                     // facebook button
-                    SquareTite(imagePath: 'lib/assets/facebook.png'),
+                    GestureDetector(
+                      onTap: signInWithFacebook,
+                      child: SquareTite(imagePath: 'lib/assets/facebook.png'),
+                    ),
 
                     const SizedBox(width: 15),
 
