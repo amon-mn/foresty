@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
 import '../../components/square_tile.dart';
@@ -22,37 +21,17 @@ class _LoginPageState extends State<LoginPage> {
 // sign google user in method
   signInWithGoogle() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  signInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
     AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-    AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 
-    UserCredential user =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-  }
     UserCredential user =
         await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
 // sign facebook user in method
-
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-    // Once signed in, return the UserCredential
-    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }
 
 // sign user in method
   void signUserIn() async {
@@ -68,26 +47,7 @@ class _LoginPageState extends State<LoginPage> {
         },
       );
     }
-  void signUserIn() async {
-    if (mounted) {
-      // show loading circle
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
-    }
 
-    try {
-      // try sign in
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: usernameController.text,
-        password: passwordController.text,
-      );
     try {
       // try sign in
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -103,23 +63,7 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         // Se ocorrer um erro durante o login, também é importante remover o dialog do loading circle.
         Navigator.pop(context);
-      if (mounted) {
-        // Login bem-sucedido, então remova o dialog do loading circle
-        Navigator.pop(context);
-      }
-    } on FirebaseAuthException catch (e) {
-      if (mounted) {
-        // Se ocorrer um erro durante o login, também é importante remover o dialog do loading circle.
-        Navigator.pop(context);
 
-        // WRONG EMAIL
-        if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-          // show error to user
-          wrongEmailPasswordMessage();
-        }
-      }
-    }
-  }
         // WRONG EMAIL
         if (e.code == 'user-not-found' || e.code == 'wrong-password') {
           // show error to user
@@ -131,10 +75,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // wrong email message popup
   void wrongEmailPasswordMessage() {
-  void wrongEmailPasswordMessage() {
     showDialog(
-      context: context,
-      builder: (context) {
       context: context,
       builder: (context) {
         return const AlertDialog(
@@ -266,14 +207,10 @@ class _LoginPageState extends State<LoginPage> {
                       child: SquareTite(imagePath: 'lib/assets/google.png'),
                     ),
 
-
                     const SizedBox(width: 15),
 
                     // facebook button
-                    GestureDetector(
-                      onTap: signInWithFacebook,
-                      child: SquareTite(imagePath: 'lib/assets/facebook.png'),
-                    ),
+                    SquareTite(imagePath: 'lib/assets/facebook.png'),
 
                     const SizedBox(width: 15),
 

@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "883889030916-jfdoc96g5g93hi1g1qb6isabo4q20ea8.apps.googleusercontent.com",
+          "client_id": "883889030916-uutl3o7f45ombi0eeul1bdf8f1t6anmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.foresty",
+            "certificate_hash": "13b04abd53eacdb69d15c5f5e2142e98fac3aee1"
+          }
+        },
+        {
+          "client_id": "883889030916-2jnqkb9bvs8nld3p9po88aq6ciajp4r3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "883889030916-h8h18th7digm2kep8ebp2rm4cdmghgck.apps.googleusercontent.com",
+              "client_id": "883889030916-2jnqkb9bvs8nld3p9po88aq6ciajp4r3.apps.googleusercontent.com",
               "client_type": 3
             },
             {

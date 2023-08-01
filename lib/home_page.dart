@@ -3,15 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
-
-  final user = FirebaseAuth.instance.currentUser!;
+  final User user;
+  HomePage({super.key, required this.user});
 
   // sign user out method
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +17,12 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: signUserOut, 
+            onPressed: signUserOut,
             icon: Icon(Icons.logout),
             color: Color.fromARGB(255, 0, 90, 3),
           )
         ],
       ),
-      
       body: Center(
         child: Text(
           "Login realizado por " + user.email!,

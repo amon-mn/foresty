@@ -5,7 +5,7 @@ class SquareTite extends StatelessWidget {
   const SquareTite({
     super.key,
     required this.imagePath,
-    });
+  });
 
   @override
   Widget build(BuildContext context) {
