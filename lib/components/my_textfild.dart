@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foresty/authentication/helpers/cpf_input_formatter.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -6,6 +8,7 @@ class MyTextField extends StatelessWidget {
   final bool obscureText;
   final IconData? prefixIcon;
   final String? Function(String?)? validator;
+  final MaskTextInputFormatter? inputFormatter;
 
   const MyTextField({
     Key? key,
@@ -14,6 +17,7 @@ class MyTextField extends StatelessWidget {
     required this.obscureText,
     this.prefixIcon,
     this.validator,
+    this.inputFormatter,
   }) : super(key: key);
 
   @override
@@ -21,6 +25,8 @@ class MyTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
       child: TextFormField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        inputFormatters: inputFormatter != null ? [inputFormatter!] : [],
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
+import '../../components/show_snackbar.dart';
 import '../../components/square_tile.dart';
+import '../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -17,6 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
 
   final passwordController = TextEditingController();
+
+  AuthService authService = AuthService();
 
 // sign google user in method
   signInWithGoogle() async {
@@ -34,55 +38,14 @@ class _LoginPageState extends State<LoginPage> {
 // sign facebook user in method
 
 // sign user in method
-  void signUserIn() async {
-    if (mounted) {
-      // show loading circle
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
-    }
-
-    try {
-      // try sign in
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: usernameController.text,
-        password: passwordController.text,
-      );
-
-      if (mounted) {
-        // Login bem-sucedido, então remova o dialog do loading circle
-        Navigator.pop(context);
-      }
-    } on FirebaseAuthException catch (e) {
-      if (mounted) {
-        // Se ocorrer um erro durante o login, também é importante remover o dialog do loading circle.
-        Navigator.pop(context);
-
-        // WRONG EMAIL
-        if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-          // show error to user
-          wrongEmailPasswordMessage();
+  void signUserIn() {
+    _enterUser({required String email, required String senha}) {
+      authService.loginUser(email: email, senha: senha).then((String? erro) {
+        if (erro != null) {
+          showSnackBar(context: context, mensagem: erro);
         }
-      }
+      });
     }
-  }
-
-  // wrong email message popup
-  void wrongEmailPasswordMessage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          title: Text('Email ou senha incorretos.'),
-        );
-      },
-    );
   }
 
   @override

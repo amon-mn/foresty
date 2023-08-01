@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foresty/authentication/screens/login_page.dart';
 import 'package:foresty/components/my_dropdown.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
 import '../../components/show_snackbar.dart';
@@ -70,7 +72,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // Add more cities of Amapá if needed
     ],
     'Amazonas': [
-      '',
       'Alvarães',
       'Amaturá',
       'Anamã',
@@ -318,7 +319,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Nome completo',
                         obscureText: false,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              value.length < 4) {
                             return "O nome deve ser preenchido";
                           } else {
                             null;
@@ -327,12 +330,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 8),
                       MyTextField(
+                        inputFormatter: MaskTextInputFormatter(
+                            mask: '###.###.###-##',
+                            filter: {"#": RegExp(r'[0-9xX]')},
+                            type: MaskAutoCompletionType.lazy),
                         prefixIcon: Icons.person,
                         controller: _cpfController,
                         hintText: 'Digite seu CPF',
                         obscureText: false,
                         validator: (value) {
-                          // ... (código de validação do CPF aqui)
+                          final exp = RegExp(r"\d{3}\.\d{3}\.\d{3}-\d{2}");
+                          if (!exp.hasMatch(value ?? '')) {
+                            return 'CPF inválido';
+                          }
+                          return null;
                         },
                       ),
                       const SizedBox(height: 8),
@@ -343,7 +354,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         obscureText: false,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "O valor de e-mail deve ser preenchido";
+                            return "O e-mail deve ser preenchido";
                           }
                           if (!value.contains("@") ||
                               !value.contains(".") ||
@@ -360,7 +371,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Defina sua senha',
                         obscureText: true,
                         validator: (value) {
-                          // ... (código de validação do CPF aqui)
+                          if (value == null || value.isEmpty) {
+                            return "A senha deve ser preenchida";
+                          }
+                          if (value.length < 6) {
+                            return "A senha deve conter pelo menos 6 caracteres";
+                          }
+                          return null; // Retorna null se a validação for bem-sucedida
                         },
                       ),
                       const SizedBox(height: 8),
@@ -370,7 +387,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Confirme sua senha',
                         obscureText: true,
                         validator: (value) {
-                          // ... (código de validação do CPF aqui)
+                          if (value == null || value.isEmpty) {
+                            return "A confirmação de senha deve ser preenchida";
+                          }
+                          if (value != _passwordController.text) {
+                            return "As senhas não coincidem";
+                          }
+                          return null; // Retorna null se a validação for bem-sucedida
                         },
                       ),
                       const SizedBox(height: 8),
@@ -380,7 +403,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onChanged: (value) {
                           setState(() {
                             _selectedState = value!;
-                            _selectedCity = '';
+                            _selectedCity = citiesByState[_selectedState]![0];
                           });
                         },
                         labelText: 'Estado',
@@ -389,9 +412,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 8),
                       MyDropdownFormField(
                         selectedValue: _selectedCity,
-                        itemsList: _selectedState.isEmpty
-                            ? null
-                            : citiesByState[_selectedState]?.toList() ?? [],
+                        itemsList: _selectedState.isEmpty ||
+                                citiesByState[_selectedState] == null
+                            ? []
+                            : citiesByState[_selectedState]!,
                         onChanged: (value) {
                           setState(() {
                             _selectedCity = value!;
@@ -433,6 +457,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           cpf: cpf,
           state: state,
           city: city);
+    } else {
+      _formKey.currentState!.validate();
     }
   }
 
@@ -459,6 +485,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             context: context,
             mensagem: 'Cadrastro realizado com sucesso!',
             isErro: false);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
       }
     });
   }

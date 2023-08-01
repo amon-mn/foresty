@@ -5,6 +5,23 @@ class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
+  Future<String?> loginUser(
+      {required String email, required String senha}) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: senha);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "user-not-found":
+          return "Usuário não cadastrado";
+        case "wrong-password":
+          return "Email ou senha incorretos";
+      }
+      return e.code;
+    }
+    return null;
+  }
+
   Future<String?> registerUser({
     required String email,
     required String password,
