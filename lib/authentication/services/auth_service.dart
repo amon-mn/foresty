@@ -6,10 +6,10 @@ class AuthService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   Future<String?> loginUser(
-      {required String email, required String senha}) async {
+      {required String email, required String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: senha);
+          email: email, password: password);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "user-not-found":

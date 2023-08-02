@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foresty/authentication/helpers/cpf_input_formatter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class MyTextField extends StatelessWidget {
@@ -25,7 +24,6 @@ class MyTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
       child: TextFormField(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
         inputFormatters: inputFormatter != null ? [inputFormatter!] : [],
         controller: controller,
         obscureText: obscureText,

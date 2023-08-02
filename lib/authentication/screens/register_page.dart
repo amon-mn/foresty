@@ -339,8 +339,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Digite seu CPF',
                         obscureText: false,
                         validator: (value) {
-                          final exp = RegExp(r"\d{3}\.\d{3}\.\d{3}-\d{2}");
-                          if (!exp.hasMatch(value ?? '')) {
+                          final cpfRegExp =
+                              RegExp(r"\d{3}\.\d{3}\.\d{3}-\d{2}");
+                          if (value == null || value.isEmpty) {
+                            return "O CPF deve ser preenchido";
+                          }
+                          if (!cpfRegExp.hasMatch(value ?? '')) {
                             return 'CPF inválido';
                           }
                           return null;
@@ -356,9 +360,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value == null || value.isEmpty) {
                             return "O e-mail deve ser preenchido";
                           }
-                          if (!value.contains("@") ||
-                              !value.contains(".") ||
-                              value.length < 4) {
+                          // A regular expression to validate email format
+                          final emailRegExp = RegExp(
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                          if (!emailRegExp.hasMatch(value ?? '')) {
                             return "O e-mail precisa ser válido";
                           }
                           return null;
@@ -426,7 +431,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 16),
                       MyButton(
-                        onTap: sendRegisterUser,
+                        onTap: signUserUp,
                         text_button: 'Cadastrar',
                       ),
                     ],
@@ -441,7 +446,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // Register Method
-  void sendRegisterUser() {
+  void signUserUp() {
     String email = _emailController.text;
     String password = _passwordController.text;
     String name = _nameController.text;

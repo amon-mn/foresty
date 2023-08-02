@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:foresty/authentication/screens/register_page.dart';
+import 'package:foresty/components/my_textBytton.dart';
 import '../../components/my_button.dart';
 import 'login_page.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
-
-  // Modifique a função para utilizar o Navigator e navegar para a página de login
-  void signUserIn(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoginPage(),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,26 +30,38 @@ class WelcomeScreen extends StatelessWidget {
                 const SizedBox(height: 84),
                 MyButton(
                   onTap: () {
-                    signUserIn(context);
+                    goToUserLogin(context);
                   },
                   text_button: 'Login',
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Cadastro",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.blueAccent,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                MyTextButton(
+                  onTap: () {
+                    goToUserRegister(context);
+                  },
+                  textButton: 'Cadastro',
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void goToUserLogin(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      ),
+    );
+  }
+
+  void goToUserRegister(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RegisterScreen(),
       ),
     );
   }

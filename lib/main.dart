@@ -49,7 +49,7 @@ class AuthPage extends StatelessWidget {
               user: snapshot.data!,
             );
           } else {
-            return LoginPage();
+            return const WelcomeScreen();
           }
         }
       },

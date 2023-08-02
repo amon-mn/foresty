@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
 import '../../components/show_snackbar.dart';
@@ -17,50 +16,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // text editing controllers
-  final usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  final passwordController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   AuthService authService = AuthService();
 
-// sign google user in method
-
-  signInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-    AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-
-    UserCredential user =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-  }
-
-// sign facebook user in method
-
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-    // Once signed in, return the UserCredential
-    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }
-
-// sign user in method
-  void signUserIn() {
-    _enterUser({required String email, required String senha}) {
-      authService.loginUser(email: email, senha: senha).then((String? erro) {
-        if (erro != null) {
-          showSnackBar(context: context, mensagem: erro);
-        }
-      });
-    }
-  }
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -93,56 +55,82 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const SizedBox(height: 16),
-
-                // username textfield
-                MyTextField(
-                  prefixIcon: Icons.email,
-                  controller: usernameController,
-                  hintText: 'Digite seu email',
-                  obscureText: false,
-                ),
-
-                const SizedBox(height: 08),
-
-                // password textfield
-                MyTextField(
-                  prefixIcon: Icons.lock,
-                  controller: passwordController,
-                  hintText: 'Digite sua senha',
-                  obscureText: true,
-                ),
-
-                // forgot password?
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 35.0,
-                    vertical: 5.0,
-                  ),
-                  child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Esqueceu a senha?',
-                        style: TextStyle(color: Colors.black),
-                      )),
-
-                  /*Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                Form(
+                  key: _formKey,
+                  child: Column(
                     children: [
-                      Text(
-                        'Esqueceu a senha?',
-                        style: TextStyle(color: Colors.black),
-                      )
+                      // username textfield
+                      MyTextField(
+                        prefixIcon: Icons.email,
+                        controller: _emailController,
+                        hintText: 'Digite seu email',
+                        obscureText: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "O e-mail deve ser preenchido";
+                          }
+                          if (!value.contains("@") ||
+                              !value.contains(".") ||
+                              value.length < 4) {
+                            return "O e-mail precisa ser válido";
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 08),
+
+                      // password textfield
+                      MyTextField(
+                        prefixIcon: Icons.lock,
+                        controller: _passwordController,
+                        hintText: 'Digite sua senha',
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "A senha deve ser preenchida";
+                          }
+                          if (value.length < 6) {
+                            return "A senha deve conter pelo menos 6 caracteres";
+                          }
+                          return null; // Retorna null se a validação for bem-sucedida
+                        },
+                      ),
+
+                      // forgot password?
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 35.0,
+                          vertical: 5.0,
+                        ),
+                        child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Esqueceu a senha?',
+                              style: TextStyle(color: Colors.black),
+                            )),
+
+                        /*Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Esqueceu a senha?',
+                              style: TextStyle(color: Colors.black),
+                            )
+                          ],
+                        ), */
+                      ),
+
+                      // sign in button
+                      MyButton(
+                        onTap: signUserIn,
+                        text_button: 'Entrar',
+                      ),
+
+                      const SizedBox(height: 50),
                     ],
-                  ), */
+                  ),
                 ),
-
-                // sign in button
-                MyButton(
-                  onTap: signUserIn,
-                  text_button: 'Entrar',
-                ),
-
-                const SizedBox(height: 50),
 
                 // or continue with
                 const Padding(
@@ -188,7 +176,6 @@ class _LoginPageState extends State<LoginPage> {
 
                     // facebook button
                     GestureDetector(
-                      onTap: signInWithFacebook,
                       child: SquareTite(imagePath: 'lib/assets/facebook.png'),
                     ),
 
@@ -206,5 +193,32 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+// sign google user in method
+  signInWithGoogle() async {
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+
+    UserCredential user =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+// sign user in method
+  void signUserIn() {
+    String email = _emailController.text;
+    String pass = _passwordController.text;
+
+    if (_formKey.currentState!.validate()) {
+      authService.loginUser(email: email, password: pass).then((String? erro) {
+        if (erro != null) {
+          showSnackBar(context: context, mensagem: erro);
+        }
+      });
+    }
   }
 }

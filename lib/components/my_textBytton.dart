@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class MyButton extends StatefulWidget {
+class MyTextButton extends StatefulWidget {
   final VoidCallback onTap;
-  final String text_button;
+  final String textButton;
 
-  const MyButton({Key? key, required this.onTap, required this.text_button})
+  const MyTextButton({Key? key, required this.onTap, required this.textButton})
       : super(key: key);
 
   @override
-  _MyButtonState createState() => _MyButtonState();
+  _MyTextButtonState createState() => _MyTextButtonState();
 }
 
-class _MyButtonState extends State<MyButton> {
+class _MyTextButtonState extends State<MyTextButton> {
   bool _isPressed = false;
 
   @override
@@ -20,21 +20,8 @@ class _MyButtonState extends State<MyButton> {
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(horizontal: 32),
       decoration: BoxDecoration(
-        color: _isPressed
-            ? Colors.green[700]
-            : Colors
-                .green[800], // Mudamos a cor quando o botão estiver pressionado
+        color: Colors.transparent, // Set the background color as transparent
         borderRadius: BorderRadius.circular(15),
-        boxShadow:
-            _isPressed // Adicionamos uma sombra quando o botão estiver pressionado
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.4),
-                      offset: Offset(0, 4),
-                      blurRadius: 8,
-                    ),
-                  ]
-                : [],
       ),
       child: InkWell(
         onTap: widget.onTap,
@@ -55,9 +42,9 @@ class _MyButtonState extends State<MyButton> {
         },
         child: Center(
           child: Text(
-            widget.text_button,
+            widget.textButton,
             style: TextStyle(
-              color: Colors.white,
+              color: _isPressed ? Colors.blue[800] : Colors.blue[600],
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
