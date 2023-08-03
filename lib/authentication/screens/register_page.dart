@@ -490,11 +490,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             context: context,
             mensagem: 'Cadrastro realizado com sucesso!',
             isErro: false);
-
+/*
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
+*/
       }
     });
   }
