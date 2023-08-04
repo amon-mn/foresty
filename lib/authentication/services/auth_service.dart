@@ -70,4 +70,16 @@ class AuthService {
     }
     return null;
   }
+
+  Future<String?> missPassword({required String email}) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
+        return "E-mail não cadastrado.";
+      }
+      return e.code;
+    }
+    return null;
+  }
 }
