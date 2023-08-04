@@ -61,8 +61,11 @@ class AuthService {
 
   Future<String?> logout() async {
     try {
+      print("Tentando fazer logout...");
       await _firebaseAuth.signOut();
+      print("Logout realizado com sucesso!");
     } on FirebaseAuthException catch (e) {
+      print("Erro durante o logout: ${e.code}");
       return e.code;
     }
     return null;

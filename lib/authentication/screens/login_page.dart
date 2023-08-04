@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foresty/home_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
@@ -217,8 +218,33 @@ class _LoginPageState extends State<LoginPage> {
       authService.loginUser(email: email, password: pass).then((String? erro) {
         if (erro != null) {
           showSnackBar(context: context, mensagem: erro);
+        } else {
+          // Redirecionar para a tela principal após o login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  HomePage(user: FirebaseAuth.instance.currentUser!),
+            ),
+          );
         }
       });
     }
   }
 }
+
+/*
+  void signUserIn() {
+    String email = _emailController.text;
+    String pass = _passwordController.text;
+
+    if (_formKey.currentState!.validate()) {
+      authService.loginUser(email: email, password: pass).then((String? erro) {
+        if (erro != null) {
+          showSnackBar(context: context, mensagem: erro);
+        }
+      });
+    }
+  }
+}
+*/
