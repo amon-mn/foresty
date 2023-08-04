@@ -26,6 +26,7 @@ class AuthService {
     required String email,
     required String password,
     required String name,
+    required String cpf,
     required String state,
     required String city,
   }) async {
@@ -47,6 +48,7 @@ class AuthService {
         'name': name,
         'state': state,
         'city': city,
+        'cpf': cpf,
       });
     } on FirebaseAuthException catch (e) {
       switch (e.code) {

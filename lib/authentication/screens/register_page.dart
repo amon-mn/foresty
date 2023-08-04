@@ -479,6 +479,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       password: password,
       email: email,
       name: name,
+      cpf: cpf,
       state: state,
       city: city,
     )
