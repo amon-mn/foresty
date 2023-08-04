@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foresty/authentication/screens/login_page.dart';
 import 'package:foresty/components/my_dropdown.dart';
+import 'package:foresty/home_page.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
@@ -491,12 +492,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             context: context,
             mensagem: 'Cadrastro realizado com sucesso!',
             isErro: false);
-/*
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
+          MaterialPageRoute(
+            builder: (context) =>
+                HomePage(user: FirebaseAuth.instance.currentUser!),
+          ),
         );
-*/
       }
     });
   }

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foresty/home_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
@@ -104,21 +105,12 @@ class _LoginPageState extends State<LoginPage> {
                           vertical: 5.0,
                         ),
                         child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Esqueceu a senha?',
-                              style: TextStyle(color: Colors.black),
-                            )),
-
-                        /*Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Esqueceu a senha?',
-                              style: TextStyle(color: Colors.black),
-                            )
-                          ],
-                        ), */
+                          onPressed: esqueciMinhaSenhaClicado,
+                          child: Text(
+                            'Esqueceu a senha?',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
                       ),
 
                       // sign in button
@@ -217,8 +209,64 @@ class _LoginPageState extends State<LoginPage> {
       authService.loginUser(email: email, password: pass).then((String? erro) {
         if (erro != null) {
           showSnackBar(context: context, mensagem: erro);
+        } else {
+          // Redirecionar para a tela principal após o login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  HomePage(user: FirebaseAuth.instance.currentUser!),
+            ),
+          );
         }
       });
     }
+  }
+
+  esqueciMinhaSenhaClicado() {
+    String email = _emailController.text;
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController redefinicaoSenhaController =
+              TextEditingController(text: email);
+          return AlertDialog(
+            title: const Text("Confirme o e-mail para redefinição de senha."),
+            content: TextFormField(
+              controller: redefinicaoSenhaController,
+              decoration: const InputDecoration(
+                label: Text("Confirme o e-mail."),
+              ),
+            ),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(32)),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  authService
+                      .missPassword(email: redefinicaoSenhaController.text)
+                      .then((String? erro) {
+                    if (erro == null) {
+                      showSnackBar(
+                        context: context,
+                        mensagem: "E-mail de redefinição enviado!",
+                        isErro: false,
+                      );
+                    } else {
+                      showSnackBar(context: context, mensagem: erro);
+                    }
+
+                    Navigator.pop(context);
+                  });
+                },
+                child: const Text("Redefinir senha."),
+              )
+            ],
+          );
+        },
+      );
+    });
   }
 }

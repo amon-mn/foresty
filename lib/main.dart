@@ -36,20 +36,28 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.userChanges(),
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         } else {
-          if (snapshot.hasData) {
-            return HomePage(
-              user: snapshot.data!,
-            );
+          if (snapshot.hasData && snapshot.data != null) {
+            // Usuário está logado, navegue para HomePage
+            final user = snapshot.data!;
+            Future.delayed(Duration.zero, () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage(user: user)),
+                (route) => false, // Remove todas as rotas anteriores
+              );
+            });
+            return Container(); // Você pode remover este Container
           } else {
-            return const WelcomeScreen();
+            // Usuário não está logado, mostre a WelcomeScreen
+            return WelcomeScreen();
           }
         }
       },
