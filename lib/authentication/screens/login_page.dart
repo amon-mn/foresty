@@ -35,16 +35,13 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: [
                 const SizedBox(height: 46),
-
                 // logo
                 const Icon(
                   Icons.forest,
                   size: 128,
                   color: Color.fromARGB(255, 0, 90, 3),
                 ),
-
                 const SizedBox(height: 76),
-
                 // welcome
                 const Text(
                   'Bem Vindo!',
@@ -54,7 +51,6 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 16),
                 Form(
                   key: _formKey,
@@ -78,9 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                       ),
-
                       const SizedBox(height: 08),
-
                       // password textfield
                       MyTextField(
                         prefixIcon: Icons.lock,
@@ -97,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
                           return null; // Retorna null se a validação for bem-sucedida
                         },
                       ),
-
                       // forgot password?
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -112,18 +105,15 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-
                       // sign in button
                       MyButton(
                         onTap: signUserIn,
                         text_button: 'Entrar',
                       ),
-
                       const SizedBox(height: 50),
                     ],
                   ),
                 ),
-
                 // or continue with
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -257,7 +247,6 @@ class _LoginPageState extends State<LoginPage> {
                     } else {
                       showSnackBar(context: context, mensagem: erro);
                     }
-
                     Navigator.pop(context);
                   });
                 },
@@ -270,6 +259,3 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 }
-
-/*
-*/

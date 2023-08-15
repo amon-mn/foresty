@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foresty/authentication/screens/login_page.dart';
+import 'package:validadores/Validador.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/home_page.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -250,6 +251,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _selectedState = '';
   String _selectedCity = '';
 
+  // validator
+  Validador validator = Validador();
+
   @override
   void initState() {
     super.initState();
@@ -340,6 +344,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Digite seu CPF',
                         obscureText: false,
                         validator: (value) {
+                          return validator
+                              .add(Validar.CPF, msg: 'CPF Inválido')
+                              .add(Validar.OBRIGATORIO,
+                                  msg: 'O CPF deve ser preenchido')
+                              .minLength(11)
+                              .maxLength(11)
+                              .valido(value, clearNoNumber: true);
+                          /*
                           final cpfRegExp =
                               RegExp(r"\d{3}\.\d{3}\.\d{3}-\d{2}");
                           if (value == null || value.isEmpty) {
@@ -349,6 +361,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return 'CPF inválido';
                           }
                           return null;
+                          */
                         },
                       ),
                       const SizedBox(height: 8),
@@ -358,6 +371,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Digite seu e-mail',
                         obscureText: false,
                         validator: (value) {
+                          return validator
+                              .add(Validar.EMAIL,
+                                  msg: 'O e-mail precisa ser válido')
+                              .add(Validar.OBRIGATORIO,
+                                  msg: 'O e-mail deve ser preenchido')
+                              .minLength(5)
+                              .maxLength(40)
+                              .valido(value, clearNoNumber: true);
+                          /*
                           if (value == null || value.isEmpty) {
                             return "O e-mail deve ser preenchido";
                           }
@@ -368,6 +390,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return "O e-mail precisa ser válido";
                           }
                           return null;
+                          */
                         },
                       ),
                       const SizedBox(height: 8),
@@ -480,6 +503,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       password: password,
       email: email,
       name: name,
+      cpf: cpf,
       state: state,
       city: city,
     )
