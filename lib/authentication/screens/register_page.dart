@@ -251,8 +251,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _selectedState = '';
   String _selectedCity = '';
 
-  // validator
-  Validador validator = Validador();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -274,198 +273,185 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: Colors
-              .black87, // Define a cor de plano de fundo da barra de status
-          statusBarIconBrightness: Brightness.light,
-        ),
-        backgroundColor: Colors.green[700],
-        elevation: 0,
-        centerTitle: true,
-        leading: const Icon(
-          Icons.forest,
-          size: 40,
-          color: Colors.white,
-        ),
-        title: const Text(
-          'Cadastro',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Colors.grey[300],
+          appBar: AppBar(
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarColor: Colors
+                  .black87, // Define a cor de plano de fundo da barra de status
+              statusBarIconBrightness: Brightness.light,
+            ),
+            backgroundColor: Colors.green[700],
+            elevation: 0,
+            centerTitle: true,
+            leading: const Icon(
+              Icons.forest,
+              size: 40,
+              color: Colors.white,
+            ),
+            title: const Text(
+              'Cadastro',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 26),
-                const Text(
-                  'Dados pessoais',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 0, 90, 3),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: Center(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 26),
+                    const Text(
+                      'Dados pessoais',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 0, 90, 3),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 16),
+                          MyTextField(
+                            prefixIcon: Icons.person,
+                            controller: _nameController,
+                            hintText: 'Nome completo',
+                            obscureText: false,
+                            validator: (value) {
+                              if (value == null ||
+                                  value.isEmpty ||
+                                  value.length < 4) {
+                                return "O nome deve ser preenchido";
+                              } else {
+                                null;
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          MyTextField(
+                            inputFormatter: MaskTextInputFormatter(
+                                mask: '###.###.###-##',
+                                filter: {"#": RegExp(r'[0-9xX]')},
+                                type: MaskAutoCompletionType.lazy),
+                            prefixIcon: Icons.person,
+                            controller: _cpfController,
+                            hintText: 'Digite seu CPF',
+                            obscureText: false,
+                            validator: (value) {
+                              return Validador()
+                                  .add(Validar.CPF, msg: 'CPF Inválido')
+                                  .add(Validar.OBRIGATORIO,
+                                      msg: 'O CPF deve ser preenchido')
+                                  .minLength(11)
+                                  .maxLength(11)
+                                  .valido(value, clearNoNumber: true);
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          MyTextField(
+                            prefixIcon: Icons.email,
+                            controller: _emailController,
+                            hintText: 'Digite seu e-mail',
+                            obscureText: false,
+                            validator: (value) {
+                              return Validador()
+                                  .add(Validar.EMAIL,
+                                      msg: 'O e-mail precisa ser válido')
+                                  .add(Validar.OBRIGATORIO,
+                                      msg: 'O e-mail deve ser preenchido')
+                                  .valido(value);
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          MyTextField(
+                            prefixIcon: Icons.lock,
+                            controller: _passwordController,
+                            hintText: 'Defina sua senha',
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "A senha deve ser preenchida";
+                              }
+                              if (value.length < 6) {
+                                return "A senha deve conter pelo menos 6 caracteres";
+                              }
+                              return null; // Retorna null se a validação for bem-sucedida
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          MyTextField(
+                            prefixIcon: Icons.lock,
+                            controller: _confirmationController,
+                            hintText: 'Confirme sua senha',
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "A confirmação de senha deve ser preenchida";
+                              }
+                              if (value != _passwordController.text) {
+                                return "As senhas não coincidem";
+                              }
+                              return null; // Retorna null se a validação for bem-sucedida
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          MyDropdownFormField(
+                            selectedValue: _selectedState,
+                            itemsList: statesList,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedState = value!;
+                                _selectedCity =
+                                    citiesByState[_selectedState]![0];
+                              });
+                            },
+                            labelText: 'Estado',
+                            prefixIcon: Icons.location_on,
+                          ),
+                          const SizedBox(height: 8),
+                          MyDropdownFormField(
+                            selectedValue: _selectedCity,
+                            itemsList: _selectedState.isEmpty ||
+                                    citiesByState[_selectedState] == null
+                                ? []
+                                : citiesByState[_selectedState]!,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedCity = value!;
+                              });
+                            },
+                            labelText: 'Cidade',
+                            prefixIcon: Icons.location_on,
+                          ),
+                          const SizedBox(height: 16),
+                          MyButton(
+                            onTap: signUserUp,
+                            text_button: 'Cadastrar',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
-                      MyTextField(
-                        prefixIcon: Icons.person,
-                        controller: _nameController,
-                        hintText: 'Nome completo',
-                        obscureText: false,
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              value.length < 4) {
-                            return "O nome deve ser preenchido";
-                          } else {
-                            null;
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      MyTextField(
-                        inputFormatter: MaskTextInputFormatter(
-                            mask: '###.###.###-##',
-                            filter: {"#": RegExp(r'[0-9xX]')},
-                            type: MaskAutoCompletionType.lazy),
-                        prefixIcon: Icons.person,
-                        controller: _cpfController,
-                        hintText: 'Digite seu CPF',
-                        obscureText: false,
-                        validator: (value) {
-                          return validator
-                              .add(Validar.CPF, msg: 'CPF Inválido')
-                              .add(Validar.OBRIGATORIO,
-                                  msg: 'O CPF deve ser preenchido')
-                              .minLength(11)
-                              .maxLength(11)
-                              .valido(value, clearNoNumber: true);
-                          /*
-                          final cpfRegExp =
-                              RegExp(r"\d{3}\.\d{3}\.\d{3}-\d{2}");
-                          if (value == null || value.isEmpty) {
-                            return "O CPF deve ser preenchido";
-                          }
-                          if (!cpfRegExp.hasMatch(value ?? '')) {
-                            return 'CPF inválido';
-                          }
-                          return null;
-                          */
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      MyTextField(
-                        prefixIcon: Icons.email,
-                        controller: _emailController,
-                        hintText: 'Digite seu e-mail',
-                        obscureText: false,
-                        validator: (value) {
-                          return validator
-                              .add(Validar.EMAIL,
-                                  msg: 'O e-mail precisa ser válido')
-                              .add(Validar.OBRIGATORIO,
-                                  msg: 'O e-mail deve ser preenchido')
-                              .minLength(5)
-                              .maxLength(40)
-                              .valido(value, clearNoNumber: true);
-                          /*
-                          if (value == null || value.isEmpty) {
-                            return "O e-mail deve ser preenchido";
-                          }
-                          // A regular expression to validate email format
-                          final emailRegExp = RegExp(
-                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-                          if (!emailRegExp.hasMatch(value ?? '')) {
-                            return "O e-mail precisa ser válido";
-                          }
-                          return null;
-                          */
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      MyTextField(
-                        prefixIcon: Icons.lock,
-                        controller: _passwordController,
-                        hintText: 'Defina sua senha',
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "A senha deve ser preenchida";
-                          }
-                          if (value.length < 6) {
-                            return "A senha deve conter pelo menos 6 caracteres";
-                          }
-                          return null; // Retorna null se a validação for bem-sucedida
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      MyTextField(
-                        prefixIcon: Icons.lock,
-                        controller: _confirmationController,
-                        hintText: 'Confirme sua senha',
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "A confirmação de senha deve ser preenchida";
-                          }
-                          if (value != _passwordController.text) {
-                            return "As senhas não coincidem";
-                          }
-                          return null; // Retorna null se a validação for bem-sucedida
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      MyDropdownFormField(
-                        selectedValue: _selectedState,
-                        itemsList: statesList,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedState = value!;
-                            _selectedCity = citiesByState[_selectedState]![0];
-                          });
-                        },
-                        labelText: 'Estado',
-                        prefixIcon: Icons.location_on,
-                      ),
-                      const SizedBox(height: 8),
-                      MyDropdownFormField(
-                        selectedValue: _selectedCity,
-                        itemsList: _selectedState.isEmpty ||
-                                citiesByState[_selectedState] == null
-                            ? []
-                            : citiesByState[_selectedState]!,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCity = value!;
-                          });
-                        },
-                        labelText: 'Cidade',
-                        prefixIcon: Icons.location_on,
-                      ),
-                      const SizedBox(height: 16),
-                      MyButton(
-                        onTap: signUserUp,
-                        text_button: 'Cadastrar',
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
+        if (_isLoading)
+          Container(
+            color: Colors.black.withOpacity(0.5),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+      ],
     );
   }
 
@@ -479,6 +465,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String city = _selectedCity;
 
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
       _createUser(
           email: email,
           password: password,
@@ -491,30 +481,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  _createUser(
-      {required String email,
-      required String password,
-      required String name,
-      required String cpf,
-      required String state,
-      required String city}) {
-    authService
-        .registerUser(
-      password: password,
-      email: email,
-      name: name,
-      cpf: cpf,
-      state: state,
-      city: city,
-    )
-        .then((String? erro) {
+  _createUser({
+    required String email,
+    required String password,
+    required String name,
+    required String cpf,
+    required String state,
+    required String city,
+  }) async {
+    try {
+      String? erro = await authService.registerUser(
+        password: password,
+        email: email,
+        name: name,
+        cpf: cpf,
+        state: state,
+        city: city,
+      );
+
       if (erro != null) {
         showSnackBar(context: context, mensagem: erro);
       } else {
         showSnackBar(
-            context: context,
-            mensagem: 'Cadrastro realizado com sucesso!',
-            isErro: false);
+          context: context,
+          mensagem: 'Cadastro realizado com sucesso!',
+          isErro: false,
+        );
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -523,6 +515,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         );
       }
-    });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }
