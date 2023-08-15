@@ -252,8 +252,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _selectedCity = '';
 
   // validator
-  Validador validator = Validador();
-
   @override
   void initState() {
     super.initState();
@@ -344,7 +342,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Digite seu CPF',
                         obscureText: false,
                         validator: (value) {
-                          return validator
+                          return Validador()
                               .add(Validar.CPF, msg: 'CPF Inválido')
                               .add(Validar.OBRIGATORIO,
                                   msg: 'O CPF deve ser preenchido')
@@ -371,14 +369,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Digite seu e-mail',
                         obscureText: false,
                         validator: (value) {
-                          return validator
+                          return Validador()
                               .add(Validar.EMAIL,
                                   msg: 'O e-mail precisa ser válido')
                               .add(Validar.OBRIGATORIO,
                                   msg: 'O e-mail deve ser preenchido')
-                              .minLength(5)
-                              .maxLength(40)
-                              .valido(value, clearNoNumber: true);
+                              .valido(value);
                           /*
                           if (value == null || value.isEmpty) {
                             return "O e-mail deve ser preenchido";

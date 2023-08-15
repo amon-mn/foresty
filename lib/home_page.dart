@@ -44,7 +44,8 @@ class _HomePageState extends State<HomePage> {
           children: [
             UserAccountsDrawerHeader(
               currentAccountPicture: const CircleAvatar(
-                backgroundColor: Colors.white,
+                backgroundImage: AssetImage('lib/assets/perfil.png'),
+                backgroundColor: Color.fromARGB(255, 33, 87, 25),
               ),
               accountName: Text(
                 (widget.user.displayName != null)
@@ -52,6 +53,16 @@ class _HomePageState extends State<HomePage> {
                     : "",
               ),
               accountEmail: Text(widget.user.email!),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 33, 87, 25),
+                    Color.fromARGB(255, 13, 95, 0)
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
             ),
             ListTile(
               leading: const Icon(
@@ -64,9 +75,7 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Sair"),
-              onTap: () {
-                AuthService().logout();
-              },
+              onTap: () => handleLogout(context),
             )
           ],
         ),
@@ -76,6 +85,15 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+/*
+          IconButton(
+            onPressed: () => handleLogout(context), // Use o callback aqui
+            icon: Icon(Icons.logout),
+            color: Color.fromARGB(255, 0, 90, 3),
+          )
+        ],
+*/
+
 /*    
       body: Column(children: [
         // custom app bar
