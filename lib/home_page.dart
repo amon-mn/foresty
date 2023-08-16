@@ -76,7 +76,8 @@ class _HomePageState extends State<HomePage> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return PasswordConfirmationDialog(email: "");
+                    return PasswordConfirmationDialog(
+                        email: widget.user.email!);
                   },
                 );
               },
