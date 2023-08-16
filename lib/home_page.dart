@@ -20,20 +20,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Novo código para fazer logout com redirecionamento
-  void handleLogout(BuildContext context) async {
-    String? error = await AuthService().logout();
-    if (error == null) {
-      // Logout bem-sucedido, redirecionar para a tela de boas-vindas
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => WelcomeScreen()),
-        (route) => false,
-      );
-    } else {
-      // Lida com qualquer erro que possa ocorrer durante o logout
-      print("Erro durante o logout: $error");
-      // Adicione aqui uma lógica para exibir uma mensagem de erro ao usuário, se necessário.
-    }
+  void handleLogout(BuildContext context) {
+    AuthService().logout().then((String? erro) {
+      if (erro == null) {
+        // Logout bem-sucedido, redirecionar para a tela de boas-vindas
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+          (route) => false,
+        );
+      } else {
+        // Lida com qualquer erro que possa ocorrer durante o logout
+        print("Erro durante o logout: $erro");
+        // Adicione aqui uma lógica para exibir uma mensagem de erro ao usuário, se necessário.
+      }
+    });
   }
 
   @override
