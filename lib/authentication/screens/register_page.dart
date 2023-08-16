@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:foresty/authentication/screens/login_page.dart';
 import 'package:validadores/Validador.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/home_page.dart';
@@ -250,7 +249,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   String _selectedState = '';
   String _selectedCity = '';
-
+  AuthService authService = AuthService();
   bool _isLoading = false;
 
   @override
@@ -267,9 +266,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  final _formKey = GlobalKey<FormState>();
-
-  AuthService authService = AuthService();
+  // Global Keys
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -277,35 +275,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       children: [
         Scaffold(
           backgroundColor: Colors.grey[300],
-          appBar: AppBar(
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarColor: Colors
-                  .black87, // Define a cor de plano de fundo da barra de status
-              statusBarIconBrightness: Brightness.light,
-            ),
-            backgroundColor: Colors.green[700],
-            elevation: 0,
-            centerTitle: true,
-            leading: const Icon(
-              Icons.forest,
-              size: 40,
-              color: Colors.white,
-            ),
-            title: const Text(
-              'Cadastro',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
           body: SingleChildScrollView(
             child: SafeArea(
               child: Center(
                 child: Column(
                   children: [
-                    const SizedBox(height: 26),
+                    const SizedBox(height: 46),
                     const Text(
                       'Dados pessoais',
                       style: TextStyle(
@@ -314,6 +289,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(height: 8),
                     Form(
                       key: _formKey,
                       child: Column(
@@ -332,6 +308,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               } else {
                                 null;
                               }
+                              return null;
                             },
                           ),
                           const SizedBox(height: 8),
@@ -456,32 +433,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // Register Method
-  void signUserUp() {
-    String email = _emailController.text;
-    String password = _passwordController.text;
-    String name = _nameController.text;
-    String cpf = _cpfController.text;
-    String state = _selectedState;
-    String city = _selectedCity;
-
+  void signUserUp() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
-
       _createUser(
-          email: email,
-          password: password,
-          name: name,
-          cpf: cpf,
-          state: state,
-          city: city);
+        email: _emailController.text,
+        password: _passwordController.text,
+        name: _nameController.text,
+        cpf: _cpfController.text,
+        state: _selectedState,
+        city: _selectedCity,
+      ).then((String? erro) {
+        if (erro != null) {
+          showSnackBar(context: context, mensagem: erro);
+        } else {
+          showSnackBar(
+            context: context,
+            mensagem: 'Cadastro realizado com sucesso!',
+            isErro: false,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  HomePage(user: FirebaseAuth.instance.currentUser!),
+            ),
+          );
+        }
+      });
     } else {
       _formKey.currentState!.validate();
     }
   }
 
-  _createUser({
+  Future<String?> _createUser({
     required String email,
     required String password,
     required String name,
@@ -490,7 +477,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required String city,
   }) async {
     try {
-      String? erro = await authService.registerUser(
+      return await authService.registerUser(
         password: password,
         email: email,
         name: name,
@@ -498,27 +485,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         state: state,
         city: city,
       );
-
-      if (erro != null) {
-        showSnackBar(context: context, mensagem: erro);
-      } else {
-        showSnackBar(
-          context: context,
-          mensagem: 'Cadastro realizado com sucesso!',
-          isErro: false,
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                HomePage(user: FirebaseAuth.instance.currentUser!),
-          ),
-        );
-      }
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    } catch (error) {
+      return error.toString();
     }
   }
 }

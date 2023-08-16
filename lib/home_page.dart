@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foresty/authentication/screens/welcome_page.dart';
 import 'authentication/services/auth_service.dart';
+import 'components/show_password_confirmation_dialog.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -70,7 +71,14 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.red,
               ),
               title: const Text("Remover conta"),
-              onTap: () {},
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return PasswordConfirmationDialog(email: "");
+                  },
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.logout),

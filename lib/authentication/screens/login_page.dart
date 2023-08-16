@@ -18,11 +18,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   // text editing controllers
   final TextEditingController _emailController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
-
   AuthService authService = AuthService();
-
   final _formKey = GlobalKey<FormState>();
 
   @override
