@@ -20,158 +20,170 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   AuthService authService = AuthService();
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 46),
-                // logo
-                const Icon(
-                  Icons.forest,
-                  size: 128,
-                  color: Color.fromARGB(255, 0, 90, 3),
-                ),
-                const SizedBox(height: 76),
-                // welcome
-                const Text(
-                  'Bem Vindo!',
-                  style: TextStyle(
+    return Stack(children: [
+      Scaffold(
+        backgroundColor: Colors.grey[300],
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                children: [
+                  const SizedBox(height: 46),
+                  // logo
+                  const Icon(
+                    Icons.forest,
+                    size: 128,
                     color: Color.fromARGB(255, 0, 90, 3),
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                const SizedBox(height: 16),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      // username textfield
-                      MyTextField(
-                        prefixIcon: Icons.email,
-                        controller: _emailController,
-                        hintText: 'Digite seu email',
-                        obscureText: false,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "O e-mail deve ser preenchido";
-                          }
-                          if (!value.contains("@") ||
-                              !value.contains(".") ||
-                              value.length < 4) {
-                            return "O e-mail precisa ser válido";
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 08),
-                      // password textfield
-                      MyTextField(
-                        prefixIcon: Icons.lock,
-                        controller: _passwordController,
-                        hintText: 'Digite sua senha',
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "A senha deve ser preenchida";
-                          }
-                          if (value.length < 6) {
-                            return "A senha deve conter pelo menos 6 caracteres";
-                          }
-                          return null; // Retorna null se a validação for bem-sucedida
-                        },
-                      ),
-                      // forgot password?
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 35.0,
-                          vertical: 5.0,
+                  const SizedBox(height: 76),
+                  // welcome
+                  const Text(
+                    'Bem Vindo!',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 0, 90, 3),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        // username textfield
+                        MyTextField(
+                          prefixIcon: Icons.email,
+                          controller: _emailController,
+                          hintText: 'Digite seu email',
+                          obscureText: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "O e-mail deve ser preenchido";
+                            }
+                            if (!value.contains("@") ||
+                                !value.contains(".") ||
+                                value.length < 4) {
+                              return "O e-mail precisa ser válido";
+                            }
+                            return null;
+                          },
                         ),
-                        child: TextButton(
-                          onPressed: esqueciMinhaSenhaClicado,
+                        const SizedBox(height: 08),
+                        // password textfield
+                        MyTextField(
+                          prefixIcon: Icons.lock,
+                          controller: _passwordController,
+                          hintText: 'Digite sua senha',
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "A senha deve ser preenchida";
+                            }
+                            if (value.length < 6) {
+                              return "A senha deve conter pelo menos 6 caracteres";
+                            }
+                            return null; // Retorna null se a validação for bem-sucedida
+                          },
+                        ),
+                        // forgot password?
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 35.0,
+                            vertical: 5.0,
+                          ),
+                          child: TextButton(
+                            onPressed: esqueciMinhaSenhaClicado,
+                            child: const Text(
+                              'Esqueceu a senha?',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        // sign in button
+                        MyButton(
+                          onTap: signUserIn,
+                          text_button: 'Entrar',
+                        ),
+                        const SizedBox(height: 50),
+                      ],
+                    ),
+                  ),
+                  // or continue with
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            thickness: 0.5,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
-                            'Esqueceu a senha?',
+                            'Ou continue com',
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
-                      ),
-                      // sign in button
-                      MyButton(
-                        onTap: signUserIn,
-                        text_button: 'Entrar',
-                      ),
-                      const SizedBox(height: 50),
-                    ],
+                        Expanded(
+                          child: Divider(
+                            thickness: 0.5,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                // or continue with
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
+
+                  const SizedBox(height: 30),
+
+                  // google / facebook / yahoo sign in buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.black,
-                        ),
+                      // google button
+                      GestureDetector(
+                        onTap: signInWithGoogle,
+                        child: const SquareTite(
+                            imagePath: 'lib/assets/google.png'),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'Ou continue com',
-                          style: TextStyle(color: Colors.black),
-                        ),
+
+                      const SizedBox(width: 15),
+
+                      // facebook button
+                      GestureDetector(
+                        child: const SquareTite(
+                            imagePath: 'lib/assets/facebook.png'),
                       ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.black,
-                        ),
-                      ),
+
+                      const SizedBox(width: 15),
+
+                      // yahoo button
+                      const SquareTite(imagePath: 'lib/assets/yahoo.png'),
                     ],
-                  ),
-                ),
+                  )
 
-                const SizedBox(height: 30),
-
-                // google / facebook / yahoo sign in buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // google button
-                    GestureDetector(
-                      onTap: signInWithGoogle,
-                      child: SquareTite(imagePath: 'lib/assets/google.png'),
-                    ),
-
-                    const SizedBox(width: 15),
-
-                    // facebook button
-                    GestureDetector(
-                      child: SquareTite(imagePath: 'lib/assets/facebook.png'),
-                    ),
-
-                    const SizedBox(width: 15),
-
-                    // yahoo button
-                    SquareTite(imagePath: 'lib/assets/yahoo.png'),
-                  ],
-                )
-
-                // not a member? register now
-              ],
+                  // not a member? register now
+                ],
+              ),
             ),
           ),
         ),
       ),
-    );
+      if (_isLoading)
+        Container(
+          color: Colors.black.withOpacity(0.5),
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+    ]);
   }
 
 // sign google user in method
@@ -193,6 +205,9 @@ class _LoginPageState extends State<LoginPage> {
     String pass = _passwordController.text;
 
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
       authService.loginUser(email: email, password: pass).then((String? erro) {
         if (erro != null) {
           showSnackBar(context: context, mensagem: erro);

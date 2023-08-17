@@ -8,7 +8,6 @@ import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
 import '../../components/show_snackbar.dart';
 import '../services/auth_service.dart';
-import 'package:flutter/services.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key? key}) : super(key: key);
@@ -424,7 +423,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (_isLoading)
           Container(
             color: Colors.black.withOpacity(0.5),
-            child: Center(
+            child: const Center(
               child: CircularProgressIndicator(),
             ),
           ),

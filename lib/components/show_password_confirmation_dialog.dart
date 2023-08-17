@@ -48,7 +48,10 @@ class _PasswordConfirmationDialogState
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text("CANCELAR"),
+          child: const Text(
+            "CANCELAR",
+            style: TextStyle(color: Color.fromARGB(255, 91, 91, 91)),
+          ),
         ),
         TextButton(
           onPressed: isSenhaValida
@@ -63,7 +66,7 @@ class _PasswordConfirmationDialogState
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  WelcomeScreen()), // Redirecionar para a tela de boas-vindas
+                                  const WelcomeScreen()), // Redirecionar para a tela de boas-vindas
                           (route) => false,
                         );
                       }
@@ -71,7 +74,10 @@ class _PasswordConfirmationDialogState
                   );
                 }
               : null,
-          child: const Text("EXCLUIR CONTA"),
+          child: const Text(
+            "EXCLUIR CONTA",
+            style: TextStyle(color: Colors.redAccent),
+          ),
         ),
       ],
     );
