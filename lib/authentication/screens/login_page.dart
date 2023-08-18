@@ -188,15 +188,41 @@ class _LoginPageState extends State<LoginPage> {
 
 // sign google user in method
   signInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
 
-    AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
 
-    UserCredential user =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        await FirebaseAuth.instance
+            .signInWithCredential(credential)
+            .then((userCredential) {
+          final User? user = userCredential.user;
+
+          if (user != null) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(user: user),
+              ),
+            );
+          }
+        });
+      }
+    } catch (error) {
+      print("Erro durante o login com o Google: $error");
+      showSnackBar(
+        context: context,
+        mensagem: "Erro durante o login com o Google.",
+        isErro: true,
+      );
+    }
   }
 
 // sign user in method

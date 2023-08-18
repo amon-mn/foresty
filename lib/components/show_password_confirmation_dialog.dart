@@ -50,7 +50,6 @@ class _PasswordConfirmationDialogState
           },
           child: const Text(
             "CANCELAR",
-            style: TextStyle(color: Color.fromARGB(255, 91, 91, 91)),
           ),
         ),
         TextButton(
@@ -76,7 +75,6 @@ class _PasswordConfirmationDialogState
               : null,
           child: const Text(
             "EXCLUIR CONTA",
-            style: TextStyle(color: Colors.redAccent),
           ),
         ),
       ],
