@@ -57,7 +57,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA1WLHtdFen8QLgF2X4vMC_UVGXP2E-R3Q',
+    apiKey: 'AIzaSyCDll66xmGhwbYBFRRBxj8lvQIFrwXydqw',
     appId: '1:883889030916:android:9abdf031b737127cfa7251',
     messagingSenderId: '883889030916',
     projectId: 'forest-traceability',
@@ -70,8 +70,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '883889030916',
     projectId: 'forest-traceability',
     storageBucket: 'forest-traceability.appspot.com',
-    androidClientId: '883889030916-uutl3o7f45ombi0eeul1bdf8f1t6anmv.apps.googleusercontent.com',
-    iosClientId: '883889030916-rhrg32gli7kh20efa6lmn8s1goe71kkg.apps.googleusercontent.com',
-    iosBundleId: 'com.example.foresty',
+    androidClientId:
+        '883889030916-uutl3o7f45ombi0eeul1bdf8f1t6anmv.apps.googleusercontent.com',
+    iosClientId:
+        '883889030916-rhrg32gli7kh20efa6lmn8s1goe71kkg.apps.googleusercontent.com',
+    iosBundleId: 'com.example.foresty_app',
   );
 }

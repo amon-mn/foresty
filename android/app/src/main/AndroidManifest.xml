@@ -1,6 +1,6 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.foresty">
+    package="com.example.foresty_app">
     <application
     android:label="foresty"
     android:name="${applicationName}"
