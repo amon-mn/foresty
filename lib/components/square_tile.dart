@@ -9,7 +9,7 @@ class SquareTite extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Ink(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border.all(color: Color.fromARGB(255, 195, 195, 195)),

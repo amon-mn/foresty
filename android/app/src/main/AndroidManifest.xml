@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.foresty">
     <application
-    android:label="foresty"
+    android:label="Foresty"
     android:name="${applicationName}"
-    android:icon="@mipmap/ic_launcher">
+    android:icon="@mipmap/leaf_logo">
     <activity
         android:name=".MainActivity"
         android:exported="true"
