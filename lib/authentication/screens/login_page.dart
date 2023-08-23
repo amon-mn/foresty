@@ -4,6 +4,7 @@ import 'package:foresty/authentication/screens/register_page.dart';
 import 'package:foresty/authentication/screens/user_addinfo.dart';
 import 'package:foresty/home_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
 import '../../components/show_snackbar.dart';
