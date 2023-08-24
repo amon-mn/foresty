@@ -159,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       // facebook button
                       GestureDetector(
+                        onTap: signInWithFacebook,
                         child: const SquareTite(
                             imagePath: 'lib/assets/facebook.png'),
                       ),
@@ -188,18 +189,40 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // sign facebook user in method
-/*
-Future<UserCredential> signInWithFacebook() async {
-  // Trigger the sign-in flow
-  final LoginResult loginResult = await FacebookAuth.instance.login();
 
-  // Create a credential from the access token
-  final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken.token);
+  signInWithFacebook() async {
+    try {
+      // Iniciar o fluxo de login
+      final LoginResult loginResult = await FacebookAuth.instance.login();
 
-  // Once signed in, return the UserCredential
-  return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-}
-*/
+      // Criar uma credencial a partir do token de acesso
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+      // Fazer login com a credencial
+      await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential)
+          .then((userCredential) {
+        final User? user = userCredential.user;
+
+        if (user != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(user: user),
+            ),
+          );
+        }
+      });
+    } catch (error) {
+      print("Erro durante o login com o Facebook: $error");
+      showSnackBar(
+        context: context,
+        mensagem: "Erro durante o login com o Facebook.",
+        isErro: true,
+      );
+    }
+  }
 
 // sign google user in method
   signInWithGoogle() async {
