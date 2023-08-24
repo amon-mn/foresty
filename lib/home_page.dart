@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
-        title: Text('Teste'),
+        title: Text('Foresty'),
         actions: [
           IconButton(
             icon: Icon(Icons.person),

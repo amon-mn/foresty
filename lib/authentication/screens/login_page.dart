@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foresty/authentication/screens/add_info_user.dart';
 import 'package:foresty/home_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../components/my_button.dart';
@@ -22,6 +23,110 @@ class _LoginPageState extends State<LoginPage> {
   AuthService authService = AuthService();
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
+
+// sign google user in method
+  void handleGoogleLogin(BuildContext context) {
+    AuthService().signInWithGoogle().then((String? errorMessage) async {
+      if (errorMessage == null) {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await AuthService().hasAdditionalInfo(user.uid).then((value) {
+            if (value) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(user: user),
+                ),
+              );
+            } else {
+              // Redirecionar para a página de adição de informações para usuários do Google
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddInfoGoogleUser(user: user),
+                ),
+              );
+            }
+          });
+        }
+      } else if (errorMessage != "Login Cancelado") {
+        // Exibir mensagem de erro
+        print(errorMessage);
+      }
+    });
+  }
+
+// sign user in method
+  void signUserIn() {
+    String email = _emailController.text;
+    String pass = _passwordController.text;
+
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      authService.loginUser(email: email, password: pass).then((String? erro) {
+        if (erro != null) {
+          showSnackBar(context: context, mensagem: erro);
+        } else {
+          // Redirecionar para a tela principal após o login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  HomePage(user: FirebaseAuth.instance.currentUser!),
+            ),
+          );
+        }
+      });
+    }
+  }
+
+  esqueciMinhaSenhaClicado() {
+    String email = _emailController.text;
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController redefinicaoSenhaController =
+              TextEditingController(text: email);
+          return AlertDialog(
+            title: const Text("Confirme o e-mail para redefinição de senha."),
+            content: TextFormField(
+              controller: redefinicaoSenhaController,
+              decoration: const InputDecoration(
+                label: Text("Confirme o e-mail."),
+              ),
+            ),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(32)),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  authService
+                      .missPassword(email: redefinicaoSenhaController.text)
+                      .then((String? erro) {
+                    if (erro == null) {
+                      showSnackBar(
+                        context: context,
+                        mensagem: "E-mail de redefinição enviado!",
+                        isErro: false,
+                      );
+                    } else {
+                      showSnackBar(context: context, mensagem: erro);
+                    }
+                    Navigator.pop(context);
+                  });
+                },
+                child: const Text("Redefinir senha."),
+              )
+            ],
+          );
+        },
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +254,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       // google button
                       GestureDetector(
-                        onTap: signInWithGoogle,
+                        onTap: () => handleGoogleLogin(context),
                         child: const SquareTite(
                             imagePath: 'lib/assets/google.png'),
                       ),
@@ -184,116 +289,5 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
     ]);
-  }
-
-// sign google user in method
-  signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        await FirebaseAuth.instance
-            .signInWithCredential(credential)
-            .then((userCredential) {
-          final User? user = userCredential.user;
-
-          if (user != null) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePage(user: user),
-              ),
-            );
-          }
-        });
-      }
-    } catch (error) {
-      print("Erro durante o login com o Google: $error");
-      showSnackBar(
-        context: context,
-        mensagem: "Erro durante o login com o Google.",
-        isErro: true,
-      );
-    }
-  }
-
-// sign user in method
-  void signUserIn() {
-    String email = _emailController.text;
-    String pass = _passwordController.text;
-
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      authService.loginUser(email: email, password: pass).then((String? erro) {
-        if (erro != null) {
-          showSnackBar(context: context, mensagem: erro);
-        } else {
-          // Redirecionar para a tela principal após o login
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  HomePage(user: FirebaseAuth.instance.currentUser!),
-            ),
-          );
-        }
-      });
-    }
-  }
-
-  esqueciMinhaSenhaClicado() {
-    String email = _emailController.text;
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          TextEditingController redefinicaoSenhaController =
-              TextEditingController(text: email);
-          return AlertDialog(
-            title: const Text("Confirme o e-mail para redefinição de senha."),
-            content: TextFormField(
-              controller: redefinicaoSenhaController,
-              decoration: const InputDecoration(
-                label: Text("Confirme o e-mail."),
-              ),
-            ),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(32)),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  authService
-                      .missPassword(email: redefinicaoSenhaController.text)
-                      .then((String? erro) {
-                    if (erro == null) {
-                      showSnackBar(
-                        context: context,
-                        mensagem: "E-mail de redefinição enviado!",
-                        isErro: false,
-                      );
-                    } else {
-                      showSnackBar(context: context, mensagem: erro);
-                    }
-                    Navigator.pop(context);
-                  });
-                },
-                child: const Text("Redefinir senha."),
-              )
-            ],
-          );
-        },
-      );
-    });
   }
 }
