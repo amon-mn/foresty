@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'authentication/services/auth_service.dart';
 import 'components/show_password_confirmation_dialog.dart';
@@ -15,6 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String _userName = ""; // Inicializa o nome do usuário como vazio
+
   void handleLogout(BuildContext context) {
     AuthService().logout().then((String? erro) {
       if (erro == null) {
@@ -29,15 +31,22 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<Map<String, dynamic>> fetchUserData(String userId) async {
+  Future<void> fetchUserData(String userId) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     if (snapshot.exists) {
-      return snapshot.data()!;
-    } else {
-      return {}; // Retorna um mapa vazio se não houver dados no Firestore
+      Map<String, dynamic> userData = snapshot.data()!;
+      setState(() {
+        _userName = userData['name'];
+      });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData(widget.user.uid);
   }
 
   @override
@@ -53,9 +62,8 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Color.fromARGB(255, 33, 87, 25),
               ),
               accountName: Text(
-                (widget.user.displayName != null)
-                    ? widget.user.displayName!
-                    : "",
+                _userName,
+                style: TextStyle(fontSize: 16),
               ),
               accountEmail: Text(widget.user.email!),
               decoration: BoxDecoration(
@@ -99,15 +107,11 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () async {
-              Map<String, dynamic> userData =
-                  await fetchUserData(widget.user.uid);
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => UserPage(
-                    displayName: widget.user.displayName!,
                     email: widget.user.email!,
-                    userData: userData,
                   ),
                 ),
               );

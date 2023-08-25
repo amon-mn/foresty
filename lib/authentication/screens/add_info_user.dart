@@ -370,8 +370,8 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
 
       // Dados a serem salvos
       final data = {
-        'name': _nameController,
-        'cpf': _cpfController,
+        'name': _nameController.text,
+        'cpf': _cpfController.text,
         'state': _selectedState,
         'city': _selectedCity,
         // Outras informações que você desejar salvar
