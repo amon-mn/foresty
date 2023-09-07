@@ -57,7 +57,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCDll66xmGhwbYBFRRBxj8lvQIFrwXydqw',
+    apiKey: 'AIzaSyA1WLHtdFen8QLgF2X4vMC_UVGXP2E-R3Q',
     appId: '1:883889030916:android:9abdf031b737127cfa7251',
     messagingSenderId: '883889030916',
     projectId: 'forest-traceability',

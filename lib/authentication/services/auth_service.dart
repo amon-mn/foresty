@@ -24,6 +24,41 @@ class AuthService {
     return null;
   }
 
+  // Função de login via google
+  Future<String?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        final UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+
+        final User? user = userCredential.user;
+
+        if (user != null) {
+          // Navegar para a página desejada após o login
+          return null; // Retornar null significa que o login foi bem-sucedido.
+        }
+      }
+
+      if (googleUser == null) {
+        return "Login Cancelado";
+      }
+    } catch (error) {
+      print("Erro durante o login com o Google: $error");
+      return "Erro durante o login com o Google.";
+    }
+    return "Erro durante o login com o Google.";
+  }
+
   Future<String?> registerUser({
     required String email,
     required String password,
@@ -63,18 +98,37 @@ class AuthService {
     return null;
   }
 
+  // Função de logout
   Future<String?> logout() async {
     try {
       print("Tentando fazer logout...");
+
+      // Faz o logout do Google
+      await GoogleSignIn().signOut();
+
+      // Faz o logout do Firebase
       await _firebaseAuth.signOut();
       await GoogleSignIn().signOut();
       await FacebookAuth.instance.logOut();
       print("Logout realizado com sucesso!");
-    } on FirebaseAuthException catch (e) {
-      print("Erro durante o logout: ${e.code}");
-      return e.code;
+      return null; // Retornar null significa que o logout foi bem-sucedido.
+    } catch (error) {
+      print("Erro durante o logout: $error");
+      return "Erro durante o logout: $error";
     }
-    return null;
+  }
+
+// Função para verificar se o usuario preencheu as informações de cadastro
+  Future<bool> hasAdditionalInfo(String userId) async {
+    try {
+      DocumentSnapshot userSnapshot =
+          await _firebaseFirestore.collection('users').doc(userId).get();
+
+      return userSnapshot.exists;
+    } catch (error) {
+      print("Erro ao verificar informações adicionais: $error");
+      return false;
+    }
   }
 
   Future<String?> missPassword({required String email}) async {

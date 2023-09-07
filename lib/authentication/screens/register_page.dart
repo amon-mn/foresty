@@ -275,6 +275,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Scaffold(
           backgroundColor: Colors.grey[300],
           body: SingleChildScrollView(
+            reverse: true,
             child: SafeArea(
               child: Center(
                 child: Column(
@@ -379,7 +380,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           const SizedBox(height: 8),
                           MyDropdownFormField(
-                            selectedValue: _selectedState,
+                            selectedValueNotifier:
+                                ValueNotifier<String>(_selectedState),
                             itemsList: statesList,
                             onChanged: (value) {
                               setState(() {
@@ -393,7 +395,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           const SizedBox(height: 8),
                           MyDropdownFormField(
-                            selectedValue: _selectedCity,
+                            selectedValueNotifier:
+                                ValueNotifier<String>(_selectedCity),
                             itemsList: _selectedState.isEmpty ||
                                     citiesByState[_selectedState] == null
                                 ? []
@@ -409,7 +412,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 16),
                           MyButton(
                             onTap: signUserUp,
-                            text_button: 'Cadastrar',
+                            textButton: 'Cadastrar',
                           ),
                         ],
                       ),

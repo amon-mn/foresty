@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:foresty/home_page.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:foresty/authentication/screens/add_info_user.dart';
+import 'package:foresty/home_page.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfild.dart';
 import '../../components/show_snackbar.dart';
@@ -17,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // text editing controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   AuthService authService = AuthService();
@@ -26,170 +25,184 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Scaffold(
-        backgroundColor: Colors.grey[300],
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Center(
-              child: Column(
-                children: [
-                  const SizedBox(height: 46),
-                  // logo
-                  const Icon(
-                    Icons.forest,
-                    size: 128,
-                    color: Color.fromARGB(255, 0, 90, 3),
-                  ),
-                  const SizedBox(height: 76),
-                  // welcome
-                  const Text(
-                    'Bem Vindo!',
-                    style: TextStyle(
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Colors.grey[300],
+          body: SingleChildScrollView(
+            reverse: true,
+            child: SafeArea(
+              child: Center(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 46),
+                    const Icon(
+                      Icons.forest,
+                      size: 128,
                       color: Color.fromARGB(255, 0, 90, 3),
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        // username textfield
-                        MyTextField(
-                          prefixIcon: Icons.email,
-                          controller: _emailController,
-                          hintText: 'Digite seu email',
-                          obscureText: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "O e-mail deve ser preenchido";
-                            }
-                            if (!value.contains("@") ||
-                                !value.contains(".") ||
-                                value.length < 4) {
-                              return "O e-mail precisa ser válido";
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 08),
-                        // password textfield
-                        MyTextField(
-                          prefixIcon: Icons.lock,
-                          controller: _passwordController,
-                          hintText: 'Digite sua senha',
-                          obscureText: true,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "A senha deve ser preenchida";
-                            }
-                            if (value.length < 6) {
-                              return "A senha deve conter pelo menos 6 caracteres";
-                            }
-                            return null; // Retorna null se a validação for bem-sucedida
-                          },
-                        ),
-                        // forgot password?
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 35.0,
-                            vertical: 5.0,
+                    const SizedBox(height: 76),
+                    const Text(
+                      'Bem Vindo!',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 0, 90, 3),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          MyTextField(
+                            prefixIcon: Icons.email,
+                            controller: _emailController,
+                            hintText: 'Digite seu email',
+                            obscureText: false,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "O e-mail deve ser preenchido";
+                              }
+                              if (!value.contains("@") ||
+                                  !value.contains(".") ||
+                                  value.length < 4) {
+                                return "O e-mail precisa ser válido";
+                              }
+                              return null;
+                            },
                           ),
-                          child: TextButton(
-                            onPressed: esqueciMinhaSenhaClicado,
-                            child: const Text(
-                              'Esqueceu a senha?',
+                          const SizedBox(height: 8),
+                          MyTextField(
+                            prefixIcon: Icons.lock,
+                            controller: _passwordController,
+                            hintText: 'Digite sua senha',
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "A senha deve ser preenchida";
+                              }
+                              if (value.length < 6) {
+                                return "A senha deve conter pelo menos 6 caracteres";
+                              }
+                              return null; // Retorna null se a validação for bem-sucedida
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 35.0,
+                              vertical: 5.0,
+                            ),
+                            child: TextButton(
+                              onPressed: forgotMyPassword,
+                              child: const Text(
+                                'Esqueceu a senha?',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          MyButton(
+                            onTap: signUserIn,
+                            textButton: 'Entrar',
+                          ),
+                          const SizedBox(height: 50),
+                        ],
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              thickness: 0.5,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(
+                              'Ou continue com',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
-                        ),
-                        // sign in button
-                        MyButton(
-                          onTap: signUserIn,
-                          text_button: 'Entrar',
-                        ),
-                        const SizedBox(height: 50),
-                      ],
+                          Expanded(
+                            child: Divider(
+                              thickness: 0.5,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  // or continue with
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Row(
+                    const SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: Divider(
-                            thickness: 0.5,
-                            color: Colors.black,
-                          ),
+                        GestureDetector(
+                          onTap: () => handleGoogleLogin(context),
+                          child: SquareTite(imagePath: 'lib/assets/google.png'),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text(
-                            'Ou continue com',
-                            style: TextStyle(color: Colors.black),
-                          ),
+                        const SizedBox(width: 15),
+                        GestureDetector(
+                          onTap: signInWithFacebook,
+                          child:
+                              SquareTite(imagePath: 'lib/assets/facebook.png'),
                         ),
-                        Expanded(
-                          child: Divider(
-                            thickness: 0.5,
-                            color: Colors.black,
-                          ),
-                        ),
+                        const SizedBox(width: 15),
+                        SquareTite(imagePath: 'lib/assets/yahoo.png'),
                       ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  // google / facebook / yahoo sign in buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // google button
-                      GestureDetector(
-                        onTap: signInWithGoogle,
-                        child: const SquareTite(
-                            imagePath: 'lib/assets/google.png'),
-                      ),
-
-                      const SizedBox(width: 15),
-
-                      // facebook button
-                      GestureDetector(
-                        onTap: signInWithFacebook,
-                        child: const SquareTite(
-                            imagePath: 'lib/assets/facebook.png'),
-                      ),
-
-                      const SizedBox(width: 15),
-
-                      // yahoo button
-                      const SquareTite(imagePath: 'lib/assets/yahoo.png'),
-                    ],
-                  )
-
-                  // not a member? register now
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-      if (_isLoading)
-        Container(
-          color: Colors.black.withOpacity(0.5),
-          child: const Center(
-            child: CircularProgressIndicator(),
+        if (_isLoading)
+          Container(
+            color: Colors.black.withOpacity(0.5),
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
-        ),
-    ]);
+      ],
+    );
+  }
+
+// sign google user in method
+  void handleGoogleLogin(BuildContext context) {
+    AuthService().signInWithGoogle().then((String? errorMessage) async {
+      if (errorMessage == null) {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await AuthService().hasAdditionalInfo(user.uid).then((value) {
+            if (value) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(user: user),
+                ),
+              );
+            } else {
+              // Redirecionar para a página de adição de informações para usuários do Google
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddInfoGoogleUser(user: user),
+                ),
+              );
+            }
+          });
+        }
+      } else if (errorMessage != "Login Cancelado") {
+        // Exibir mensagem de erro
+        print(errorMessage);
+      }
+    });
   }
 
 // sign facebook user in method
-
   signInWithFacebook() async {
     try {
       // Iniciar o fluxo de login
@@ -224,45 +237,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-// sign google user in method
-  signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        await FirebaseAuth.instance
-            .signInWithCredential(credential)
-            .then((userCredential) {
-          final User? user = userCredential.user;
-
-          if (user != null) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePage(user: user),
-              ),
-            );
-          }
-        });
-      }
-    } catch (error) {
-      print("Erro durante o login com o Google: $error");
-      showSnackBar(
-        context: context,
-        mensagem: "Erro durante o login com o Google.",
-        isErro: true,
-      );
-    }
-  }
-
 // sign user in method
   void signUserIn() {
     String email = _emailController.text;
@@ -289,7 +263,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  esqueciMinhaSenhaClicado() {
+  forgotMyPassword() {
     String email = _emailController.text;
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       showDialog(
