@@ -323,7 +323,7 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
             ),
             const SizedBox(height: 16),
             MyDropdownFormField(
-              selectedValue: _selectedState,
+              selectedValueNotifier: ValueNotifier<String>(_selectedState),
               itemsList: statesList,
               onChanged: (value) {
                 setState(() {
@@ -334,9 +334,9 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
               labelText: 'Estado',
               prefixIcon: Icons.location_on,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             MyDropdownFormField(
-              selectedValue: _selectedCity,
+              selectedValueNotifier: ValueNotifier<String>(_selectedCity),
               itemsList: _selectedState.isEmpty ||
                       citiesByState[_selectedState] == null
                   ? []
@@ -354,7 +354,7 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
               onTap: () {
                 _saveAdditionalInfo();
               },
-              text_button: 'Salvar',
+              textButton: 'Salvar',
             ),
           ],
         ),

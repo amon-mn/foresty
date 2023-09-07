@@ -289,131 +289,137 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 16),
-                          MyTextField(
-                            prefixIcon: Icons.person,
-                            controller: _nameController,
-                            hintText: 'Nome completo',
-                            obscureText: false,
-                            validator: (value) {
-                              if (value == null ||
-                                  value.isEmpty ||
-                                  value.length < 4) {
-                                return "O nome deve ser preenchido";
-                              } else {
-                                null;
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                          MyTextField(
-                            inputFormatter: MaskTextInputFormatter(
-                                mask: '###.###.###-##',
-                                filter: {"#": RegExp(r'[0-9xX]')},
-                                type: MaskAutoCompletionType.lazy),
-                            prefixIcon: Icons.person,
-                            controller: _cpfController,
-                            hintText: 'Digite seu CPF',
-                            obscureText: false,
-                            validator: (value) {
-                              return Validador()
-                                  .add(Validar.CPF, msg: 'CPF Inválido')
-                                  .add(Validar.OBRIGATORIO,
-                                      msg: 'O CPF deve ser preenchido')
-                                  .minLength(11)
-                                  .maxLength(11)
-                                  .valido(value, clearNoNumber: true);
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                          MyTextField(
-                            prefixIcon: Icons.email,
-                            controller: _emailController,
-                            hintText: 'Digite seu e-mail',
-                            obscureText: false,
-                            validator: (value) {
-                              return Validador()
-                                  .add(Validar.EMAIL,
-                                      msg: 'O e-mail precisa ser válido')
-                                  .add(Validar.OBRIGATORIO,
-                                      msg: 'O e-mail deve ser preenchido')
-                                  .valido(value);
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                          MyTextField(
-                            prefixIcon: Icons.lock,
-                            controller: _passwordController,
-                            hintText: 'Defina sua senha',
-                            obscureText: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "A senha deve ser preenchida";
-                              }
-                              if (value.length < 6) {
-                                return "A senha deve conter pelo menos 6 caracteres";
-                              }
-                              return null; // Retorna null se a validação for bem-sucedida
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                          MyTextField(
-                            prefixIcon: Icons.lock,
-                            controller: _confirmationController,
-                            hintText: 'Confirme sua senha',
-                            obscureText: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "A confirmação de senha deve ser preenchida";
-                              }
-                              if (value != _passwordController.text) {
-                                return "As senhas não coincidem";
-                              }
-                              return null; // Retorna null se a validação for bem-sucedida
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                          MyDropdownFormField(
-                            selectedValue: _selectedState,
-                            itemsList: statesList,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedState = value!;
-                                _selectedCity =
-                                    citiesByState[_selectedState]![0];
-                              });
-                            },
-                            labelText: 'Estado',
-                            prefixIcon: Icons.location_on,
-                          ),
-                          const SizedBox(height: 8),
-                          MyDropdownFormField(
-                            selectedValue: _selectedCity,
-                            itemsList: _selectedState.isEmpty ||
-                                    citiesByState[_selectedState] == null
-                                ? []
-                                : citiesByState[_selectedState]!,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedCity = value!;
-                              });
-                            },
-                            labelText: 'Cidade',
-                            prefixIcon: Icons.location_on,
-                          ),
-                          const SizedBox(height: 16),
-                          MyButton(
-                            onTap: signUserUp,
-                            text_button: 'Cadastrar',
-                          ),
-                        ],
+                    FractionallySizedBox(
+                      widthFactor: 0.85,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 16),
+                            MyTextField(
+                              prefixIcon: Icons.person,
+                              controller: _nameController,
+                              hintText: 'Nome completo',
+                              obscureText: false,
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.length < 4) {
+                                  return "O nome deve ser preenchido";
+                                } else {
+                                  null;
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            MyTextField(
+                              inputFormatter: MaskTextInputFormatter(
+                                  mask: '###.###.###-##',
+                                  filter: {"#": RegExp(r'[0-9xX]')},
+                                  type: MaskAutoCompletionType.lazy),
+                              prefixIcon: Icons.person,
+                              controller: _cpfController,
+                              hintText: 'Digite seu CPF',
+                              obscureText: false,
+                              validator: (value) {
+                                return Validador()
+                                    .add(Validar.CPF, msg: 'CPF Inválido')
+                                    .add(Validar.OBRIGATORIO,
+                                        msg: 'O CPF deve ser preenchido')
+                                    .minLength(11)
+                                    .maxLength(11)
+                                    .valido(value, clearNoNumber: true);
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            MyTextField(
+                              prefixIcon: Icons.email,
+                              controller: _emailController,
+                              hintText: 'Digite seu e-mail',
+                              obscureText: false,
+                              validator: (value) {
+                                return Validador()
+                                    .add(Validar.EMAIL,
+                                        msg: 'O e-mail precisa ser válido')
+                                    .add(Validar.OBRIGATORIO,
+                                        msg: 'O e-mail deve ser preenchido')
+                                    .valido(value);
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            MyTextField(
+                              prefixIcon: Icons.lock,
+                              controller: _passwordController,
+                              hintText: 'Defina sua senha',
+                              obscureText: true,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "A senha deve ser preenchida";
+                                }
+                                if (value.length < 6) {
+                                  return "A senha deve conter pelo menos 6 caracteres";
+                                }
+                                return null; // Retorna null se a validação for bem-sucedida
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            MyTextField(
+                              prefixIcon: Icons.lock,
+                              controller: _confirmationController,
+                              hintText: 'Confirme sua senha',
+                              obscureText: true,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "A confirmação de senha deve ser preenchida";
+                                }
+                                if (value != _passwordController.text) {
+                                  return "As senhas não coincidem";
+                                }
+                                return null; // Retorna null se a validação for bem-sucedida
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            MyDropdownFormField(
+                              hint: "Escolha seu Estado",
+                              selectedValueNotifier:
+                                  ValueNotifier<String>(_selectedState),
+                              itemsList: statesList,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedState = value!;
+                                  _selectedCity =
+                                      citiesByState[_selectedState]![0];
+                                });
+                              },
+                              labelText: 'Estado',
+                              prefixIcon: Icons.location_on,
+                            ),
+                            const SizedBox(height: 8),
+                            MyDropdownFormField(
+                              selectedValueNotifier:
+                                  ValueNotifier<String>(_selectedCity),
+                              itemsList: _selectedState.isEmpty ||
+                                      citiesByState[_selectedState] == null
+                                  ? []
+                                  : citiesByState[_selectedState]!,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedCity = value!;
+                                });
+                              },
+                              labelText: 'Cidade',
+                              prefixIcon: Icons.location_on,
+                            ),
+                            const SizedBox(height: 16),
+                            MyButton(
+                              onTap: signUserUp,
+                              textButton: 'Cadastrar',
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

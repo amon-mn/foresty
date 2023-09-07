@@ -156,68 +156,73 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        // username textfield
-                        MyTextField(
-                          prefixIcon: Icons.email,
-                          controller: _emailController,
-                          hintText: 'Digite seu email',
-                          obscureText: false,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "O e-mail deve ser preenchido";
-                            }
-                            if (!value.contains("@") ||
-                                !value.contains(".") ||
-                                value.length < 4) {
-                              return "O e-mail precisa ser válido";
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 08),
-                        // password textfield
-                        MyTextField(
-                          prefixIcon: Icons.lock,
-                          controller: _passwordController,
-                          hintText: 'Digite sua senha',
-                          obscureText: true,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "A senha deve ser preenchida";
-                            }
-                            if (value.length < 6) {
-                              return "A senha deve conter pelo menos 6 caracteres";
-                            }
-                            return null; // Retorna null se a validação for bem-sucedida
-                          },
-                        ),
-                        // forgot password?
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 35.0,
-                            vertical: 5.0,
+
+                  FractionallySizedBox(
+                    widthFactor: 0.9,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          // username textfield
+                          MyTextField(
+                            prefixIcon: Icons.email,
+                            controller: _emailController,
+                            hintText: 'Digite seu email',
+                            obscureText: false,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "O e-mail deve ser preenchido";
+                              }
+                              if (!value.contains("@") ||
+                                  !value.contains(".") ||
+                                  value.length < 4) {
+                                return "O e-mail precisa ser válido";
+                              }
+                              return null;
+                            },
                           ),
-                          child: TextButton(
-                            onPressed: esqueciMinhaSenhaClicado,
-                            child: const Text(
-                              'Esqueceu a senha?',
-                              style: TextStyle(color: Colors.black),
+                          const SizedBox(height: 08),
+                          // password textfield
+                          MyTextField(
+                            prefixIcon: Icons.lock,
+                            controller: _passwordController,
+                            hintText: 'Digite sua senha',
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "A senha deve ser preenchida";
+                              }
+                              if (value.length < 6) {
+                                return "A senha deve conter pelo menos 6 caracteres";
+                              }
+                              return null; // Retorna null se a validação for bem-sucedida
+                            },
+                          ),
+                          // forgot password?
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 35.0,
+                              vertical: 5.0,
+                            ),
+                            child: TextButton(
+                              onPressed: esqueciMinhaSenhaClicado,
+                              child: const Text(
+                                'Esqueceu a senha?',
+                                style: TextStyle(color: Colors.black),
+                              ),
                             ),
                           ),
-                        ),
-                        // sign in button
-                        MyButton(
-                          onTap: signUserIn,
-                          text_button: 'Entrar',
-                        ),
-                        const SizedBox(height: 50),
-                      ],
+                          // sign in button
+                          MyButton(
+                            onTap: signUserIn,
+                            textButton: 'Entrar',
+                          ),
+                          const SizedBox(height: 50),
+                        ],
+                      ),
                     ),
                   ),
+
                   // or continue with
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.0),

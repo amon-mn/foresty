@@ -21,9 +21,14 @@ class MyTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+    final textScaleFactor = MediaQuery.of(context).textScaleFactor;
+
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
       child: TextFormField(
+        style: TextStyle(
+            fontSize: 16 *
+                textScaleFactor), // Ajuste o tamanho da fonte responsivamente
         inputFormatters: inputFormatter != null ? [inputFormatter!] : [],
         controller: controller,
         obscureText: obscureText,

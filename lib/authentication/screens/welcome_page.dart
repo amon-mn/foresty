@@ -32,7 +32,7 @@ class WelcomeScreen extends StatelessWidget {
                   onTap: () {
                     goToUserLogin(context);
                   },
-                  text_button: 'Login',
+                  textButton: 'Login',
                 ),
                 MyTextButton(
                   onTap: () {
