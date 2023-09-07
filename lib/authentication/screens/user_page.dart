@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserPage extends StatefulWidget {
-  final String displayName;
   final String email;
-  final Map<String, dynamic> userData;
 
   const UserPage({
     Key? key,
-    required this.displayName,
     required this.email,
-    required this.userData,
   }) : super(key: key);
 
   @override
@@ -17,6 +15,26 @@ class UserPage extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<UserPage> {
+  Map<String, dynamic> _userData = {}; // Inicializa com um mapa vazio
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserDataFromFirebase();
+  }
+
+  Future<void> fetchUserDataFromFirebase() async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (snapshot.exists) {
+      setState(() {
+        _userData = snapshot.data()!;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +53,7 @@ class _MyWidgetState extends State<UserPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nome: ${widget.displayName}',
+              'Nome: ${_userData['name']}',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
@@ -50,15 +68,15 @@ class _MyWidgetState extends State<UserPage> {
             ),
             SizedBox(height: 8),
             Text(
-              'CPF: ${widget.userData['cpf']}',
+              'CPF: ${_userData['cpf']}',
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              'Cidade: ${widget.userData['city']}',
+              'Cidade: ${_userData['city']}',
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              'Estado: ${widget.userData['state']}',
+              'Estado: ${_userData['state']}',
               style: TextStyle(fontSize: 16),
             ),
           ],

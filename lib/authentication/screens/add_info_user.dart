@@ -287,76 +287,81 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
       ),
       body: SingleChildScrollView(
         reverse: true,
-        child: Column(
-          children: [
-            MyTextField(
-              prefixIcon: Icons.person,
-              controller: _nameController,
-              hintText: 'Nome completo',
-              obscureText: false,
-              validator: (value) {
-                if (value == null || value.isEmpty || value.length < 4) {
-                  return "O nome deve ser preenchido";
-                } else {
-                  null;
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            MyTextField(
-              inputFormatter: MaskTextInputFormatter(
-                  mask: '###.###.###-##',
-                  filter: {"#": RegExp(r'[0-9xX]')},
-                  type: MaskAutoCompletionType.lazy),
-              prefixIcon: Icons.person,
-              controller: _cpfController,
-              hintText: 'Digite seu CPF',
-              obscureText: false,
-              validator: (value) {
-                return Validador()
-                    .add(Validar.CPF, msg: 'CPF Inválido')
-                    .add(Validar.OBRIGATORIO, msg: 'O CPF deve ser preenchido')
-                    .minLength(11)
-                    .maxLength(11)
-                    .valido(value, clearNoNumber: true);
-              },
-            ),
-            const SizedBox(height: 16),
-            MyDropdownFormField(
-              selectedValueNotifier: ValueNotifier<String>(_selectedState),
-              itemsList: statesList,
-              onChanged: (value) {
-                setState(() {
-                  _selectedState = value!;
-                  _selectedCity = citiesByState[_selectedState]![0];
-                });
-              },
-              labelText: 'Estado',
-              prefixIcon: Icons.location_on,
-            ),
-            MyDropdownFormField(
-              selectedValueNotifier: ValueNotifier<String>(_selectedCity),
-              itemsList: _selectedState.isEmpty ||
-                      citiesByState[_selectedState] == null
-                  ? []
-                  : citiesByState[_selectedState]!,
-              onChanged: (value) {
-                setState(() {
-                  _selectedCity = value!;
-                });
-              },
-              labelText: 'Cidade',
-              prefixIcon: Icons.location_on,
-            ),
-            const SizedBox(height: 16),
-            MyButton(
-              onTap: () {
-                _saveAdditionalInfo();
-              },
-              textButton: 'Salvar',
-            ),
-          ],
+        child: FractionallySizedBox(
+          widthFactor: 0.9,
+          child: Column(
+            children: [
+              MyTextField(
+                prefixIcon: Icons.person,
+                controller: _nameController,
+                hintText: 'Nome completo',
+                obscureText: false,
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.length < 4) {
+                    return "O nome deve ser preenchido";
+                  } else {
+                    null;
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              MyTextField(
+                inputFormatter: MaskTextInputFormatter(
+                    mask: '###.###.###-##',
+                    filter: {"#": RegExp(r'[0-9xX]')},
+                    type: MaskAutoCompletionType.lazy),
+                prefixIcon: Icons.person,
+                controller: _cpfController,
+                hintText: 'Digite seu CPF',
+                obscureText: false,
+                validator: (value) {
+                  return Validador()
+                      .add(Validar.CPF, msg: 'CPF Inválido')
+                      .add(Validar.OBRIGATORIO,
+                          msg: 'O CPF deve ser preenchido')
+                      .minLength(11)
+                      .maxLength(11)
+                      .valido(value, clearNoNumber: true);
+                },
+              ),
+              const SizedBox(height: 16),
+              MyDropdownFormField(
+                selectedValueNotifier: ValueNotifier<String>(_selectedState),
+                itemsList: statesList,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedState = value!;
+                    _selectedCity = citiesByState[_selectedState]![0];
+                  });
+                },
+                labelText: 'Estado',
+                prefixIcon: Icons.location_on,
+              ),
+              const SizedBox(height: 8),
+              MyDropdownFormField(
+                selectedValueNotifier: ValueNotifier<String>(_selectedCity),
+                itemsList: _selectedState.isEmpty ||
+                        citiesByState[_selectedState] == null
+                    ? []
+                    : citiesByState[_selectedState]!,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCity = value!;
+                  });
+                },
+                labelText: 'Cidade',
+                prefixIcon: Icons.location_on,
+              ),
+              const SizedBox(height: 16),
+              MyButton(
+                onTap: () {
+                  _saveAdditionalInfo();
+                },
+                textButton: 'Salvar',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -370,8 +375,8 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
 
       // Dados a serem salvos
       final data = {
-        'name': _nameController,
-        'cpf': _cpfController,
+        'name': _nameController.text,
+        'cpf': _cpfController.text,
         'state': _selectedState,
         'city': _selectedCity,
         // Outras informações que você desejar salvar

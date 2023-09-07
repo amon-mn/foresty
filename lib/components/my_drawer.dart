@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foresty/components/show_password_confirmation_dialog.dart';
 
-class CustomDrawer extends StatelessWidget {
+class MyDrawer extends StatelessWidget {
   final User user;
   final VoidCallback onLogout;
   final Function(String) onRemoveAccount;
 
-  const CustomDrawer({
+  const MyDrawer({
     required this.user,
     required this.onLogout,
     required this.onRemoveAccount,

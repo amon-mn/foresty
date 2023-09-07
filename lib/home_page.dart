@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'authentication/services/auth_service.dart';
 import 'components/my_drawer.dart';
@@ -16,51 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      drawer: CustomDrawer(
-        user: widget.user,
-        onLogout: () {
-          handleLogout(context);
-        },
-        onRemoveAccount: (email) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return PasswordConfirmationDialog(email: widget.user.email!);
-            },
-          );
-        },
-      ),
-      appBar: AppBar(
-        title: Text('Foresty'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.person),
-            onPressed: () {
-              fetchUserData(widget.user.uid).then((userData) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UserPage(
-                      displayName: widget.user.displayName!,
-                      email: widget.user.email!,
-                      userData: userData,
-                    ),
-                  ),
-                );
-              }).catchError((error) {
-                // Lidar com erros aqui, se necessário.
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   void handleLogout(BuildContext context) {
     AuthService().logout().then((String? erro) {
       if (erro == null) {
@@ -75,14 +30,54 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<Map<String, dynamic>> fetchUserData(String userId) async {
-    DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+  Future<void> fetchUserData(String userId) async {
+    await FirebaseFirestore.instance.collection('users').doc(userId).get();
+  }
 
-    if (snapshot.exists) {
-      return snapshot.data()!;
-    } else {
-      return {}; // Retorna um mapa vazio se não houver dados no Firestore
-    }
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData(widget.user.uid);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[300],
+      drawer: MyDrawer(
+        user: widget.user,
+        onLogout: () => handleLogout(context),
+        onRemoveAccount: (email) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return PasswordConfirmationDialog(email: widget.user.email!);
+            },
+          );
+        },
+      ),
+      appBar: AppBar(
+        title: Text('Foresty'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () async {
+              fetchUserData(widget.user.uid).then((userData) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserPage(
+                      email: widget.user.email!,
+                    ),
+                  ),
+                );
+              }).catchError((error) {
+                // Lidar com erros aqui, se necessário.
+              });
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
