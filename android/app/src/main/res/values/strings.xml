@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Foresty-App</string>
+    <string name="facebook_app_id">617321143868036</string>
+    <string name="fb_login_protocol_scheme">fb617321143868036</string>
+    <string name="facebook_client_token">8b54072ea8ba335fd3474c900597a885</string>
+</resources>

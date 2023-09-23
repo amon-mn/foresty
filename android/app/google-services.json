@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "883889030916",
+    "project_id": "forest-traceability",
+    "storage_bucket": "forest-traceability.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883889030916:android:9abdf031b737127cfa7251",
+        "android_client_info": {
+          "package_name": "com.example.foresty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883889030916-uutl3o7f45ombi0eeul1bdf8f1t6anmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.foresty",
+            "certificate_hash": "13b04abd53eacdb69d15c5f5e2142e98fac3aee1"
+          }
+        },
+        {
+          "client_id": "883889030916-2jnqkb9bvs8nld3p9po88aq6ciajp4r3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1WLHtdFen8QLgF2X4vMC_UVGXP2E-R3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883889030916-2jnqkb9bvs8nld3p9po88aq6ciajp4r3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "883889030916-rhrg32gli7kh20efa6lmn8s1goe71kkg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.foresty"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
