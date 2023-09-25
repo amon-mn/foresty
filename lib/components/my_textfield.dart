@@ -6,10 +6,10 @@ class MyTextFieldWrapper extends StatefulWidget {
   final String hintText;
   final bool obscureText;
   final IconData? prefixIcon;
-  final IconData? suffixIcon; // Novo parâmetro para o ícone no final
+  final IconData? suffixIcon;
   final String? Function(String?)? validator;
   final MaskTextInputFormatter? inputFormatter;
-  final VoidCallback? onSuffixIconPressed; // Nova função para o ícone no final
+  final VoidCallback? onSuffixIconPressed;
 
   MyTextFieldWrapper({
     Key? key,
@@ -17,10 +17,10 @@ class MyTextFieldWrapper extends StatefulWidget {
     required this.hintText,
     required this.obscureText,
     this.prefixIcon,
-    this.suffixIcon, // Adicione o parâmetro para o ícone no final
+    this.suffixIcon,
     this.validator,
     this.inputFormatter,
-    this.onSuffixIconPressed, // Adicione o parâmetro para a função onPressed do ícone no final
+    this.onSuffixIconPressed,
   }) : super(key: key);
 
   @override
@@ -42,18 +42,19 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
         inputFormatters:
             widget.inputFormatter != null ? [widget.inputFormatter!] : [],
         controller: widget.controller,
-        obscureText: widget.obscureText,
+        obscureText: widget
+            .obscureText, // Use o valor fornecido pela propriedade obscureText
         decoration: InputDecoration(
           prefixIcon: Icon(
             widget.prefixIcon,
             color: Color.fromARGB(255, 0, 90, 3),
           ),
-          suffixIcon: widget.suffixIcon !=
-                  null // Adicione o ícone no final se estiver definido
+          suffixIcon: widget.suffixIcon != null
               ? IconButton(
                   icon: Icon(widget.suffixIcon),
                   color: Color.fromARGB(255, 0, 90, 3),
-                  onPressed: widget.onSuffixIconPressed,
+                  onPressed: widget
+                      .onSuffixIconPressed, // Chame a função fornecida aqui
                 )
               : null,
           border: OutlineInputBorder(

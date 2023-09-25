@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   AuthService authService = AuthService();
   bool _isLoading = false;
+  bool _obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
 
 // sign google user in method
@@ -202,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                           MyTextFieldWrapper(
                             prefixIcon: Icons.email,
                             controller: _emailController,
-                            hintText: 'Digite seu email',
+                            hintText: 'Email',
                             obscureText: false,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -220,9 +221,13 @@ class _LoginPageState extends State<LoginPage> {
                           // password textfield
                           MyTextFieldWrapper(
                             prefixIcon: Icons.lock,
+                            suffixIcon: _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            onSuffixIconPressed: togglePasswordVisibility,
                             controller: _passwordController,
-                            hintText: 'Digite sua senha',
-                            obscureText: true,
+                            hintText: 'Senha',
+                            obscureText: _obscurePassword,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "A senha deve ser preenchida";
@@ -257,7 +262,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-
                   // or continue with
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -329,5 +333,12 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
     ]);
+  }
+
+  // Função para alternar a visibilidade da senha
+  void togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
   }
 }

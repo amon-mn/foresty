@@ -43,7 +43,6 @@ dependencies:
   validadores: ^1.0.9
   flutter_facebook_auth: ^6.0.1
   http: ^1.1.0
-  flutter_map: ^5.0.0
 
 dev_dependencies:
   flutter_test:

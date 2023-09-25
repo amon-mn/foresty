@@ -3,11 +3,9 @@ import 'package:foresty/authentication/services/via_cep_service.dart';
 import 'package:foresty/components/show_snackbar.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:validadores/Validador.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 import 'my_textfield.dart';
 
-class SignupUserForm extends StatelessWidget {
+class SignupUserForm extends StatefulWidget {
   final TextEditingController nameController,
       emailController,
       passwordController,
@@ -41,9 +39,17 @@ class SignupUserForm extends StatelessWidget {
   });
 
   @override
+  State<SignupUserForm> createState() => _SignupUserFormState();
+}
+
+class _SignupUserFormState extends State<SignupUserForm> {
+  bool _obscurePassword = true;
+  bool _obscureConfirmation = true;
+
+  @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
+      key: widget.formKey,
       child: ListView.builder(
         itemCount: 14, // Número de campos de entrada
         itemBuilder: (BuildContext context, int index) {
@@ -56,7 +62,7 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 0)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.person,
-                    controller: nameController,
+                    controller: widget.nameController,
                     hintText: 'Nome Completo',
                     obscureText: false,
                     validator: (value) {
@@ -77,7 +83,7 @@ class SignupUserForm extends StatelessWidget {
                       type: MaskAutoCompletionType.lazy,
                     ),
                     prefixIcon: Icons.person,
-                    controller: cpfController,
+                    controller: widget.cpfController,
                     hintText: 'CPF',
                     obscureText: false,
                     validator: (value) {
@@ -95,7 +101,7 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 2)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.email,
-                    controller: emailController,
+                    controller: widget.emailController,
                     hintText: 'E-mail',
                     obscureText: false,
                     validator: (value) {
@@ -112,7 +118,11 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 3)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.lock,
-                    controller: passwordController,
+                    suffixIcon: _obscurePassword
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    onSuffixIconPressed: togglePasswordVisibility,
+                    controller: widget.passwordController,
                     hintText: 'Defina sua Senha',
                     obscureText: true,
                     validator: (value) {
@@ -128,14 +138,18 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 4)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.lock,
-                    controller: confirmationController,
+                    suffixIcon: _obscureConfirmation
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    onSuffixIconPressed: togglePasswordVisibility,
+                    controller: widget.confirmationController,
                     hintText: 'Confirme sua Senha',
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "A confirmação de senha deve ser preenchida";
                       }
-                      if (value != passwordController.text) {
+                      if (value != widget.passwordController.text) {
                         return "As senhas não coincidem";
                       }
                       return null; // Retorna null se a validação for bem-sucedida
@@ -144,7 +158,7 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 5)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.location_on,
-                    controller: stateController,
+                    controller: widget.stateController,
                     hintText: 'Estado',
                     obscureText: false,
                     validator: (value) {
@@ -160,7 +174,7 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 6)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.location_on,
-                    controller: cityController,
+                    controller: widget.cityController,
                     hintText: 'Cidade',
                     obscureText: false,
                     validator: (value) {
@@ -177,7 +191,7 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 8)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.business,
-                    controller: propertyNameController,
+                    controller: widget.propertyNameController,
                     hintText: 'Nome da Propriedade',
                     obscureText: false,
                     validator: (value) {
@@ -188,7 +202,7 @@ class SignupUserForm extends StatelessWidget {
                       }
                     },
                   ),
-                if (cnpjController != null && index == 9)
+                if (widget.cnpjController != null && index == 9)
                   MyTextFieldWrapper(
                     inputFormatter: MaskTextInputFormatter(
                       mask: '##.###.###/####-##',
@@ -196,7 +210,7 @@ class SignupUserForm extends StatelessWidget {
                       type: MaskAutoCompletionType.lazy,
                     ),
                     prefixIcon: Icons.business,
-                    controller: cnpjController!,
+                    controller: widget.cnpjController!,
                     hintText: 'CNPJ',
                     obscureText: false,
                     validator: (value) {
@@ -221,7 +235,7 @@ class SignupUserForm extends StatelessWidget {
                     prefixIcon: Icons.pin_drop,
                     suffixIcon: Icons.search,
                     onSuffixIconPressed: () => _autoFillAddress(context),
-                    controller: cepController,
+                    controller: widget.cepController,
                     hintText: 'CEP',
                     obscureText: false,
                     validator: (value) {
@@ -237,7 +251,7 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 11)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.location_on,
-                    controller: streetController,
+                    controller: widget.streetController,
                     hintText: 'Logradouro',
                     obscureText: false,
                     validator: (value) {
@@ -250,7 +264,7 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 12)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.location_city,
-                    controller: neighborhoodController,
+                    controller: widget.neighborhoodController,
                     hintText: 'Bairro',
                     obscureText: false,
                     validator: (value) {
@@ -263,7 +277,7 @@ class SignupUserForm extends StatelessWidget {
                 if (index == 13)
                   MyTextFieldWrapper(
                     prefixIcon: Icons.location_city,
-                    controller: localityController,
+                    controller: widget.localityController,
                     hintText: 'Localidade',
                     obscureText: false,
                     validator: (value) {
@@ -283,8 +297,14 @@ class SignupUserForm extends StatelessWidget {
     );
   }
 
+  void togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
+
   Future<void> _autoFillAddress(BuildContext context) async {
-    final cep = cepController.text.replaceAll('-', '');
+    final cep = widget.cepController.text.replaceAll('-', '');
 
     try {
       await ViaCepService.fetchCep(cep).then(
@@ -305,9 +325,9 @@ class SignupUserForm extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       // Preencher automaticamente os campos
-                      streetController.text = result.logradouro;
-                      neighborhoodController.text = result.bairro;
-                      localityController.text = result.localidade;
+                      widget.streetController.text = result.logradouro;
+                      widget.neighborhoodController.text = result.bairro;
+                      widget.localityController.text = result.localidade;
                       Navigator.of(context).pop(); // Fechar o dialog
                     },
                     child: Text('Sim'),
