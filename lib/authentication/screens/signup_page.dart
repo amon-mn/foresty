@@ -260,8 +260,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
             ),
-          )
-          // Bottom buttons
+          ),
+          if (_isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
         ],
       ),
     );
