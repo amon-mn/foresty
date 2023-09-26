@@ -300,6 +300,7 @@ class _SignupUserFormState extends State<SignupUserForm> {
   void togglePasswordVisibility() {
     setState(() {
       _obscurePassword = !_obscurePassword;
+      _obscureConfirmation = !_obscureConfirmation;
     });
   }
 
