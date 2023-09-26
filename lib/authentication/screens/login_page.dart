@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
 
   forgotMyPassword() {
     String email = _emailController.text;
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
         context: context,
         builder: (context) {

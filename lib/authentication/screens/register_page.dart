@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:validadores/Validador.dart';
 import 'package:foresty/components/my_dropdown.dart';
-import 'package:foresty/home_page.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfield.dart';
-import '../../components/show_snackbar.dart';
 import '../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {

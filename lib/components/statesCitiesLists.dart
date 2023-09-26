@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class StatesAndCities {
   List<String> statesList = [
     'Acre',
