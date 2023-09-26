@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foresty/authentication/screens/register_page.dart';
+import 'package:foresty/authentication/screens/siginup_page.dart';
 import 'package:foresty/components/my_textBytton.dart';
 import '../../components/my_button.dart';
 import 'login_page.dart';
@@ -61,7 +62,7 @@ class WelcomeScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RegisterScreen(),
+        builder: (context) => SignupScreen(),
       ),
     );
   }

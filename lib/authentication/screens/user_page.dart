@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:foresty/components/my_row.dart';
+import 'package:foresty/components/profile.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class UserPage extends StatefulWidget {
   final String email;
@@ -52,33 +57,39 @@ class _MyWidgetState extends State<UserPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Nome: ${_userData['name']}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Email: ${widget.email}',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Informações adicionais:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'CPF: ${_userData['cpf']}',
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              'Cidade: ${_userData['city']}',
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              'Estado: ${_userData['state']}',
-              style: TextStyle(fontSize: 16),
-            ),
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Column(
+                children: [
+                  SizedBox(height: 20),
+                  MyRow(
+                    title: 'Nome',
+                    value: _userData['name'] ?? 'Não disponível',
+                    icon: Icons.person,
+                  ),
+                  MyRow(
+                    title: 'Email',
+                    value: widget.email,
+                    icon: Icons.email,
+                  ),
+                  MyRow(
+                    title: 'CPF',
+                    value: _userData['cpf'] ?? 'Não disponível',
+                    icon: Icons.assignment_ind,
+                  ),
+                  MyRow(
+                    title: 'Cidade',
+                    value: _userData['city'] ?? 'Não disponível',
+                    icon: Icons.location_city,
+                  ),
+                  MyRow(
+                    title: 'Estado',
+                    value: _userData['state'] ?? 'Não disponível',
+                    icon: Icons.location_on,
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

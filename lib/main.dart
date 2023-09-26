@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foresty/authentication/screens/register_page.dart';
 import 'package:foresty/authentication/screens/welcome_page.dart';
+import 'package:provider/provider.dart';
 import 'authentication/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'components/forms_provider.dart';
 import 'firebase_options.dart';
 import 'home_page.dart';
 
@@ -12,7 +14,17 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (_) =>
+                FormularioProvider()), // Fornecendo o FormularioProvider
+        // Adicione outros provedores, se necessário
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,6 +40,17 @@ class MyApp extends StatelessWidget {
       ),
       home: const AuthPage(),
     );
+  }
+}
+
+class ProfileImageProvider with ChangeNotifier {
+  String _imageUrl = '';
+
+  String get imageUrl => _imageUrl;
+
+  void updateImageUrl(String newImageUrl) {
+    _imageUrl = newImageUrl;
+    notifyListeners();
   }
 }
 
