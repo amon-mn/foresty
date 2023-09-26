@@ -124,7 +124,7 @@ class _SignupUserFormState extends State<SignupUserForm> {
                     onSuffixIconPressed: togglePasswordVisibility,
                     controller: widget.passwordController,
                     hintText: 'Defina sua Senha',
-                    obscureText: true,
+                    obscureText: _obscurePassword,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "A senha deve ser preenchida";
@@ -144,7 +144,7 @@ class _SignupUserFormState extends State<SignupUserForm> {
                     onSuffixIconPressed: togglePasswordVisibility,
                     controller: widget.confirmationController,
                     hintText: 'Confirme sua Senha',
-                    obscureText: true,
+                    obscureText: _obscureConfirmation,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "A confirmação de senha deve ser preenchida";
