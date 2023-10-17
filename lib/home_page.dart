@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       appBar: AppBar(
-        title: Text('Foresty'),
+        title: const Text('Meus Produtos'),
         actions: [
           IconButton(
             icon: Icon(Icons.person),
@@ -77,6 +77,34 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8.0, bottom: 80.0),
+        child: Center(
+          child: Column(
+            children: [
+              Icon(Icons.error_outline, size: 128),
+              Text(
+                'Você ainda não possui produtos',
+                style: TextStyle(fontSize: 24),
+              )
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          /*Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (contextNew) => FormScreen(
+                        taskContext: context,
+                      ))).then((value) => setState(() {
+                print('Recarregando a Tela Inicial');
+              }));
+              */
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

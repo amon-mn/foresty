@@ -8,6 +8,7 @@ class ViaCepService {
         await http.get(Uri.parse('https://viacep.com.br/ws/$cep/json/'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
+      print(responseData);
       return ResultCep.fromJson(responseData);
     } else {
       throw Exception('Requisição inválida!');
