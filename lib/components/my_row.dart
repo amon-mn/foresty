@@ -16,7 +16,7 @@ class MyRow extends StatelessWidget {
     return Column(
       children: [
         FractionallySizedBox(
-          widthFactor: 0.8, // Define a largura relativa desejada (80% do pai)
+          widthFactor: 0.9, // Define a largura relativa desejada (80% do pai)
           child: Container(
             decoration: BoxDecoration(
               borderRadius:

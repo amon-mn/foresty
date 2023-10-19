@@ -43,6 +43,9 @@ dependencies:
   validadores: ^1.0.9
   flutter_facebook_auth: ^6.0.1
   http: ^1.1.0
+  image_picker: ^0.8.0
+  firebase_storage: ^11.2.6
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

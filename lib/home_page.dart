@@ -1,12 +1,15 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:foresty/authentication/screens/create_form_page.dart';
 import 'package:foresty/components/product.dart';
 import 'authentication/services/auth_service.dart';
 import 'components/my_drawer.dart';
 import 'components/show_password_confirmation_dialog.dart';
 import 'authentication/screens/user_page.dart';
 import 'authentication/screens/welcome_page.dart';
+import 'package:foresty/authentication/screens/view_forms_page.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -17,6 +20,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String profileImageUrl = '';
+
   void handleLogout(BuildContext context) {
     AuthService().logout().then((String? erro) {
       if (erro == null) {
@@ -35,10 +40,32 @@ class _HomePageState extends State<HomePage> {
     await FirebaseFirestore.instance.collection('users').doc(userId).get();
   }
 
+  Future<String> getProfileImageURL(String userId) async {
+    try {
+      Reference storageRef = FirebaseStorage.instance
+          .ref()
+          .child('profile_images')
+          .child('profile_image_$userId.jpg');
+      String imageUrl = await storageRef.getDownloadURL();
+      return imageUrl;
+    } catch (error) {
+      print('Erro ao obter a URL da imagem de perfil: $error');
+      return ''; // Retorna uma string vazia em caso de erro
+    }
+  }
+
+  Future<void> fetchProfileImage() async {
+    String imageUrl = await getProfileImageURL(widget.user.uid);
+    setState(() {
+      profileImageUrl = imageUrl;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     fetchUserData(widget.user.uid);
+    fetchProfileImage(); // Obtém a URL da imagem de perfil no início
   }
 
   @override
@@ -69,6 +96,8 @@ class _HomePageState extends State<HomePage> {
             },
           );
         },
+        profileImageUrl: profileImageUrl,
+        onUpdateProfileImage: updateProfileImage,
       ),
       appBar: AppBar(
         title: const Text('Meus Produtos'),
@@ -119,6 +148,10 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateFormPage()),
+          );
           /*Navigator.push(
               context,
               MaterialPageRoute(
@@ -132,5 +165,12 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  // Função de atualização da imagem de perfil
+  void updateProfileImage(String imageUrl) {
+    setState(() {
+      profileImageUrl = imageUrl;
+    });
   }
 }
