@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:foresty/components/product.dart';
 import 'authentication/services/auth_service.dart';
 import 'components/my_drawer.dart';
 import 'components/show_password_confirmation_dialog.dart';
@@ -42,6 +43,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Simula uma lista de produtos (substitua por seus próprios dados)
+    final List<Map<String, String>> products = [
+      {
+        'title': 'Produto 1',
+        'description': 'Descrição do Produto 1',
+      },
+      {
+        'title': 'Produto 2',
+        'description': 'Descrição do Produto 2',
+      },
+      // Adicione mais produtos conforme necessário
+    ];
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       drawer: MyDrawer(
@@ -80,7 +94,17 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8.0, bottom: 80.0),
-        child: Center(
+        child: ListView.builder(
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            final product = products[index];
+            return ProductWidget(
+              title: product['title']!,
+              description: product['description']!,
+            );
+          },
+        ),
+        /*Center(
           child: Column(
             children: [
               Icon(Icons.error_outline, size: 128),
@@ -91,6 +115,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        */
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
