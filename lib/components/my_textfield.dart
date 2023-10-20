@@ -3,25 +3,33 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class MyTextFieldWrapper extends StatefulWidget {
   final TextEditingController controller;
-  final String hintText;
+  final String? hintText;
   final bool obscureText;
   final IconData? prefixIcon;
   final IconData? suffixIcon;
   final String? Function(String?)? validator;
   final MaskTextInputFormatter? inputFormatter;
   final VoidCallback? onSuffixIconPressed;
+  final ValueChanged<String>? onChanged;
+  final String? initialValue;
 
   MyTextFieldWrapper({
     Key? key,
     required this.controller,
-    required this.hintText,
+    this.hintText,
     required this.obscureText,
     this.prefixIcon,
     this.suffixIcon,
     this.validator,
     this.inputFormatter,
     this.onSuffixIconPressed,
-  }) : super(key: key);
+    this.onChanged,
+    this.initialValue, // Adicione esta linha
+  }) : super(key: key) {
+    if (initialValue != null) {
+      controller.text = initialValue!; // Defina o valor inicial do controlador
+    }
+  }
 
   @override
   _MyTextFieldWrapperState createState() => _MyTextFieldWrapperState();
@@ -92,6 +100,8 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
           setState(() {
             isFilled = value.isNotEmpty;
           });
+          widget.onChanged
+              ?.call(value); // Chame a função onChanged se estiver definida
         },
       ),
     );

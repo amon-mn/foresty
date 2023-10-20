@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foresty/components/my_textfield.dart';
 import 'package:provider/provider.dart';
 import 'package:foresty/components/forms_provider.dart';
 
@@ -11,6 +12,9 @@ class CreateFormPage extends StatefulWidget {
 
 class _CreateFormPageState extends State<CreateFormPage> {
   final TextEditingController formNameController = TextEditingController();
+  List<String> answers = List.filled(5, ''); // Inicialize com respostas vazias
+  List<TextEditingController> questionControllers =
+      List.generate(5, (index) => TextEditingController());
 
   List<String> questions = [
     'Qual é a sua cor favorita?',
@@ -19,8 +23,6 @@ class _CreateFormPageState extends State<CreateFormPage> {
     'Qual é a sua estação do ano favorita?',
     'Qual é o seu filme favorito?',
   ];
-
-  List<String> answers = List.filled(5, ''); // Inicialize com respostas vazias
 
   void _saveForm(BuildContext context) {
     final formularioProvider =
@@ -39,6 +41,7 @@ class _CreateFormPageState extends State<CreateFormPage> {
   @override
   void dispose() {
     formNameController.dispose();
+    questionControllers.forEach((controller) => controller.dispose());
     super.dispose();
   }
 
@@ -77,8 +80,9 @@ class _CreateFormPageState extends State<CreateFormPage> {
                     fontWeight: FontWeight.bold,
                     color: Colors.grey[700]),
               ),
-              TextField(
+              MyTextFieldWrapper(
                 controller: formNameController,
+                obscureText: false,
               ),
               SizedBox(height: 32.0),
               Column(
@@ -95,21 +99,26 @@ class _CreateFormPageState extends State<CreateFormPage> {
                             fontWeight: FontWeight.bold,
                             color: Colors.grey[700]),
                       ),
-                      TextField(
+                      SizedBox(height: 4.0),
+                      MyTextFieldWrapper(
+                        controller: questionControllers[index],
+                        obscureText: false,
                         onChanged: (value) {
-                          answers[index] = value;
+                          setState(() {
+                            answers[index] = value;
+                          });
                         },
-                        decoration: InputDecoration(),
+                        initialValue: answers[index],
                       ),
                       SizedBox(height: 8.0),
                     ],
                   );
                 }),
               ),
-              SizedBox(height: 32.0),
+              SizedBox(height: 16.0),
               MyButton(
                 onTap: () => _saveForm(context),
-                textButton: 'Salvar Formulário',
+                textButton: 'Salvar',
               ),
             ],
           ),
