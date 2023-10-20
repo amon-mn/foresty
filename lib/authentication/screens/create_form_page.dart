@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foresty/components/forms_provider.dart';
 
+import '../../components/my_button.dart';
+
 class CreateFormPage extends StatefulWidget {
   @override
   _CreateFormPageState createState() => _CreateFormPageState();
@@ -43,53 +45,54 @@ class _CreateFormPageState extends State<CreateFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: Text('Criar Formulário'),
+        title: Text('Cadastrar Produção'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Nome do Produto',
+              style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[700]),
+            ),
             TextField(
               controller: formNameController,
-              decoration: InputDecoration(labelText: 'Nome do Formulário'),
             ),
-            SizedBox(height: 16.0),
-            Text('Perguntas e Respostas:'),
+            SizedBox(height: 60.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: List.generate(questions.length, (index) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Pergunta ${index + 1}:',
-                      style: TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8.0),
+                    SizedBox(height: 16.0),
                     Text(
                       questions[index],
-                      style: TextStyle(fontSize: 16.0),
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[700]),
                     ),
-                    SizedBox(height: 8.0),
                     TextField(
                       onChanged: (value) {
                         answers[index] = value;
                       },
-                      decoration: InputDecoration(
-                        labelText: 'Resposta',
-                      ),
+                      decoration: InputDecoration(),
                     ),
                     SizedBox(height: 16.0),
                   ],
                 );
               }),
             ),
-            ElevatedButton(
-              onPressed: () => _saveForm(context),
-              child: Text('Salvar Formulário'),
+            MyButton(
+              onTap: () => _saveForm(context),
+              textButton: 'Salvar Formulário',
             ),
           ],
         ),

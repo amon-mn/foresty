@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.grey.shade100,
       drawer: MyDrawer(
         user: widget.user,
         onLogout: () => handleLogout(context),
@@ -121,32 +121,35 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 8.0, bottom: 80.0),
-        child: ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            final product = products[index];
-            return ProductWidget(
-              title: product['title']!,
-              description: product['description']!,
-            );
-          },
-        ),
-        /*Center(
-          child: Column(
-            children: [
-              Icon(Icons.error_outline, size: 128),
-              Text(
-                'Você ainda não possui produtos',
-                style: TextStyle(fontSize: 24),
-              )
-            ],
+      body: FractionallySizedBox(
+        widthFactor: 1,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8.0, bottom: 80.0),
+          child: ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return ProductWidget(
+                title: product['title']!,
+              );
+            },
           ),
+          /*Center(
+            child: Column(
+              children: [
+                Icon(Icons.error_outline, size: 128),
+                Text(
+                  'Você ainda não possui produtos',
+                  style: TextStyle(fontSize: 24),
+                )
+              ],
+            ),
+          ),
+          */
         ),
-        */
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromARGB(169, 127, 232, 129),
         onPressed: () {
           Navigator.push(
             context,
@@ -162,7 +165,10 @@ class _HomePageState extends State<HomePage> {
               }));
               */
         },
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
       ),
     );
   }

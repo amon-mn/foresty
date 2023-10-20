@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class ProductWidget extends StatelessWidget {
   final String title;
-  final String description;
 
   ProductWidget({
     required this.title,
-    required this.description,
   });
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Stack(
@@ -18,9 +18,11 @@ class ProductWidget extends StatelessWidget {
           Column(
             children: [
               Container(
-                height: 140,
+                height: 120,
+                width: screenWidth,
                 decoration: BoxDecoration(
-                  color: Colors.blue, // Cor de fundo do contêiner
+                  color: Color.fromARGB(
+                      255, 0, 90, 3), // Cor de fundo do contêiner
                   borderRadius: BorderRadius.circular(12.0),
                   boxShadow: [
                     BoxShadow(
@@ -34,7 +36,7 @@ class ProductWidget extends StatelessWidget {
                   children: [
                     Container(
                       margin: const EdgeInsets.only(left: 80),
-                      height: 100,
+                      width: screenWidth,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12.0),
@@ -46,6 +48,7 @@ class ProductWidget extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(
                               left: MediaQuery.of(context).size.width / 8,
+                              bottom: MediaQuery.of(context).size.height / 20,
                             ),
                             width: 100,
                             child: Text(
@@ -57,19 +60,6 @@ class ProductWidget extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Container(
-                            margin: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width / 8,
-                            ),
-                            width: 150,
-                            child: Text(
-                              description,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                overflow: TextOverflow.fade,
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -79,25 +69,25 @@ class ProductWidget extends StatelessWidget {
             ],
           ),
           Container(
-            margin: const EdgeInsets.only(top: 8, left: 10),
-            height: 120,
-            width: 110,
+            margin: const EdgeInsets.only(top: 10, left: 10),
+            height: 100,
+            width: 100,
+            alignment: Alignment.centerLeft,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.0),
               boxShadow: [
                 BoxShadow(
-                  offset: const Offset(0.0, 2.0),
-                  color: Colors.black.withOpacity(.80),
+                  offset: const Offset(0.0, 0.1),
+                  color: Colors.black.withOpacity(0.4),
                   blurRadius: 7,
-                ),
+                )
               ],
+              borderRadius: BorderRadius.circular(16.0),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16.0),
-              child: Icon(
-                Icons.shopping_cart, // Ícone genérico
-                size: 80,
-                color: Colors.blue,
+              child: Image.asset(
+                'lib/assets/plantararvore.jpg',
+                fit: BoxFit.cover,
               ),
             ),
           ),
