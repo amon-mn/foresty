@@ -27,7 +27,7 @@ class ProductWidget extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       offset: const Offset(0.0, 4.0),
-                      color: Colors.black.withOpacity(.80),
+                      color: Colors.black.withOpacity(.3),
                       blurRadius: 7,
                     ),
                   ],
