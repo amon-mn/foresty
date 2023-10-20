@@ -30,7 +30,7 @@ class _CreateFormPageState extends State<CreateFormPage> {
     if (formName.isNotEmpty) {
       formularioProvider.salvarFormulario(formName, questions, answers);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Formulário cadastrado com sucesso'),
+        content: Text('Lote cadastrado com sucesso'),
       ));
       Navigator.of(context).pop(); // Volte para a página anterior
     }
@@ -47,54 +47,72 @@ class _CreateFormPageState extends State<CreateFormPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: Text('Cadastrar Produção'),
+        title: Text('Novo Lote'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Nome do Produto',
-              style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[700]),
-            ),
-            TextField(
-              controller: formNameController,
-            ),
-            SizedBox(height: 60.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(questions.length, (index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 16.0),
-                    Text(
-                      questions[index],
-                      style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700]),
-                    ),
-                    TextField(
-                      onChanged: (value) {
-                        answers[index] = value;
-                      },
-                      decoration: InputDecoration(),
-                    ),
-                    SizedBox(height: 16.0),
-                  ],
-                );
-              }),
-            ),
-            MyButton(
-              onTap: () => _saveForm(context),
-              textButton: 'Salvar Formulário',
-            ),
-          ],
+        child: Container(
+          height: MediaQuery.of(context).size.height - 40,
+          padding: EdgeInsets.all(20),
+          width: MediaQuery.of(context).size.width - 40,
+          margin: EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 15,
+                spreadRadius: 5,
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Nome do Lote',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[700]),
+              ),
+              TextField(
+                controller: formNameController,
+              ),
+              SizedBox(height: 32.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(questions.length, (index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 8.0),
+                      Text(
+                        questions[index],
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[700]),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          answers[index] = value;
+                        },
+                        decoration: InputDecoration(),
+                      ),
+                      SizedBox(height: 8.0),
+                    ],
+                  );
+                }),
+              ),
+              SizedBox(height: 32.0),
+              MyButton(
+                onTap: () => _saveForm(context),
+                textButton: 'Salvar Formulário',
+              ),
+            ],
+          ),
         ),
       ),
     );

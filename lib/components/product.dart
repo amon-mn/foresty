@@ -116,7 +116,10 @@ class ProductWidget extends StatelessWidget {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: Icon(
+                    Icons.delete,
+                    color: Color.fromARGB(255, 217, 0, 0),
+                  ),
                   onPressed: () {
                     // Lógica para remover o produto
                   },

@@ -74,11 +74,27 @@ class _HomePageState extends State<HomePage> {
     final List<Map<String, String>> products = [
       {
         'title': 'Produto 1',
-        'description': 'Descrição do Produto 1',
       },
       {
         'title': 'Produto 2',
-        'description': 'Descrição do Produto 2',
+      },
+      {
+        'title': 'Produto 3',
+      },
+      {
+        'title': 'Produto 4',
+      },
+      {
+        'title': 'Produto 5',
+      },
+      {
+        'title': 'Produto 6',
+      },
+      {
+        'title': 'Produto 7',
+      },
+      {
+        'title': 'Produto 8',
       },
       // Adicione mais produtos conforme necessário
     ];
