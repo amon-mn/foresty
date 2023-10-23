@@ -2,8 +2,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:foresty/authentication/screens/create_form_page.dart';
-import 'package:foresty/components/product.dart';
+import 'package:foresty/authentication/screens/batch_form_page.dart';
+import 'package:foresty/components/batch_widget.dart';
 import 'authentication/services/auth_service.dart';
 import 'components/my_drawer.dart';
 import 'components/show_password_confirmation_dialog.dart';
@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
             itemCount: products.length,
             itemBuilder: (context, index) {
               final product = products[index];
-              return ProductWidget(
+              return BatchWidget(
                 title: product['title']!,
               );
             },
@@ -167,10 +167,12 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color.fromARGB(169, 127, 232, 129),
         onPressed: () {
+          /*
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateFormPage()),
+            MaterialPageRoute(builder: (context) => BatchFormPage()),
           );
+          */
           /*Navigator.push(
               context,
               MaterialPageRoute(

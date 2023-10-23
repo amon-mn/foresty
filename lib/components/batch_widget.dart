@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ProductWidget extends StatelessWidget {
+class BatchWidget extends StatelessWidget {
   final String title;
 
-  ProductWidget({
+  BatchWidget({
     required this.title,
   });
 
