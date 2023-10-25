@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/components/my_textfield.dart';
@@ -21,14 +22,19 @@ class BatchFormPage extends StatefulWidget {
 }
 
 class _BatchFormPageState extends State<BatchFormPage> {
-  final TextEditingController batchNameController = TextEditingController();
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  final TextEditingController _batchNameController = TextEditingController();
   final TextEditingController _larguraController = TextEditingController();
   final TextEditingController _comprimentoController = TextEditingController();
   final TextEditingController _localController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final selectedValueNotifier = ValueNotifier<String>('Selecione');
+  final _selectedValueNotifierFinalidade = ValueNotifier<String>('Selecione');
+  final _selectedValueNotifierAmbiente = ValueNotifier<String>('Selecione');
+  final _selectedValueNotifierTipoCultivo = ValueNotifier<String>('Selecione');
+
   final itemList1 = [
     'Selecione',
     'Plantio de frutas',
@@ -58,12 +64,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
 
   @override
   void dispose() {
-    batchNameController.dispose();
+    _batchNameController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final String currentBatchId = widget.productBatch.id!;
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -129,7 +136,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
               ),
               child: Center(
                 child: Text(
-                  widget.productBatch.codProd,
+                  currentBatchId,
                   style: TextStyle(
                     fontSize: 24.0, // Adjust the font size as needed
                     color: Colors.white, // Adjust the text color as needed
@@ -226,11 +233,11 @@ class _BatchFormPageState extends State<BatchFormPage> {
                     ),
                     const SizedBox(height: 4),
                     MyDropdownFormField(
-                      selectedValueNotifier: selectedValueNotifier,
+                      selectedValueNotifier: _selectedValueNotifierFinalidade,
                       itemsList: itemList1,
                       onChanged: (value) {
                         setState(() {
-                          selectedValueNotifier.value = value!;
+                          _selectedValueNotifierFinalidade.value = value!;
                         });
                       },
                     ),
@@ -244,11 +251,11 @@ class _BatchFormPageState extends State<BatchFormPage> {
                     ),
                     const SizedBox(height: 4),
                     MyDropdownFormField(
-                      selectedValueNotifier: selectedValueNotifier,
+                      selectedValueNotifier: _selectedValueNotifierAmbiente,
                       itemsList: itemList2,
                       onChanged: (value) {
                         setState(() {
-                          selectedValueNotifier.value = value!;
+                          _selectedValueNotifierAmbiente.value = value!;
                         });
                       },
                     ),
@@ -262,17 +269,48 @@ class _BatchFormPageState extends State<BatchFormPage> {
                     ),
                     const SizedBox(height: 4),
                     MyDropdownFormField(
-                      selectedValueNotifier: selectedValueNotifier,
+                      selectedValueNotifier: _selectedValueNotifierTipoCultivo,
                       itemsList: itemList3,
                       onChanged: (value) {
                         setState(() {
-                          selectedValueNotifier.value = value!;
+                          _selectedValueNotifierTipoCultivo.value = value!;
                         });
                       },
                     ),
-                    MyButton(
-                      onTap: () => {},
-                      textButton: 'Salvar',
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        MyButton(
+                          isRed: true,
+                          textButton: 'Descartar',
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        MyButton(
+                          onTap: () {
+                            ProductBatch batch = ProductBatch(
+                              id: currentBatchId,
+                              largura: double.parse(_larguraController.text),
+                              comprimento:
+                                  double.parse(_comprimentoController.text),
+                              finalidade:
+                                  _selectedValueNotifierFinalidade.value,
+                              ambiente: _selectedValueNotifierAmbiente.value,
+                              tipoCultivo:
+                                  _selectedValueNotifierTipoCultivo.value,
+                            );
+
+                            db
+                                .collection("batchs")
+                                .doc(batch.id)
+                                .set(batch.toMap());
+
+                            Navigator.pop(context);
+                          },
+                          textButton: 'Salvar',
+                        ),
+                      ],
                     ),
                   ],
                 ),

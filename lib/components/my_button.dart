@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class MyButton extends StatefulWidget {
   final VoidCallback onTap;
   final String textButton;
+  final bool isRed; // Novo parâmetro
 
   const MyButton({
     Key? key,
     required this.onTap,
     required this.textButton,
+    this.isRed = false, // Valor padrão para isRed
   }) : super(key: key);
 
   @override
@@ -16,6 +18,14 @@ class MyButton extends StatefulWidget {
 
 class _MyButtonState extends State<MyButton> {
   bool _isPressed = false;
+
+  Color? getButtonColor() {
+    if (_isPressed) {
+      return widget.isRed ? Colors.red[700] : Colors.green[700];
+    } else {
+      return widget.isRed ? Colors.red[800] : Colors.green[800];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +37,7 @@ class _MyButtonState extends State<MyButton> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: _isPressed ? Colors.green[700] : Colors.green[800],
+          color: getButtonColor(),
           borderRadius: BorderRadius.circular(15),
           boxShadow: _isPressed
               ? [

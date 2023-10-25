@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:foresty/authentication/screens/batch_form_page.dart';
 import 'package:foresty/components/batch_widget.dart';
+import 'package:foresty/models/batch.dart';
 import 'authentication/services/auth_service.dart';
 import 'components/my_drawer.dart';
 import 'components/show_password_confirmation_dialog.dart';
@@ -21,45 +22,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String profileImageUrl = '';
-
-  void handleLogout(BuildContext context) {
-    AuthService().logout().then((String? erro) {
-      if (erro == null) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-          (route) => false,
-        );
-      } else {
-        print("Erro durante o logout: $erro");
-      }
-    });
-  }
-
-  Future<void> fetchUserData(String userId) async {
-    await FirebaseFirestore.instance.collection('users').doc(userId).get();
-  }
-
-  Future<String> getProfileImageURL(String userId) async {
-    try {
-      Reference storageRef = FirebaseStorage.instance
-          .ref()
-          .child('profile_images')
-          .child('profile_image_$userId.jpg');
-      String imageUrl = await storageRef.getDownloadURL();
-      return imageUrl;
-    } catch (error) {
-      print('Erro ao obter a URL da imagem de perfil: $error');
-      return ''; // Retorna uma string vazia em caso de erro
-    }
-  }
-
-  Future<void> fetchProfileImage() async {
-    String imageUrl = await getProfileImageURL(widget.user.uid);
-    setState(() {
-      profileImageUrl = imageUrl;
-    });
-  }
+  final List<ProductBatch> listBatchs = [
+    ProductBatch(
+        largura: 2,
+        comprimento: 3,
+        latitude: "-40.7473",
+        longitude: "147.2552",
+        finalidade: "Plantio de Hortaliças",
+        ambiente: "Praia",
+        tipoCultivo: "Convencional"),
+    ProductBatch(
+        largura: 4,
+        comprimento: 5,
+        latitude: "-40.7473",
+        longitude: "147.2552",
+        finalidade: "Plantio de Frutas",
+        ambiente: "AgroFloresta",
+        tipoCultivo: "Floresta"),
+  ];
 
   @override
   void initState() {
@@ -70,35 +50,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Simula uma lista de produtos (substitua por seus próprios dados)
-    final List<Map<String, String>> products = [
-      {
-        'title': 'Produto 1',
-      },
-      {
-        'title': 'Produto 2',
-      },
-      {
-        'title': 'Produto 3',
-      },
-      {
-        'title': 'Produto 4',
-      },
-      {
-        'title': 'Produto 5',
-      },
-      {
-        'title': 'Produto 6',
-      },
-      {
-        'title': 'Produto 7',
-      },
-      {
-        'title': 'Produto 8',
-      },
-      // Adicione mais produtos conforme necessário
-    ];
-
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       drawer: MyDrawer(
@@ -137,33 +88,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: FractionallySizedBox(
-        widthFactor: 1,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 80.0),
-          child: ListView.builder(
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return BatchWidget(
-                title: product['title']!,
-              );
-            },
-          ),
-          /*Center(
-            child: Column(
-              children: [
-                Icon(Icons.error_outline, size: 128),
-                Text(
-                  'Você ainda não possui produtos',
-                  style: TextStyle(fontSize: 24),
-                )
-              ],
-            ),
-          ),
-          */
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color.fromARGB(169, 127, 232, 129),
         onPressed: () {
@@ -188,7 +112,60 @@ class _HomePageState extends State<HomePage> {
           color: Colors.black,
         ),
       ),
+      body: (listBatchs.isEmpty)
+          ? const Center(
+              child: Text(
+                "Nenhum lote ainda.\nVamos criar o primeiro?",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18),
+              ),
+            )
+          : ListView(
+              children: List.generate(listBatchs.length, (index) {
+                ProductBatch model = listBatchs[index];
+                return BatchWidget(title: (model.tipoCultivo));
+              }),
+            ),
     );
+  }
+
+  void handleLogout(BuildContext context) {
+    AuthService().logout().then((String? erro) {
+      if (erro == null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+          (route) => false,
+        );
+      } else {
+        print("Erro durante o logout: $erro");
+      }
+    });
+  }
+
+  Future<void> fetchUserData(String userId) async {
+    await FirebaseFirestore.instance.collection('users').doc(userId).get();
+  }
+
+  Future<String> getProfileImageURL(String userId) async {
+    try {
+      Reference storageRef = FirebaseStorage.instance
+          .ref()
+          .child('profile_images')
+          .child('profile_image_$userId.jpg');
+      String imageUrl = await storageRef.getDownloadURL();
+      return imageUrl;
+    } catch (error) {
+      print('Erro ao obter a URL da imagem de perfil: $error');
+      return ''; // Retorna uma string vazia em caso de erro
+    }
+  }
+
+  Future<void> fetchProfileImage() async {
+    String imageUrl = await getProfileImageURL(widget.user.uid);
+    setState(() {
+      profileImageUrl = imageUrl;
+    });
   }
 
   // Função de atualização da imagem de perfil
