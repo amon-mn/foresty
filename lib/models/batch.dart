@@ -5,8 +5,8 @@ class ProductBatch {
   double largura;
   double comprimento;
   double? area;
-  String? latitude;
-  String? longitude;
+  double? latitude;
+  double? longitude;
   String finalidade;
   String ambiente;
   String tipoCultivo;

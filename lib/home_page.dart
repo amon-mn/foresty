@@ -24,8 +24,8 @@ class _HomePageState extends State<HomePage> {
   ProductBatch productBatch = ProductBatch(
       largura: 2,
       comprimento: 3,
-      latitude: "-40.7473",
-      longitude: "147.2552",
+      latitude: -40.7473,
+      longitude: 147.2552,
       finalidade: "Plantio de Hortaliças",
       ambiente: "Praia",
       tipoCultivo: "Convencional");
@@ -35,16 +35,16 @@ class _HomePageState extends State<HomePage> {
     ProductBatch(
         largura: 2,
         comprimento: 3,
-        latitude: "-40.7473",
-        longitude: "147.2552",
+        latitude: -40.7473,
+        longitude: 147.2552,
         finalidade: "Plantio de Hortaliças",
         ambiente: "Praia",
         tipoCultivo: "Convencional"),
     ProductBatch(
         largura: 4,
         comprimento: 5,
-        latitude: "-40.7473",
-        longitude: "147.2552",
+        latitude: -40.7473,
+        longitude: 147.2552,
         finalidade: "Plantio de Frutas",
         ambiente: "AgroFloresta",
         tipoCultivo: "Floresta"),

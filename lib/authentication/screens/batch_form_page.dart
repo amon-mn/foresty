@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/components/my_textfield.dart';
 import 'package:foresty/models/batch.dart';
+import 'package:foresty/models/batch_location_controller.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:foresty/components/forms_provider.dart';
@@ -26,7 +27,8 @@ class _BatchFormPageState extends State<BatchFormPage> {
   final TextEditingController _batchNameController = TextEditingController();
   final TextEditingController _larguraController = TextEditingController();
   final TextEditingController _comprimentoController = TextEditingController();
-  final TextEditingController _localController = TextEditingController();
+  double _latBatch = 0.0;
+  double _longBatch = 0.0;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -169,20 +171,22 @@ class _BatchFormPageState extends State<BatchFormPage> {
                           ),
                         ),
                         SizedBox(height: 8),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(left: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .spaceBetween, // Adicione esta linha
-                            children: [
-                              Column(
+                        ChangeNotifierProvider<BatchLocationController>(
+                          create: (context) => BatchLocationController(),
+                          child: Builder(builder: (context) {
+                            final location =
+                                context.watch<BatchLocationController>();
+                            if (location.error == '') {
+                              _latBatch = location.lat;
+                              _longBatch = location.long;
+                              // Caso não haja erro, exibir latitude e longitude
+                              return Column(
                                 children: [
                                   Container(
                                     alignment: Alignment.topLeft,
                                     padding: EdgeInsets.only(left: 10),
                                     child: Text(
-                                      'Latitude:',
+                                      'Latitude: $_latBatch',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey[900],
@@ -194,7 +198,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                     alignment: Alignment.topLeft,
                                     padding: EdgeInsets.only(left: 10),
                                     child: Text(
-                                      'Longitude:',
+                                      'Longitude: $_longBatch',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey[900],
@@ -203,7 +207,30 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                     ),
                                   ),
                                 ],
-                              ),
+                              );
+                            } else {
+                              // Caso haja erro, exibir a mensagem de erro
+                              return Container(
+                                alignment: Alignment.topLeft,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  location.error,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[900],
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              );
+                            }
+                          }),
+                        ),
+                        /*Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceBetween, // Adicione esta linha
+                            children: [
+                              
+                              /*
                               Container(
                                 alignment: Alignment.topRight,
                                 padding: EdgeInsets.all(10),
@@ -215,9 +242,10 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                   ),
                                 ),
                               ),
+                              */
                             ],
                           ),
-                        ),
+                          */
                         const SizedBox(height: 16),
                         Container(
                           alignment: Alignment.topLeft,
@@ -327,6 +355,12 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                         double.parse(_larguraController.text),
                                     comprimento: double.parse(
                                         _comprimentoController.text),
+                                    area:
+                                        double.parse(_larguraController.text) *
+                                            double.parse(
+                                                _comprimentoController.text),
+                                    latitude: _latBatch,
+                                    longitude: _longBatch,
                                     finalidade:
                                         _selectedValueNotifierFinalidade.value,
                                     ambiente:
