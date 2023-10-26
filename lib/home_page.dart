@@ -21,6 +21,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ProductBatch productBatch = ProductBatch(
+      largura: 2,
+      comprimento: 3,
+      latitude: "-40.7473",
+      longitude: "147.2552",
+      finalidade: "Plantio de Hortaliças",
+      ambiente: "Praia",
+      tipoCultivo: "Convencional");
+
   String profileImageUrl = '';
   final List<ProductBatch> listBatchs = [
     ProductBatch(
@@ -91,12 +100,12 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color.fromARGB(169, 127, 232, 129),
         onPressed: () {
-          /*
           Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => BatchFormPage()),
-          );
-          */
+              context,
+              MaterialPageRoute(
+                builder: (context) => BatchFormPage(),
+              ));
+
           /*Navigator.push(
               context,
               MaterialPageRoute(

@@ -299,8 +299,8 @@ class _LoginPageState extends State<LoginPage> {
                       // google button
                       GestureDetector(
                         onTap: () => handleGoogleLogin(context),
-                        child: const SquareTite(
-                            imagePath: 'lib/assets/google.png'),
+                        child:
+                            const SquareTite(content: 'lib/assets/google.png'),
                       ),
 
                       const SizedBox(width: 15),
@@ -308,13 +308,13 @@ class _LoginPageState extends State<LoginPage> {
                       // facebook button
                       GestureDetector(
                         onTap: signInWithFacebook,
-                        child: SquareTite(imagePath: 'lib/assets/facebook.png'),
+                        child: SquareTite(content: 'lib/assets/facebook.png'),
                       ),
 
                       const SizedBox(width: 15),
 
                       // yahoo button
-                      const SquareTite(imagePath: 'lib/assets/yahoo.png'),
+                      const SquareTite(content: 'lib/assets/yahoo.png'),
                     ],
                   )
 
