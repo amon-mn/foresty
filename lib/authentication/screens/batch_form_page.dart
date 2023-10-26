@@ -6,15 +6,13 @@ import 'package:foresty/models/batch.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:foresty/components/forms_provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../components/my_button.dart';
 
 class BatchFormPage extends StatefulWidget {
-  final ProductBatch productBatch;
-
   const BatchFormPage({
     super.key,
-    required this.productBatch,
   });
 
   @override
@@ -70,7 +68,6 @@ class _BatchFormPageState extends State<BatchFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String currentBatchId = widget.productBatch.id!;
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -80,7 +77,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
         padding: EdgeInsets.all(16.0),
         child: Container(
           height: MediaQuery.of(context).size.height - 40,
-          width: MediaQuery.of(context).size.width - 40,
+          width: MediaQuery.of(context).size.width - 16,
           padding: EdgeInsets.all(20),
           margin: EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
@@ -96,20 +93,18 @@ class _BatchFormPageState extends State<BatchFormPage> {
           ),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            /*
-              Text(
-                'Nome do Lote',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[700]),
-              ),
-              MyTextFieldWrapper(
-                controller: batchNameController,
-                obscureText: false,
-              ),
-              */
-            SizedBox(height: 32.0),
+            Text(
+              'Nome do Lote',
+              style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[700]),
+            ),
+            MyTextFieldWrapper(
+              controller: _batchNameController,
+              obscureText: false,
+            ),
+            SizedBox(height: 16.0),
             Text(
               'Código do Novo Lote',
               style: TextStyle(
@@ -118,34 +113,6 @@ class _BatchFormPageState extends State<BatchFormPage> {
                   color: Colors.grey[900]),
             ),
             SizedBox(height: 4.0),
-            Container(
-              height: 120,
-              width: MediaQuery.of(context).size.width - 40,
-              padding: EdgeInsets.all(20),
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 244, 126, 63),
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 15,
-                    spreadRadius: 5,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  currentBatchId,
-                  style: TextStyle(
-                    fontSize: 24.0, // Adjust the font size as needed
-                    color: Colors.white, // Adjust the text color as needed
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(height: 16.0),
             FractionallySizedBox(
               widthFactor: 0.85,
               child: Form(
@@ -176,9 +143,9 @@ class _BatchFormPageState extends State<BatchFormPage> {
                         ),
                         const SizedBox(width: 8),
                         const Text('m'),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 8),
                         const Text('x'),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 8),
                         const Text('m'),
                         const SizedBox(width: 8),
                         Expanded(
@@ -290,9 +257,11 @@ class _BatchFormPageState extends State<BatchFormPage> {
                         MyButton(
                           onTap: () {
                             ProductBatch batch = ProductBatch(
-                              id: currentBatchId,
+                              id: Uuid().v4(),
                               largura: double.parse(_larguraController.text),
                               comprimento:
+                                  double.parse(_comprimentoController.text),
+                              area: double.parse(_larguraController.text) *
                                   double.parse(_comprimentoController.text),
                               finalidade:
                                   _selectedValueNotifierFinalidade.value,

@@ -21,8 +21,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String profileImageUrl = '';
-  final List<ProductBatch> listBatchs = [
+  List<ProductBatch> listBatchs = [
+    /*
     ProductBatch(
         largura: 2,
         comprimento: 3,
@@ -39,13 +39,19 @@ class _HomePageState extends State<HomePage> {
         finalidade: "Plantio de Frutas",
         ambiente: "AgroFloresta",
         tipoCultivo: "Floresta"),
+        */
   ];
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  String profileImageUrl = '';
 
   @override
   void initState() {
-    super.initState();
+    refresh();
     fetchUserData(widget.user.uid);
     fetchProfileImage(); // Obtém a URL da imagem de perfil no início
+    super.initState();
   }
 
   @override
@@ -172,6 +178,20 @@ class _HomePageState extends State<HomePage> {
   void updateProfileImage(String imageUrl) {
     setState(() {
       profileImageUrl = imageUrl;
+    });
+  }
+
+  refresh() async {
+    List<ProductBatch> temp = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await db.collection("batchs").get();
+
+    for (var doc in snapshot.docs) {
+      temp.add(ProductBatch.fromMap(doc.data()));
+    }
+
+    setState(() {
+      listBatchs = temp;
     });
   }
 }
