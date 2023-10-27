@@ -7,14 +7,22 @@ class BatchService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> addBatch({required ProductBatch batch}) async {
-    return firestore.collection(user_id).doc(batch.id).set(batch.toMap());
+    return firestore
+        .collection('users')
+        .doc(user_id)
+        .collection('lotes')
+        .doc(batch.id)
+        .set(batch.toMap());
   }
 
   Future<List<ProductBatch>> readBatchs() async {
     List<ProductBatch> temp = [];
 
-    QuerySnapshot<Map<String, dynamic>> snapshot =
-        await firestore.collection(user_id).get();
+    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+        .collection('users')
+        .doc(user_id)
+        .collection('lotes')
+        .get();
 
     for (var doc in snapshot.docs) {
       temp.add(ProductBatch.fromMap(doc.data()));
@@ -24,6 +32,11 @@ class BatchService {
   }
 
   Future<void> removeBatch({required String batchId}) async {
-    return firestore.collection(user_id).doc(batchId).delete();
+    return firestore
+        .collection('users')
+        .doc(user_id)
+        .collection('lotes')
+        .doc(batchId)
+        .delete();
   }
 }

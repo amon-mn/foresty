@@ -4,6 +4,7 @@ import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/components/my_textField.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_batch/models/batch_location_controller.dart';
+import 'package:foresty/firestore_batch/services/batch_service.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -21,7 +22,8 @@ class BatchFormPage extends StatefulWidget {
 }
 
 class _BatchFormPageState extends State<BatchFormPage> {
-  FirebaseFirestore db = FirebaseFirestore.instance;
+  //FirebaseFirestore db = FirebaseFirestore.instance;
+  BatchService batchService = BatchService();
 
   final TextEditingController _batchNameController = TextEditingController();
   final TextEditingController _larguraController = TextEditingController();
@@ -368,10 +370,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                         _selectedValueNotifierTipoCultivo.value,
                                   );
 
+                                  batchService.addBatch(batch: batch);
+/*
                                   db
                                       .collection("batchs")
                                       .doc(batch.id)
                                       .set(batch.toMap());
+*/
 
                                   Navigator.pop(context);
                                 },
