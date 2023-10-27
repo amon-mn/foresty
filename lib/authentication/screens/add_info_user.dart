@@ -9,7 +9,7 @@ import 'package:foresty/home_page.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:validadores/Validador.dart';
 
-import '../../components/my_textfield.dart';
+import '../../components/my_textField.dart';
 
 class AddInfoGoogleUser extends StatefulWidget {
   final User user;

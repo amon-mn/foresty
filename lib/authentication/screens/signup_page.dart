@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:foresty/components/signup_form.dart';
+import 'package:foresty/authentication/screens/components/signup_form.dart';
 import '../../components/my_button.dart';
 import '../../components/show_snackbar.dart';
 import '../../home_page.dart';

@@ -2,15 +2,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:foresty/authentication/screens/batch_form_page.dart';
-import 'package:foresty/components/batch_widget.dart';
-import 'package:foresty/models/batch.dart';
+import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_batch/screens/batch_form_page.dart';
+import 'package:foresty/firestore_batch/screens/components/batch_widget.dart';
+
 import 'authentication/services/auth_service.dart';
 import 'components/my_drawer.dart';
-import 'components/show_password_confirmation_dialog.dart';
+import 'authentication/screens/components/show_password_confirmation_dialog.dart';
 import 'authentication/screens/user_page.dart';
 import 'authentication/screens/welcome_page.dart';
-import 'package:foresty/authentication/screens/view_forms_page.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -125,11 +125,16 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 18),
               ),
             )
-          : ListView(
-              children: List.generate(listBatchs.length, (index) {
-                ProductBatch model = listBatchs[index];
-                return BatchWidget(title: (model.tipoCultivo));
-              }),
+          : RefreshIndicator(
+              onRefresh: () {
+                return refresh();
+              },
+              child: ListView(
+                children: List.generate(listBatchs.length, (index) {
+                  ProductBatch model = listBatchs[index];
+                  return BatchWidget(title: (model.tipoCultivo));
+                }),
+              ),
             ),
     );
   }

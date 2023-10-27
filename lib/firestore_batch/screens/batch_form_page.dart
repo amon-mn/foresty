@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foresty/components/my_dropdown.dart';
-import 'package:foresty/components/my_textfield.dart';
-import 'package:foresty/models/batch.dart';
-import 'package:foresty/models/batch_location_controller.dart';
+import 'package:foresty/components/my_textField.dart';
+import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_batch/models/batch_location_controller.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
-import 'package:foresty/components/forms_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../components/my_button.dart';

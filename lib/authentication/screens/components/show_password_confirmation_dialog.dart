@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../authentication/screens/welcome_page.dart';
-import '../authentication/services/auth_service.dart';
+import '../welcome_page.dart';
+import '../../services/auth_service.dart';
 
 class PasswordConfirmationDialog extends StatefulWidget {
   final String email;

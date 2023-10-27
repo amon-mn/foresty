@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:foresty/models/result_cep.dart';
+import 'package:foresty/authentication/models/result_cep.dart';
 import 'package:http/http.dart' as http;
 
 class ViaCepService {

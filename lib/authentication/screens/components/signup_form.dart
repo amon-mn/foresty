@@ -3,7 +3,7 @@ import 'package:foresty/authentication/services/via_cep_service.dart';
 import 'package:foresty/components/show_snackbar.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:validadores/Validador.dart';
-import 'my_textfield.dart';
+import '../../../components/my_textField.dart';
 
 class SignupUserForm extends StatefulWidget {
   final TextEditingController nameController,

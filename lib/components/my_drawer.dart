@@ -3,7 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
-import 'show_password_confirmation_dialog.dart';
+import '../authentication/screens/components/show_password_confirmation_dialog.dart';
 
 class MyDrawer extends StatelessWidget {
   final User user;
