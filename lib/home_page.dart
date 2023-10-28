@@ -102,6 +102,10 @@ class _HomePageState extends State<HomePage> {
               context,
               MaterialPageRoute(
                 builder: (context) => BatchFormPage(),
+              )).then((value) => setState(
+                () {
+                  refresh();
+                },
               ));
 
           /*Navigator.push(
@@ -120,11 +124,16 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: (listBatchs.isEmpty)
-          ? const Center(
-              child: Text(
-                "Nenhum lote ainda.\nVamos criar o primeiro?",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
+          ? RefreshIndicator(
+              onRefresh: () {
+                return refresh();
+              },
+              child: const Center(
+                child: Text(
+                  "Nenhum lote ainda.\nVamos criar o primeiro?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             )
           : RefreshIndicator(
@@ -134,7 +143,10 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 children: List.generate(listBatchs.length, (index) {
                   ProductBatch model = listBatchs[index];
-                  return BatchWidget(title: (model.tipoCultivo));
+                  return BatchWidget(
+                    title: (model.nomeLote),
+                    subtitle: (model.nomeProduto),
+                  );
                 }),
               ),
             ),

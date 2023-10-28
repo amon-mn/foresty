@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class BatchWidget extends StatelessWidget {
   final String title;
+  final String? subtitle;
 
   BatchWidget({
     required this.title,
+    this.subtitle,
   });
 
   @override
@@ -55,6 +57,20 @@ class BatchWidget extends StatelessWidget {
                               title,
                               style: const TextStyle(
                                 fontSize: 20,
+                                overflow: TextOverflow.fade,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width / 8,
+                              bottom: MediaQuery.of(context).size.height / 20,
+                            ),
+                            width: 100,
+                            child: Text(
+                              subtitle ?? '',
+                              style: const TextStyle(
+                                fontSize: 16,
                                 overflow: TextOverflow.fade,
                               ),
                             ),

@@ -24,7 +24,7 @@ class BatchFormPage extends StatefulWidget {
 class _BatchFormPageState extends State<BatchFormPage> {
   //FirebaseFirestore db = FirebaseFirestore.instance;
   BatchService batchService = BatchService();
-
+  final TextEditingController _productNameController = TextEditingController();
   final TextEditingController _batchNameController = TextEditingController();
   final TextEditingController _larguraController = TextEditingController();
   final TextEditingController _comprimentoController = TextEditingController();
@@ -117,6 +117,12 @@ class _BatchFormPageState extends State<BatchFormPage> {
                           ),
                         ),
                         const SizedBox(height: 4),
+                        MyTextFieldWrapper(
+                          hintText: 'Nome do Lote',
+                          controller: _batchNameController,
+                          obscureText: false,
+                        ),
+                        const SizedBox(height: 8),
                         Row(
                           children: [
                             SizedBox(
@@ -226,27 +232,6 @@ class _BatchFormPageState extends State<BatchFormPage> {
                             }
                           }),
                         ),
-                        /*Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .spaceBetween, // Adicione esta linha
-                            children: [
-                              
-                              /*
-                              Container(
-                                alignment: Alignment.topRight,
-                                padding: EdgeInsets.all(10),
-                                child: SizedBox(
-                                  child: GestureDetector(
-                                    onTap: () {},
-                                    child:
-                                        SquareTite(content: Icons.location_pin),
-                                  ),
-                                ),
-                              ),
-                              */
-                            ],
-                          ),
-                          */
                         const SizedBox(height: 16),
                         Container(
                           alignment: Alignment.topLeft,
@@ -329,14 +314,14 @@ class _BatchFormPageState extends State<BatchFormPage> {
                         ),
                         MyTextFieldWrapper(
                           hintText: 'Ex: Tomate',
-                          controller: _batchNameController,
+                          controller: _productNameController,
                           obscureText: false,
                         ),
                         SizedBox(height: 18),
                         Row(
                           children: [
                             SizedBox(
-                              width: 140,
+                              width: 131,
                               child: MyButton(
                                 isRed: true,
                                 textButton: 'Descartar',
@@ -347,11 +332,12 @@ class _BatchFormPageState extends State<BatchFormPage> {
                             ),
                             SizedBox(width: 18),
                             SizedBox(
-                              width: 140,
+                              width: 131,
                               child: MyButton(
                                 onTap: () {
                                   ProductBatch batch = ProductBatch(
                                     id: Uuid().v4(),
+                                    nomeLote: _batchNameController.text,
                                     largura:
                                         double.parse(_larguraController.text),
                                     comprimento: double.parse(
@@ -368,6 +354,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                         _selectedValueNotifierAmbiente.value,
                                     tipoCultivo:
                                         _selectedValueNotifierTipoCultivo.value,
+                                    nomeProduto: _productNameController.text,
                                   );
 
                                   batchService.addBatch(batch: batch);
