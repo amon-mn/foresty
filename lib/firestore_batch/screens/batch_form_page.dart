@@ -198,29 +198,55 @@ class _BatchFormPageState extends State<BatchFormPage> {
                               _latBatch = location.lat;
                               _longBatch = location.long;
                               // Caso não haja erro, exibir latitude e longitude
-                              return Column(
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    alignment: Alignment.topLeft,
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      'Latitude: $_latBatch',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[900],
-                                        fontWeight: FontWeight.w500,
+                                  Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.topLeft,
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          'Latitude: $_latBatch',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.grey[900],
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      Container(
+                                        alignment: Alignment.topLeft,
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          'Longitude: $_longBatch',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.grey[900],
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   Container(
-                                    alignment: Alignment.topLeft,
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      'Longitude: $_longBatch',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[900],
-                                        fontWeight: FontWeight.w500,
+                                    alignment: Alignment.topRight,
+                                    padding: EdgeInsets.all(10),
+                                    child: SizedBox(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          location
+                                              .getPosition(); // Chama a atualização da geolocalização
+                                        },
+                                        child: const SquareTite(
+                                            isIcon: true,
+                                            content: Icon(
+                                              Icons.location_pin,
+                                              color:
+                                                  Color.fromARGB(255, 0, 90, 3),
+                                            )),
                                       ),
                                     ),
                                   ),

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class SquareTite extends StatelessWidget {
-  final dynamic content; // Pode ser um IconData ou uma String (path da imagem)
+  final dynamic
+      content; // Pode ser um IconData, um String (path da imagem) ou um Icon
+  final bool isIcon; // Indica se o conteúdo é um ícone
   const SquareTite({
     super.key,
     required this.content,
+    this.isIcon = false, // Por padrão, não é um ícone
   });
 
   @override
@@ -21,6 +24,8 @@ class SquareTite extends StatelessWidget {
         content,
         height: 30,
       );
+    } else if (isIcon && content is Icon) {
+      childWidget = content;
     } else {
       // Lida com outros tipos ou valores
       childWidget =

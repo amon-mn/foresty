@@ -6,10 +6,6 @@ class BatchLocationController extends ChangeNotifier {
   double long = 0.0;
   String error = '';
 
-  BatchLocationController() {
-    getPosition();
-  }
-
   getPosition() async {
     try {
       Position position = await _currentPosition();
