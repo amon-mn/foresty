@@ -143,9 +143,36 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 children: List.generate(listBatchs.length, (index) {
                   ProductBatch model = listBatchs[index];
-                  return BatchWidget(
-                    title: (model.nomeLote),
-                    subtitle: (model.nomeProduto),
+                  return Dismissible(
+                    key: ValueKey<ProductBatch>(model),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onDismissed: (direction) {
+                      remove(model);
+                    },
+                    child: BatchWidget(
+                      title: (model.nomeLote),
+                      subtitle: (model.nomeProduto),
+                      onDeletePressed: remove(model),
+                      onLongPress: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BatchFormPage(
+                              batch: model,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 }),
               ),
@@ -197,6 +224,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       profileImageUrl = imageUrl;
     });
+  }
+
+  remove(ProductBatch model) async {
+    await batchService.removeBatch(batchId: model.id);
+    refresh(); // Esta chamada deve ser válida
   }
 
   refresh() async {

@@ -4,8 +4,10 @@ class SquareTite extends StatelessWidget {
   final dynamic
       content; // Pode ser um IconData, um String (path da imagem) ou um Icon
   final bool isIcon; // Indica se o conteúdo é um ícone
+  final Color? borderColor;
   const SquareTite({
     super.key,
+    this.borderColor,
     required this.content,
     this.isIcon = false, // Por padrão, não é um ícone
   });
@@ -35,9 +37,10 @@ class SquareTite extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        border: Border.all(color: Color.fromARGB(255, 195, 195, 195)),
+        border: Border.all(
+            color: borderColor ?? Color.fromARGB(255, 195, 195, 195)),
         borderRadius: BorderRadius.circular(16),
-        color: Colors.grey[200],
+        color: Color.fromRGBO(238, 238, 238, 1),
       ),
       child: childWidget,
     );

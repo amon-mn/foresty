@@ -13,8 +13,11 @@ import '../../components/my_button.dart';
 import '../../components/square_tile.dart';
 
 class BatchFormPage extends StatefulWidget {
-  const BatchFormPage({
+  ProductBatch? batch;
+
+  BatchFormPage({
     super.key,
+    this.batch,
   });
 
   @override
@@ -23,6 +26,7 @@ class BatchFormPage extends StatefulWidget {
 
 class _BatchFormPageState extends State<BatchFormPage> {
   //FirebaseFirestore db = FirebaseFirestore.instance;
+  String labelTitle = 'Novo Lote';
   BatchService batchService = BatchService();
   final TextEditingController _productNameController = TextEditingController();
   final TextEditingController _batchNameController = TextEditingController();
@@ -70,12 +74,32 @@ class _BatchFormPageState extends State<BatchFormPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    // Verifique se um objeto ProductBatch não nulo foi passado
+    if (widget.batch != null) {
+      labelTitle = 'Editando ${widget.batch!.nomeLote}';
+      // Preencha os campos do formulário com os valores do objeto ProductBatch
+      _batchNameController.text = widget.batch!.nomeLote ?? '';
+      _larguraController.text = widget.batch!.largura.toString();
+      _comprimentoController.text = widget.batch!.comprimento.toString();
+      _latBatch = widget.batch!.latitude;
+      _longBatch = widget.batch!.longitude;
+      _selectedValueNotifierFinalidade.value = widget.batch!.finalidade;
+      _selectedValueNotifierAmbiente.value = widget.batch!.ambiente;
+      _selectedValueNotifierTipoCultivo.value = widget.batch!.tipoCultivo;
+      _productNameController.text = widget.batch!.nomeProduto ?? '';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: Text('Novo Lote'),
+        title: Text(labelTitle),
       ),
       body: Container(
         alignment: Alignment.topLeft,
@@ -117,7 +141,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
                         ),
                         const SizedBox(height: 4),
                         MyTextFieldWrapper(
-                          hintText: '',
+                          hintText: 'Nome',
                           controller: _batchNameController,
                           obscureText: false,
                         ),
@@ -188,7 +212,6 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                 color: Colors.grey[900]),
                           ),
                         ),
-                        SizedBox(height: 8),
                         ChangeNotifierProvider<BatchLocationController>(
                           create: (context) => BatchLocationController(),
                           child: Builder(builder: (context) {
@@ -203,33 +226,47 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Column(
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.topLeft,
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text(
-                                          'Latitude: $_latBatch',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey[900],
-                                            fontWeight: FontWeight.w500,
+                                  Container(
+                                    width: 232,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color:
+                                              Color.fromRGBO(135, 135, 135, 1)),
+                                      color: Color.fromRGBO(238, 238, 238, 1),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(left: 05),
+                                          alignment: Alignment.topLeft,
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            'Latitude: $_latBatch',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.grey[800],
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.topLeft,
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text(
-                                          'Longitude: $_longBatch',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey[900],
-                                            fontWeight: FontWeight.w500,
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(left: 05),
+                                          alignment: Alignment.topLeft,
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            'Longitude: $_longBatch',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.grey[800],
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   Container(
                                     alignment: Alignment.topRight,
@@ -241,6 +278,8 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                               .getPosition(); // Chama a atualização da geolocalização
                                         },
                                         child: const SquareTite(
+                                            borderColor: Color.fromRGBO(
+                                                135, 135, 135, 1),
                                             isIcon: true,
                                             content: Icon(
                                               Icons.location_pin,
@@ -356,6 +395,8 @@ class _BatchFormPageState extends State<BatchFormPage> {
                         ),
                         SizedBox(height: 18),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
                               width: 131,
