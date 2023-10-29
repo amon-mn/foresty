@@ -2,7 +2,7 @@ import 'package:uuid/uuid.dart';
 
 class ProductBatch {
   String? id = const Uuid().v4();
-  String nomeLote;
+  String? nomeLote;
   double largura;
   double comprimento;
   double? area;
@@ -15,7 +15,7 @@ class ProductBatch {
 
   ProductBatch({
     this.id,
-    required this.nomeLote,
+    this.nomeLote,
     required this.largura,
     required this.comprimento,
     this.area,

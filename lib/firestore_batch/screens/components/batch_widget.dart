@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BatchWidget extends StatelessWidget {
-  final String title;
+  final String? title;
   final String? subtitle;
 
   BatchWidget({
@@ -37,24 +37,25 @@ class BatchWidget extends StatelessWidget {
                 child: Stack(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 80),
+                      margin: const EdgeInsets.only(
+                          left: 80, top: 2, bottom: 2, right: 2),
                       width: screenWidth,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                             margin: EdgeInsets.only(
                               left: MediaQuery.of(context).size.width / 8,
-                              bottom: MediaQuery.of(context).size.height / 20,
+                              top: 10,
                             ),
-                            width: 100,
+                            width: 200,
                             child: Text(
-                              title,
+                              title ?? '',
                               style: const TextStyle(
                                 fontSize: 20,
                                 overflow: TextOverflow.fade,
@@ -64,9 +65,8 @@ class BatchWidget extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(
                               left: MediaQuery.of(context).size.width / 8,
-                              bottom: MediaQuery.of(context).size.height / 20,
                             ),
-                            width: 100,
+                            width: 200,
                             child: Text(
                               subtitle ?? '',
                               style: const TextStyle(
@@ -109,7 +109,7 @@ class BatchWidget extends StatelessWidget {
           ),
           Positioned(
             left: MediaQuery.of(context).size.width / 3,
-            bottom: 12.5,
+            bottom: 5,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

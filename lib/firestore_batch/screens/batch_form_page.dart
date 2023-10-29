@@ -66,7 +66,6 @@ class _BatchFormPageState extends State<BatchFormPage> {
 
   @override
   void dispose() {
-    _batchNameController.dispose();
     super.dispose();
   }
 
@@ -109,7 +108,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
-                            'Área do Lote',
+                            'Nome do Lote',
                             style: TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
@@ -118,11 +117,23 @@ class _BatchFormPageState extends State<BatchFormPage> {
                         ),
                         const SizedBox(height: 4),
                         MyTextFieldWrapper(
-                          hintText: 'Nome do Lote',
+                          hintText: '',
                           controller: _batchNameController,
                           obscureText: false,
                         ),
                         const SizedBox(height: 8),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Área do Lote',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[900]),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
                         Row(
                           children: [
                             SizedBox(
