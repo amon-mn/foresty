@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foresty/firestore_activity/screens/components/activity_form_page.dart';
 
 class BatchWidget extends StatelessWidget {
   final String? title;
@@ -123,11 +124,24 @@ class BatchWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  if (onEditPressed != null)
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: onEditPressed,
-                    ),
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {}, //onEditPressed
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      // Use o Navigator para navegar para uma nova página
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            // Aqui você pode criar a página que deseja mostrar
+                            return ActivityFormPage();
+                          },
+                        ),
+                      );
+                    },
+                  ),
                   IconButton(
                     icon: Icon(Icons.check),
                     onPressed: () {
@@ -140,14 +154,15 @@ class BatchWidget extends StatelessWidget {
                       // Lógica para gerar QR code
                     },
                   ),
-                  if (onDeletePressed != null)
-                    IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Color.fromARGB(255, 217, 0, 0),
-                      ),
-                      onPressed: onDeletePressed,
+                  IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: Color.fromARGB(255, 217, 0, 0),
                     ),
+                    onPressed: () {
+                      // Lógica para deletar lote
+                    },
+                  ),
                 ],
               ),
             ),

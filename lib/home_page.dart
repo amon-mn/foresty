@@ -143,36 +143,20 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 children: List.generate(listBatchs.length, (index) {
                   ProductBatch model = listBatchs[index];
-                  return Dismissible(
-                    key: ValueKey<ProductBatch>(model),
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      color: Colors.red,
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: const Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      ),
-                    ),
-                    onDismissed: (direction) {
-                      remove(model);
-                    },
-                    child: BatchWidget(
-                      title: (model.nomeLote),
-                      subtitle: (model.nomeProduto),
-                      onDeletePressed: remove(model),
-                      onLongPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BatchFormPage(
-                              batch: model,
-                            ),
+                  return BatchWidget(
+                    title: (model.nomeLote),
+                    subtitle: (model.nomeProduto),
+                    //onDeletePressed: remove(model),
+                    onLongPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BatchFormPage(
+                            batch: model,
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   );
                 }),
               ),
@@ -226,9 +210,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  remove(ProductBatch model) async {
-    await batchService.removeBatch(batchId: model.id);
-    refresh(); // Esta chamada deve ser válida
+  remove(ProductBatch model) {
+    batchService.removeBatch(batchId: model.id).then((_) {
+      refresh();
+    });
   }
 
   refresh() async {
