@@ -90,6 +90,19 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
           padding: EdgeInsets.all(16.0),
           children: [
             Container(
+              alignment: Alignment.topLeft,
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                'Data da Atividade',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[900],
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Container(
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.grey[300]!,
@@ -107,7 +120,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   Icons.calendar_today,
                   color: Colors.green[800]!,
                 ),
-                dateLabelText: 'Selecione a data',
+                dateLabelText: 'Ex: 31/10/2023',
                 onChanged: (val) {
                   setState(() {
                     selectedDate = val;
@@ -344,7 +357,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
-                            'Data',
+                            'Data da Semeadura',
                             style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
@@ -372,7 +385,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               Icons.calendar_today,
                               color: Colors.green[800]!, // Calendar icon color
                             ),
-                            dateLabelText: '31/10/2023',
+                            dateLabelText: 'Ex: 31/10/2023',
                             onChanged: (val) {
                               setState(() {
                                 selectedDateSD = val;
@@ -404,7 +417,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             type: MaskAutoCompletionType.lazy,
                           ),
                           controller: _quantidadeSDController,
-                          hintText: '3kg',
+                          hintText: 'Quantidade',
                           obscureText: false,
                           validator: (value) {},
                         ),
