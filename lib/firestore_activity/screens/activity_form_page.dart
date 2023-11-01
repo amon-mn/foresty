@@ -1,14 +1,14 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:provider/provider.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:foresty/components/my_dropdown.dart';
-import 'package:foresty/components/my_button.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../components/my_textField.dart';
 import '../../firestore_batch/models/batch.dart';
 
 class ActivityFormPage extends StatefulWidget {
-  ActivityFormPage({Key? key}) : super(key: key);
+  final ProductBatch? batch;
+
+  ActivityFormPage({Key? key, this.batch}) : super(key: key);
 
   @override
   _ActivityFormPageState createState() => _ActivityFormPageState();
@@ -21,12 +21,19 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       TextEditingController();
   final TextEditingController _comprimentoPlantioController =
       TextEditingController();
-
+  bool? _selectedRadioValue;
+  bool? _selectedRadioValueUnid;
   String labelTitle = 'Adicionar Atividade';
-  String selectedDateAtividade = '';
-  String selectedDateSD = '';
   ValueNotifier<String> selectedAtividade = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedPreparoSolo =
+      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedAdubacao = ValueNotifier<String>('Selecione');
+
   ValueNotifier<String> selectedPlantio = ValueNotifier<String>('Selecione');
+
+  // Variável para armazenar a data selecionada
+  String selectedDate = '';
+  String selectedDateSD = '';
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -39,6 +46,20 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     'Adubação de cobertura',
     'Capina',
     'Outros tratos culturais',
+  ];
+
+  final itemListTipoPreparoSolo = [
+    'Selecione',
+    'Canteiro',
+    'Leira',
+    'Cova',
+  ];
+
+  final itemListAduboPlantio = [
+    'Selecione',
+    'Orgânica',
+    'Química',
+    'Não fez adubação',
   ];
 
   final itemListTipoPlantio = [
@@ -69,6 +90,37 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
           padding: EdgeInsets.all(16.0),
           children: [
             Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey[300]!,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: DateTimePicker(
+                type: DateTimePickerType.date,
+                dateMask: 'dd/MM/yyyy',
+                initialValue: selectedDate,
+                firstDate: DateTime(2023),
+                lastDate: DateTime(2030),
+                icon: Icon(
+                  Icons.calendar_today,
+                  color: Colors.green[800]!,
+                ),
+                dateLabelText: 'Selecione a data',
+                onChanged: (val) {
+                  setState(() {
+                    selectedDate = val;
+                  });
+                },
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.grey[900]!,
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            Container(
               alignment: Alignment.topLeft,
               padding: EdgeInsets.only(left: 10),
               child: Text(
@@ -95,38 +147,169 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                 children: [
                   SizedBox(height: 18),
                   Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey[300]!, // Border color
-                        width: 1.0, // Border width
-                      ),
-                      borderRadius:
-                          BorderRadius.circular(15.0), // Border radius
-                    ),
-                    child: DateTimePicker(
-                      type: DateTimePickerType.date,
-                      dateMask: 'dd/MM/yyyy',
-                      initialValue: selectedDateAtividade,
-                      firstDate: DateTime(2023),
-                      lastDate: DateTime(2030),
-                      icon: Icon(
-                        Icons.calendar_today,
-                        color: Colors.green[800]!, // Calendar icon color
-                      ),
-                      dateLabelText: 'Selecione a data',
-                      onChanged: (val) {
-                        setState(() {
-                          selectedDateAtividade = val;
-                        });
-                      },
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Tipo',
                       style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.grey[900]!,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
                       ),
                     ),
                   ),
+                  const SizedBox(height: 4),
+                  MyDropdownFormField(
+                    selectedValueNotifier: selectedPreparoSolo,
+                    itemsList: itemListTipoPreparoSolo,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedPreparoSolo.value = value!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 18),
+                  if (selectedPreparoSolo.value == 'Canteiro')
+                    Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Tamanho',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        MyTextFieldWrapper(
+                          hintText: 'Digite um número',
+                          controller: _tamanho,
+                          obscureText: false,
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 18),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Fez uso de calcário',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Radio<bool>(
+                        value: true,
+                        groupValue: _selectedRadioValue,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedRadioValue = value;
+                          });
+                        },
+                        activeColor: Colors.green[800]!,
+                      ),
+                      Text('Sim'),
+                      SizedBox(width: 20),
+                      Radio<bool>(
+                        value: false,
+                        groupValue: _selectedRadioValue,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedRadioValue = value;
+                          });
+                        },
+                        activeColor: Colors.green[800]!,
+                      ),
+                      Text('Não'),
+                    ],
+                  ),
+                  // Verifique se a opção selecionada é "Sim"
+                  Visibility(
+                    visible: _selectedRadioValue == true,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 18),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Quantidade de calcário',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        MyTextFieldWrapper(
+                          hintText: 'Digite um número',
+                          controller: _tamanho,
+                          obscureText: false,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.topLeft,
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          'Quantidade de adubo',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[900],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      MyTextFieldWrapper(
+                        hintText: 'Digite um número',
+                        controller: _tamanho,
+                        obscureText: false,
+                      ),
+                      Row(
+                        children: [
+                          Radio<bool>(
+                            value: true,
+                            groupValue: _selectedRadioValueUnid,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedRadioValueUnid = value;
+                              });
+                            },
+                            activeColor: Colors.green[800]!,
+                          ),
+                          Text('T/ha'),
+                          SizedBox(width: 20),
+                          Radio<bool>(
+                            value: false,
+                            groupValue: _selectedRadioValueUnid,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedRadioValueUnid = value;
+                              });
+                            },
+                            activeColor: Colors.green[800]!,
+                          ),
+                          Text('Kg/m2'),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
+
             if (selectedAtividade.value == 'Plantio')
               Column(
                 children: [
