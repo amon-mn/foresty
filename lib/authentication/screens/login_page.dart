@@ -4,7 +4,7 @@ import 'package:foresty/authentication/screens/add_info_user.dart';
 import 'package:foresty/home_page.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../components/my_button.dart';
-import '../../components/my_textField.dart';
+import '../../components/my_textfield.dart';
 import '../../components/show_snackbar.dart';
 import '../../components/square_tile.dart';
 import '../services/auth_service.dart';

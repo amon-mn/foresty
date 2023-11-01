@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import '../../components/my_textField.dart';
+import '../../components/my_textfield.dart';
 import '../../firestore_batch/models/batch.dart';
 
 class ActivityFormPage extends StatefulWidget {
@@ -28,8 +28,10 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   ValueNotifier<String> selectedPreparoSolo =
       ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedAdubacao = ValueNotifier<String>('Selecione');
-
   ValueNotifier<String> selectedPlantio = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoAduboQuimico = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoAduboOrganico = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedAduboComplementar = ValueNotifier<String>('Selecione');
 
   // Variável para armazenar a data selecionada
   String selectedDate = '';
@@ -68,6 +70,37 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     'Transplantio de mudas',
     'Replantio',
   ];
+
+  final itemListTipoAduboQuimico = [
+    'Selecione',
+    'NPK',
+    'Uréia',
+    'Superfosfato triplo',
+    'Superfosfato simples',
+    'Cloreto de potássio',
+    'FTE-BR12',
+    'Outro (especificar)',
+  ];
+
+  final itemListTipoAduboOrganico = [
+    'Selecione',
+    'Adubação Verde',
+    'Esterco de aves',
+    'Esterco de gado',
+    'Outro (especificar)',
+  ];
+
+  final itemListAduboComplementar = [
+    'Selecione',
+    'Esterco de aves',
+    'Esterco de gado',
+    'Matéria orgânica',
+    'Composto orgânico',
+    'Humus',
+    'Outro (especificar)',
+    'Não',
+  ];
+
 
   @override
   void initState() {
@@ -182,7 +215,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     },
                   ),
                   const SizedBox(height: 18),
-                  if (selectedPreparoSolo.value == 'Canteiro')
+                  if (selectedPreparoSolo.value != 'Selecione')
                     Column(
                       children: [
                         Container(
@@ -202,9 +235,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           controller: _tamanho,
                           obscureText: false,
                         ),
-                      ],
-                    ),
-                  const SizedBox(height: 18),
+                                          const SizedBox(height: 18),
                   Container(
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(left: 10),
@@ -270,6 +301,86 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                       ],
                     ),
                   ),
+                      ],
+                    ),
+
+                  const SizedBox(height: 18),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Adubação pré-plantio',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  MyDropdownFormField(
+                    selectedValueNotifier: selectedAdubacao,
+                    itemsList: itemListAduboPlantio,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedAdubacao.value = value!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 18),
+                  if (selectedAdubacao.value != 'Selecione' && selectedAdubacao.value != 'Não fez adubação' && selectedAdubacao.value != 'Química')
+                    Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Tipo de Adubo',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        MyDropdownFormField(
+                    selectedValueNotifier: selectedTipoAduboOrganico,
+                    itemsList: itemListTipoAduboOrganico,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedTipoAduboOrganico.value = value!;
+                      });
+                    },
+                  ),
+                      ],
+                    ),
+                  if (selectedAdubacao.value == 'Química')
+                    Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Tipo de Adubo',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        MyDropdownFormField(
+                    selectedValueNotifier: selectedTipoAduboQuimico,
+                    itemsList: itemListTipoAduboQuimico,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedTipoAduboQuimico.value = value!;
+                      });
+                    },
+                  ),
+                      ],
+                    ),
+
                   const SizedBox(height: 18),
                   Column(
                     children: [
@@ -318,7 +429,9 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           Text('Kg/m2'),
                         ],
                       ),
+                      
                     ],
+                    
                   ),
                 ],
               ),
