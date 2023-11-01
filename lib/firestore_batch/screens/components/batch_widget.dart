@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foresty/firestore_activity/screens/components/activity_form_page.dart';
+import 'package:foresty/firestore_activity/screens/activity_form_page.dart';
 
 class BatchWidget extends StatelessWidget {
   final String? title;
