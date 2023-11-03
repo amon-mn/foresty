@@ -32,6 +32,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
   final TextEditingController _batchNameController = TextEditingController();
   final TextEditingController _larguraController = TextEditingController();
   final TextEditingController _comprimentoController = TextEditingController();
+  final TextEditingController _especificarFinalidadeController =
+      TextEditingController();
+  final TextEditingController _especificarAmbienteController =
+      TextEditingController();
+  final TextEditingController _especificarTipoCultivoController =
+      TextEditingController();
+
   double _latBatch = 0.0;
   double _longBatch = 0.0;
 
@@ -331,6 +338,32 @@ class _BatchFormPageState extends State<BatchFormPage> {
                             });
                           },
                         ),
+                        if (_selectedValueNotifierFinalidade.value ==
+                            'Outro (Especificar)')
+                          Column(
+                            children: [
+                              const SizedBox(height: 16),
+                              Container(
+                                alignment: Alignment.topLeft,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Especifique a Finalidade',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[900],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              MyTextFieldWrapper(
+                                controller: _especificarFinalidadeController,
+                                hintText: 'Especificar',
+                                obscureText: false,
+                                validator: (value) {},
+                              ),
+                            ],
+                          ),
                         SizedBox(height: 16),
                         Container(
                           alignment: Alignment.topLeft,
@@ -353,6 +386,32 @@ class _BatchFormPageState extends State<BatchFormPage> {
                             });
                           },
                         ),
+                        if (_selectedValueNotifierAmbiente.value ==
+                            'Outro (Especificar)')
+                          Column(
+                            children: [
+                              const SizedBox(height: 16),
+                              Container(
+                                alignment: Alignment.topLeft,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Especifique o Ambiente',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[900],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              MyTextFieldWrapper(
+                                controller: _especificarAmbienteController,
+                                hintText: 'Especificar',
+                                obscureText: false,
+                                validator: (value) {},
+                              ),
+                            ],
+                          ),
                         SizedBox(height: 16),
                         Container(
                           alignment: Alignment.topLeft,
@@ -376,7 +435,33 @@ class _BatchFormPageState extends State<BatchFormPage> {
                             });
                           },
                         ),
-                        SizedBox(height: 18),
+                        if (_selectedValueNotifierTipoCultivo.value ==
+                            'Outro (Especificar)')
+                          Column(
+                            children: [
+                              const SizedBox(height: 16),
+                              Container(
+                                alignment: Alignment.topLeft,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Especifique o Tipo de Cultivo',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[900],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              MyTextFieldWrapper(
+                                controller: _especificarTipoCultivoController,
+                                hintText: 'Especificar',
+                                obscureText: false,
+                                validator: (value) {},
+                              ),
+                            ],
+                          ),
+                        SizedBox(height: 16),
                         Container(
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.only(left: 10),
@@ -393,7 +478,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
                           controller: _productNameController,
                           obscureText: false,
                         ),
-                        SizedBox(height: 18),
+                        SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -436,12 +521,6 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                   );
 
                                   batchService.addBatch(batch: batch);
-/*
-                                  db
-                                      .collection("batchs")
-                                      .doc(batch.id)
-                                      .set(batch.toMap());
-*/
 
                                   Navigator.pop(context);
                                 },
