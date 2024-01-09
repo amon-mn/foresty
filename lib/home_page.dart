@@ -144,9 +144,10 @@ class _HomePageState extends State<HomePage> {
                 children: List.generate(listBatchs.length, (index) {
                   ProductBatch model = listBatchs[index];
                   return BatchWidget(
-                    title: (model.nomeLote),
-                    subtitle: (model.nomeProduto),
-                    //onDeletePressed: remove(model),
+                    batchId:
+                        model.id, // Passando o ID do lote para o BatchWidget
+                    title: model.nomeLote,
+                    subtitle: model.nomeProduto,
                     onEditPressed: () {
                       Navigator.push(
                         context,
@@ -156,6 +157,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       );
+                    },
+                    onDeletePressed: () {
+                      remove(model);
+                      refresh();
                     },
                   );
                 }),
@@ -212,7 +217,10 @@ class _HomePageState extends State<HomePage> {
 
   remove(ProductBatch model) {
     batchService.removeBatch(batchId: model.id).then((_) {
-      refresh();
+      setState(() {
+        // Remove o lote da lista listBatchs com base no ID correspondente ao modelo removido
+        listBatchs.removeWhere((batch) => batch.id == model.id);
+      });
     });
   }
 

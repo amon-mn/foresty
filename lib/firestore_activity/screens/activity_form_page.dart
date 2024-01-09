@@ -698,95 +698,123 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Quantidade Recomendada',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[900],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  MyTextFieldWrapper(
-                    hintText: 'Digite um número',
-                    controller: _tamanho,
-                    obscureText: false,
-                  ),
                   Row(
                     children: [
-                      Radio<bool>(
-                        value: true,
-                        groupValue: _selectedRadioValueQuantRecomendada,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRadioValueQuantRecomendada = value;
-                          });
-                        },
-                        activeColor: Colors.green[800]!,
+                      Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Qtd. Recomendada',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[900],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: 180,
+                            child: MyTextFieldWrapper(
+                              hintText: 'Número',
+                              controller: _tamanho,
+                              obscureText: false,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('T/ha'),
-                      SizedBox(width: 20),
-                      Radio<bool>(
-                        value: false,
-                        groupValue: _selectedRadioValueQuantRecomendada,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRadioValueQuantRecomendada = value;
-                          });
-                        },
-                        activeColor: Colors.green[800]!,
+                      const SizedBox(width: 16),
+                      Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Unid',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[900],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: 180,
+                            child: MyDropdownFormField(
+                              selectedValueNotifier: selectedTipoUnid,
+                              itemsList: itemListTipoUnid,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedTipoUnid.value = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('Kg/m2'),
                     ],
                   ),
                   SizedBox(height: 16),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Quantidade Aplicada',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[900],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  MyTextFieldWrapper(
-                    hintText: 'Digite um número',
-                    controller: _tamanho,
-                    obscureText: false,
-                  ),
                   Row(
                     children: [
-                      Radio<bool>(
-                        value: true,
-                        groupValue: _selectedRadioValueQuantAplicada,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRadioValueQuantAplicada = value;
-                          });
-                        },
-                        activeColor: Colors.green[800]!,
+                      Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Qtd. Aplicada',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[900],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: 180,
+                            child: MyTextFieldWrapper(
+                              hintText: 'Número',
+                              controller: _tamanho,
+                              obscureText: false,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('T/ha'),
-                      SizedBox(width: 20),
-                      Radio<bool>(
-                        value: false,
-                        groupValue: _selectedRadioValueQuantAplicada,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRadioValueQuantAplicada = value;
-                          });
-                        },
-                        activeColor: Colors.green[800]!,
+                      const SizedBox(width: 16),
+                      Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Unid',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[900],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: 180,
+                            child: MyDropdownFormField(
+                              selectedValueNotifier: selectedTipoUnid,
+                              itemsList: itemListTipoUnid,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedTipoUnid.value = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('Kg/m2'),
                     ],
                   ),
                 ],
@@ -840,95 +868,123 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Quantidade Recomendada',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[900],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  MyTextFieldWrapper(
-                    hintText: 'Digite um número',
-                    controller: _tamanho,
-                    obscureText: false,
-                  ),
                   Row(
                     children: [
-                      Radio<bool>(
-                        value: true,
-                        groupValue: _selectedRadioValueQuantRecomendada,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRadioValueQuantRecomendada = value;
-                          });
-                        },
-                        activeColor: Colors.green[800]!,
+                      Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Qtd. Recomendada',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[900],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: 180,
+                            child: MyTextFieldWrapper(
+                              hintText: 'Número',
+                              controller: _tamanho,
+                              obscureText: false,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('T/ha'),
-                      SizedBox(width: 20),
-                      Radio<bool>(
-                        value: false,
-                        groupValue: _selectedRadioValueQuantRecomendada,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRadioValueQuantRecomendada = value;
-                          });
-                        },
-                        activeColor: Colors.green[800]!,
+                      const SizedBox(width: 16),
+                      Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Unid',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[900],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: 180,
+                            child: MyDropdownFormField(
+                              selectedValueNotifier: selectedTipoUnid,
+                              itemsList: itemListTipoUnid,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedTipoUnid.value = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('Kg/m2'),
                     ],
                   ),
                   SizedBox(height: 16),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Quantidade Aplicada',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[900],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  MyTextFieldWrapper(
-                    hintText: 'Digite um número',
-                    controller: _tamanho,
-                    obscureText: false,
-                  ),
                   Row(
                     children: [
-                      Radio<bool>(
-                        value: true,
-                        groupValue: _selectedRadioValueQuantAplicada,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRadioValueQuantAplicada = value;
-                          });
-                        },
-                        activeColor: Colors.green[800]!,
+                      Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Qtd. Aplicada',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[900],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: 180,
+                            child: MyTextFieldWrapper(
+                              hintText: 'Número',
+                              controller: _tamanho,
+                              obscureText: false,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('T/ha'),
-                      SizedBox(width: 20),
-                      Radio<bool>(
-                        value: false,
-                        groupValue: _selectedRadioValueQuantAplicada,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRadioValueQuantAplicada = value;
-                          });
-                        },
-                        activeColor: Colors.green[800]!,
+                      const SizedBox(width: 16),
+                      Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Unid',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[900],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: 180,
+                            child: MyDropdownFormField(
+                              selectedValueNotifier: selectedTipoUnid,
+                              itemsList: itemListTipoUnid,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedTipoUnid.value = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('Kg/m2'),
                     ],
                   ),
                 ],
@@ -962,7 +1018,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
             if (selectedAtividade.value == 'Manejo de doenças')
               Column(
                 children: [
-                  const SizedBox(height: 8),
                   Container(
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(left: 10),
@@ -981,7 +1036,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     controller: _nomeDaDoenca,
                     obscureText: false,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 16),
                   Container(
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(left: 10),
@@ -1032,6 +1087,73 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         Text('Natural'),
                       ],
                     ),
+                ],
+              ),
+            if (_selectedRadioValueUnid == true) // Se "Químico" for selecionado
+              Column(
+                children: [
+                  const SizedBox(height: 8),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Nome do Produto Utilizado',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  MyTextFieldWrapper(
+                    hintText: 'Nome',
+                    controller: _tamanho, // Use um novo controller
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Dose Aplicada',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 336,
+                        child: Column(
+                          children: [
+                            MyTextFieldWrapper(
+                              inputFormatter: MaskTextInputFormatter(
+                                filter: {"#": RegExp(r'[0-9xX]')},
+                                type: MaskAutoCompletionType.lazy,
+                              ),
+                              controller: _larguraPlantioController,
+                              hintText: 'Quantidade',
+                              obscureText: false,
+                              validator: (value) {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Column(
+                        children: [
+                          Text('ml'),
+                          Text('/'),
+                          Text('L'),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             if (selectedAtividade.value == 'Adubação de cobertura')
@@ -1204,7 +1326,76 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                       });
                     },
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 16),
+                  if (selectedTipoCapina.value ==
+                      'Química') // Mostrar campos adicionais apenas para "Química"
+                    Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Nome do Produto Utilizado',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        MyTextFieldWrapper(
+                          hintText: 'Nome',
+                          controller: _tamanho, // Use um novo controller
+                          obscureText: false,
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Dose Aplicada',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 336,
+                              child: Column(
+                                children: [
+                                  MyTextFieldWrapper(
+                                    inputFormatter: MaskTextInputFormatter(
+                                      filter: {"#": RegExp(r'[0-9xX]')},
+                                      type: MaskAutoCompletionType.lazy,
+                                    ),
+                                    controller:
+                                        _tamanho, // Use um novo controller
+                                    hintText: 'Quantidade',
+                                    obscureText: false,
+                                    validator: (value) {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            Column(
+                              children: [
+                                Text('ml'),
+                                Text('/'),
+                                Text('L'),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 16),
                   Container(
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(left: 10),
