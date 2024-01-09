@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                     title: (model.nomeLote),
                     subtitle: (model.nomeProduto),
                     //onDeletePressed: remove(model),
-                    onLongPress: () {
+                    onEditPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(

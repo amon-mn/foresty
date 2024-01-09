@@ -126,7 +126,7 @@ class BatchWidget extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: Icon(Icons.edit),
-                    onPressed: () {}, //onEditPressed
+                    onPressed: onEditPressed, //onEditPressed
                   ),
                   IconButton(
                     icon: Icon(Icons.add),

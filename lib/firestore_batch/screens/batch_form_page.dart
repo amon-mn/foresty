@@ -499,7 +499,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
                               child: MyButton(
                                 onTap: () {
                                   ProductBatch batch = ProductBatch(
-                                    id: Uuid().v4(),
+                                    id: widget.batch?.id ?? Uuid().v4(),
                                     nomeLote: _batchNameController.text,
                                     largura:
                                         double.parse(_larguraController.text),
