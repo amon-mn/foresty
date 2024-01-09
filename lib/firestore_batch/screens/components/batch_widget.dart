@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foresty/firestore_activity/screens/activity_form_page.dart';
+import 'package:foresty/firestore_batch/services/batch_service.dart';
 
 class BatchWidget extends StatelessWidget {
   final String? title;
@@ -8,6 +9,7 @@ class BatchWidget extends StatelessWidget {
   final VoidCallback? onDeletePressed;
   final VoidCallback? onLongPress; // Novo parâmetro
   final VoidCallback? onTap; // Novo parâmetro
+  final String? batchId; // Novo parâmetro - Adicionando o batchId
 
   BatchWidget({
     required this.title,
@@ -16,6 +18,7 @@ class BatchWidget extends StatelessWidget {
     this.onDeletePressed,
     this.onLongPress, // Novo parâmetro
     this.onTap, // Novo parâmetro
+    this.batchId, // Atualizando o construtor para incluir batchId
   });
 
   @override
@@ -159,8 +162,13 @@ class BatchWidget extends StatelessWidget {
                       Icons.delete,
                       color: Color.fromARGB(255, 217, 0, 0),
                     ),
-                    onPressed: () {
-                      // Lógica para deletar lote
+                    onPressed: () async {
+                      if (batchId != null) {
+                        // Chama a função para remover o lote do Firebase
+                        await BatchService().removeBatch(batchId: batchId!);
+                        // Você pode implementar a lógica para atualizar a interface ou a lista após a remoção do lote
+                        // Isso pode envolver a remoção do widget da árvore de widgets ou atualizar o estado que controla a exibição dos lotes
+                      }
                     },
                   ),
                 ],
