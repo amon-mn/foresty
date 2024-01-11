@@ -211,7 +211,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
-                            'Localização',
+                            'Geolocalização',
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontSize: 18.0,
@@ -219,102 +219,146 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                 color: Colors.grey[900]),
                           ),
                         ),
-                        ChangeNotifierProvider<BatchLocationController>(
-                          create: (context) => BatchLocationController(),
-                          child: Builder(builder: (context) {
-                            final location =
-                                context.watch<BatchLocationController>();
-                            if (location.error == '') {
-                              _latBatch = location.lat;
-                              _longBatch = location.long;
-                              // Caso não haja erro, exibir latitude e longitude
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                        if (widget.batch == null)
+                          ChangeNotifierProvider<BatchLocationController>(
+                            create: (context) => BatchLocationController(),
+                            child: Builder(builder: (context) {
+                              final location =
+                                  context.watch<BatchLocationController>();
+                              if (location.error == '') {
+                                _latBatch = location.lat;
+                                _longBatch = location.long;
+                                // Caso não haja erro, exibir latitude e longitude
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 232,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Color.fromRGBO(
+                                                135, 135, 135, 1)),
+                                        color: Color.fromRGBO(238, 238, 238, 1),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            margin:
+                                                const EdgeInsets.only(left: 05),
+                                            alignment: Alignment.topLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              'Latitude: $_latBatch',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey[800],
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin:
+                                                const EdgeInsets.only(left: 05),
+                                            alignment: Alignment.topLeft,
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              'Longitude: $_longBatch',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey[800],
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.topRight,
+                                      padding: EdgeInsets.all(10),
+                                      child: SizedBox(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            location
+                                                .getPosition(); // Chama a atualização da geolocalização
+                                          },
+                                          child: const SquareTite(
+                                              borderColor: Color.fromRGBO(
+                                                  135, 135, 135, 1),
+                                              isIcon: true,
+                                              content: Icon(
+                                                Icons.location_pin,
+                                                color: Color.fromARGB(
+                                                    255, 0, 90, 3),
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                // Caso haja erro, exibir a mensagem de erro
+                                return Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    location.error,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[900],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                );
+                              }
+                            }),
+                          ),
+                        if (widget.batch != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width - 32,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color.fromRGBO(135, 135, 135, 1)),
+                                color: Color.fromRGBO(238, 238, 238, 1),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Column(
                                 children: [
                                   Container(
-                                    width: 232,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color:
-                                              Color.fromRGBO(135, 135, 135, 1)),
-                                      color: Color.fromRGBO(238, 238, 238, 1),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(left: 05),
-                                          alignment: Alignment.topLeft,
-                                          padding: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            'Latitude: $_latBatch',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.grey[800],
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(left: 05),
-                                          alignment: Alignment.topLeft,
-                                          padding: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            'Longitude: $_longBatch',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.grey[800],
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                    margin: const EdgeInsets.only(left: 05),
+                                    alignment: Alignment.topLeft,
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Latitude: $_latBatch',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[800],
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    alignment: Alignment.topRight,
-                                    padding: EdgeInsets.all(10),
-                                    child: SizedBox(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          location
-                                              .getPosition(); // Chama a atualização da geolocalização
-                                        },
-                                        child: const SquareTite(
-                                            borderColor: Color.fromRGBO(
-                                                135, 135, 135, 1),
-                                            isIcon: true,
-                                            content: Icon(
-                                              Icons.location_pin,
-                                              color:
-                                                  Color.fromARGB(255, 0, 90, 3),
-                                            )),
+                                    margin: const EdgeInsets.only(left: 05),
+                                    alignment: Alignment.topLeft,
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Longitude: $_longBatch',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[800],
+                                        fontWeight: FontWeight.w400,
                                       ),
                                     ),
                                   ),
                                 ],
-                              );
-                            } else {
-                              // Caso haja erro, exibir a mensagem de erro
-                              return Container(
-                                alignment: Alignment.topLeft,
-                                padding: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  location.error,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[900],
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              );
-                            }
-                          }),
-                        ),
+                              ),
+                            ),
+                          ),
                         const SizedBox(height: 16),
                         Container(
                           alignment: Alignment.topLeft,

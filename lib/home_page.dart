@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_batch/screens/batch_details_page.dart';
 import 'package:foresty/firestore_batch/screens/batch_form_page.dart';
 import 'package:foresty/firestore_batch/screens/components/batch_widget.dart';
 import 'package:foresty/firestore_batch/services/batch_service.dart';
@@ -161,6 +162,14 @@ class _HomePageState extends State<HomePage> {
                     onDeletePressed: () {
                       remove(model);
                       refresh();
+                    },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BatchDetailsPage(batch: model),
+                        ),
+                      );
                     },
                   );
                 }),
