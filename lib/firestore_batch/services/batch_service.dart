@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 
 class BatchService {
@@ -13,6 +14,18 @@ class BatchService {
         .collection('lotes')
         .doc(batch.id)
         .set(batch.toMap());
+  }
+
+  Future<void> addBatchActivity(
+      {required String lotId, required BatchActivity batchActivity}) async {
+    return firestore
+        .collection('users')
+        .doc(user_id)
+        .collection('lotes')
+        .doc(lotId)
+        .collection('atividades')
+        .doc(batchActivity.id)
+        .set(batchActivity.toMap());
   }
 
   Future<List<ProductBatch>> readBatchs() async {

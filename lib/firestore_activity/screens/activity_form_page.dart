@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:foresty/components/my_button.dart';
 import 'package:foresty/components/my_dropdown.dart';
+import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../components/my_textfield.dart';
 import '../../firestore_batch/models/batch.dart';
 
 class ActivityFormPage extends StatefulWidget {
   final ProductBatch? batch;
+  final BatchActivity? activity;
 
-  ActivityFormPage({Key? key, this.batch}) : super(key: key);
+  ActivityFormPage({Key? key, this.batch, this.activity}) : super(key: key);
 
   @override
   _ActivityFormPageState createState() => _ActivityFormPageState();
@@ -27,10 +29,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       TextEditingController();
   bool? _selectedRadioValue;
   bool? _selectedRadioValueUnid;
-  bool? _selectedRadioValueUnidComplementar;
-  bool? _selectedRadioValueUnidCalcario;
-  bool? _selectedRadioValueQuantRecomendada;
-  bool? _selectedRadioValueQuantAplicada;
   String labelTitle = 'Adicionar Atividade';
   ValueNotifier<String> selectedAtividade = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedPreparoSolo =
