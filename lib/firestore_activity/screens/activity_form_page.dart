@@ -3,6 +3,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:foresty/components/my_button.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
+import 'package:foresty/firestore_batch/services/batch_service.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../components/my_textfield.dart';
 import '../../firestore_batch/models/batch.dart';
@@ -18,7 +19,12 @@ class ActivityFormPage extends StatefulWidget {
 }
 
 class _ActivityFormPageState extends State<ActivityFormPage> {
-  final TextEditingController _tamanho = TextEditingController();
+  BatchService batchService = BatchService();
+  final TextEditingController _tamanho1 = TextEditingController();
+  final TextEditingController _tamanho2 = TextEditingController();
+  final TextEditingController _quantidade1 = TextEditingController();
+  final TextEditingController _quantidade2 = TextEditingController();
+
   final TextEditingController _quantidadeSDController = TextEditingController();
   final TextEditingController _outroTratoController = TextEditingController();
   final TextEditingController _nomeDaDoenca = TextEditingController();
@@ -295,7 +301,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         ),
                         MyTextFieldWrapper(
                           hintText: 'Digite um número',
-                          controller: _tamanho,
+                          controller: _tamanho1,
                           obscureText: false,
                         ),
                         const SizedBox(height: 16),
@@ -358,7 +364,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               ),
                               MyTextFieldWrapper(
                                 hintText: 'Digite um número',
-                                controller: _tamanho,
+                                controller: _quantidade1,
                                 obscureText: false,
                               ),
                             ],
@@ -468,7 +474,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               width: 180,
                               child: MyTextFieldWrapper(
                                 hintText: 'Número',
-                                controller: _tamanho,
+                                controller: _quantidade2,
                                 obscureText: false,
                               ),
                             ),
@@ -557,7 +563,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             filter: {"#": RegExp(r'[0-9xX]')},
                             type: MaskAutoCompletionType.lazy,
                           ),
-                          controller: _quantidadeSDController,
+                          controller: _quantidade1,
                           hintText: 'Quantidade',
                           obscureText: false,
                           validator: (value) {},
@@ -644,7 +650,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   const SizedBox(height: 4),
                   MyTextFieldWrapper(
                     hintText: 'Digite um nome',
-                    controller: _tamanho,
+                    controller: _tamanho1,
                     obscureText: false,
                   ),
                   SizedBox(height: 16),
@@ -692,7 +698,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   const SizedBox(height: 4),
                   MyTextFieldWrapper(
                     hintText: 'Digite um nome',
-                    controller: _tamanho,
+                    controller: _tamanho1,
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
@@ -717,7 +723,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             width: 180,
                             child: MyTextFieldWrapper(
                               hintText: 'Número',
-                              controller: _tamanho,
+                              controller: _tamanho1,
                               obscureText: false,
                             ),
                           ),
@@ -777,7 +783,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             width: 180,
                             child: MyTextFieldWrapper(
                               hintText: 'Número',
-                              controller: _tamanho,
+                              controller: _tamanho1,
                               obscureText: false,
                             ),
                           ),
@@ -862,7 +868,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   ),
                   MyTextFieldWrapper(
                     hintText: 'Digite um nome',
-                    controller: _tamanho,
+                    controller: _tamanho1,
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
@@ -887,7 +893,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             width: 180,
                             child: MyTextFieldWrapper(
                               hintText: 'Número',
-                              controller: _tamanho,
+                              controller: _tamanho1,
                               obscureText: false,
                             ),
                           ),
@@ -947,7 +953,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             width: 180,
                             child: MyTextFieldWrapper(
                               hintText: 'Número',
-                              controller: _tamanho,
+                              controller: _tamanho1,
                               obscureText: false,
                             ),
                           ),
@@ -1106,7 +1112,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   const SizedBox(height: 4),
                   MyTextFieldWrapper(
                     hintText: 'Nome',
-                    controller: _tamanho, // Use um novo controller
+                    controller: _tamanho1, // Use um novo controller
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
@@ -1258,7 +1264,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               width: 180,
                               child: MyTextFieldWrapper(
                                 hintText: 'Número',
-                                controller: _tamanho,
+                                controller: _tamanho1,
                                 obscureText: false,
                               ),
                             ),
@@ -1344,7 +1350,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         const SizedBox(height: 4),
                         MyTextFieldWrapper(
                           hintText: 'Nome',
-                          controller: _tamanho, // Use um novo controller
+                          controller: _tamanho1, // Use um novo controller
                           obscureText: false,
                         ),
                         const SizedBox(height: 16),
@@ -1373,7 +1379,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                       type: MaskAutoCompletionType.lazy,
                                     ),
                                     controller:
-                                        _tamanho, // Use um novo controller
+                                        _tamanho1, // Use um novo controller
                                     hintText: 'Quantidade',
                                     obscureText: false,
                                     validator: (value) {},
@@ -1507,7 +1513,17 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                 SizedBox(
                   width: 180,
                   child: MyButton(
-                    onTap: () {
+                    onTap: () async {
+                      // Crie o objeto BatchActivity com base nas informações do formulário
+                      BatchActivity batchActivity =
+                          createBatchActivityObject(widget.batch!.id);
+
+                      // Adicione o objeto ao banco de dados usando o serviço
+                      batchService.addBatchActivity(
+                          lotId: widget.batch!.id,
+                          batchActivity: batchActivity);
+
+                      // Feche o formulário ou faça qualquer outra ação necessária
                       Navigator.pop(context);
                     },
                     textButton: 'Salvar',
@@ -1519,5 +1535,57 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         ),
       ),
     );
+  }
+
+  BatchActivity createBatchActivityObject(String batchId) {
+    // Crie um objeto PreparoSolo com base nas informações do formulário
+
+    // Crie um objeto BatchActivity com base nas informações do formulário
+    BatchActivity batchActivity = BatchActivity(
+      id: batchId, // Substitua pelo ID desejado
+      tipoAtividade: selectedAtividade.value,
+      dataDaAtividade: selectedDate,
+      preparoSolo: PreparoSolo(
+        tipo: selectedPreparoSolo.value,
+        tamanho: double.parse(_tamanho1.text),
+        usouCalcario: _selectedRadioValue,
+        quantidadeCalcario: double.parse(_quantidade1.text),
+        adubacao: Adubacao(
+          tipoAdubo: selectedTipoAduboQuimico.value,
+          quantidade: _quantidade2.text,
+          unidade: selectedTipoUnid.value,
+        ),
+        naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação'
+            ? true
+            : false, /* Preencha com a informação correta */
+      ),
+      // Preencha os outros atributos de BatchActivity conforme necessário
+      // ...
+
+      // Exemplo de preenchimento de outros atributos:
+      // plantio: Plantio(
+      //   tipo: selectedPlantio.value,
+      //   quantidade: int.parse(_quantidadeSDController.text),
+      //   largura: double.parse(_larguraPlantioController.text),
+      //   comprimento: double.parse(_comprimentoPlantioController.text),
+      // ),
+      // manejoDoencas: ManejoDoencas(
+      //   nomeDoenca: _nomeDaDoenca.text,
+      //   tipoControle: selectedTipoControleDoenca.value,
+      //   tipoVetor: /* Preencha com a informação correta */,
+      // ),
+      // adubacaoCobertura: AdubacaoCobertura(
+      //   tipo: selectedAdubacao.value,
+      //   adubacao: Adubacao(
+      //     tipoAdubo: selectedAduboComplementar.value,
+      //     quantidade: double.parse(/* Preencha com a informação correta */),
+      //     unidade: /* Preencha com a informação correta */,
+      //   ),
+      //   naoFezAdubacao: /* Preencha com a informação correta */,
+      // ),
+      // ...
+    );
+
+    return batchActivity;
   }
 }

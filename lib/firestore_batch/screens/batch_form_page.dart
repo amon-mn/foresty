@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foresty/components/my_dropdown.dart';
+import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_batch/models/batch_location_controller.dart';
 import 'package:foresty/firestore_batch/services/batch_service.dart';
@@ -14,10 +15,12 @@ import '../../components/square_tile.dart';
 
 class BatchFormPage extends StatefulWidget {
   ProductBatch? batch;
+  BatchActivity? activity;
 
   BatchFormPage({
     super.key,
     this.batch,
+    this.activity,
   });
 
   @override
@@ -562,6 +565,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                     tipoCultivo:
                                         _selectedValueNotifierTipoCultivo.value,
                                     nomeProduto: _productNameController.text,
+                                    atividade: widget.activity,
                                   );
 
                                   batchService.addBatch(batch: batch);

@@ -5,7 +5,9 @@ import 'package:foresty/firestore_batch/services/batch_service.dart';
 class BatchWidget extends StatelessWidget {
   final String? title;
   final String? subtitle;
+  final String? activity;
   final VoidCallback? onEditPressed;
+  final VoidCallback? onCreateActivityPressed;
   final VoidCallback? onDeletePressed;
   final VoidCallback? onLongPress; // Novo parâmetro
   final VoidCallback? onTap; // Novo parâmetro
@@ -14,7 +16,9 @@ class BatchWidget extends StatelessWidget {
   BatchWidget({
     required this.title,
     this.subtitle,
+    this.activity,
     this.onEditPressed,
+    this.onCreateActivityPressed,
     this.onDeletePressed,
     this.onLongPress, // Novo parâmetro
     this.onTap, // Novo parâmetro
@@ -62,19 +66,55 @@ class BatchWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              margin: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width / 8,
-                                top: 10,
-                              ),
-                              width: 200,
-                              child: Text(
-                                title ?? '',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  overflow: TextOverflow.fade,
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width / 8,
+                                    top: 10,
+                                  ),
+                                  width: 100,
+                                  child: Text(
+                                    title ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      overflow: TextOverflow.fade,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Container(
+                                  width: 20,
+                                  margin: EdgeInsets.only(
+                                    top: 10,
+                                  ),
+                                  child: Text(
+                                    '-',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      overflow: TextOverflow.fade,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    top: 10,
+                                  ),
+                                  width: 100,
+                                  child: Text(
+                                    activity ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      overflow: TextOverflow.fade,
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                             Container(
                               margin: EdgeInsets.only(
@@ -133,17 +173,7 @@ class BatchWidget extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Icon(Icons.add),
-                    onPressed: () {
-                      // Use o Navigator para navegar para uma nova página
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            // Aqui você pode criar a página que deseja mostrar
-                            return ActivityFormPage();
-                          },
-                        ),
-                      );
-                    },
+                    onPressed: onCreateActivityPressed,
                   ),
                   IconButton(
                     icon: Icon(Icons.check),

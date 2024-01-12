@@ -2,6 +2,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:foresty/firestore_activity/models/batch_activity.dart';
+import 'package:foresty/firestore_activity/screens/activity_form_page.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_batch/screens/batch_details_page.dart';
 import 'package:foresty/firestore_batch/screens/batch_form_page.dart';
@@ -16,7 +18,8 @@ import 'authentication/screens/welcome_page.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
-  HomePage({super.key, required this.user});
+  BatchActivity? activity;
+  HomePage({super.key, required this.user, this.activity});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -53,6 +56,7 @@ class _HomePageState extends State<HomePage> {
     refresh();
     fetchUserData(widget.user.uid);
     fetchProfileImage(); // Obtém a URL da imagem de perfil no início
+
     super.initState();
   }
 
@@ -102,7 +106,9 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BatchFormPage(),
+                builder: (context) => BatchFormPage(
+                  activity: widget.activity,
+                ),
               )).then((value) => setState(
                 () {
                   refresh();
@@ -149,7 +155,9 @@ class _HomePageState extends State<HomePage> {
                         model.id, // Passando o ID do lote para o BatchWidget
                     title: model.nomeLote,
                     subtitle: model.nomeProduto,
+                    activity: model.atividade?.tipoAtividade,
                     onEditPressed: () {
+                      print(model.atividade?.tipoAtividade);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -158,6 +166,18 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       );
+                    },
+                    onCreateActivityPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ActivityFormPage(
+                            batch: model,
+                          ),
+                        ),
+                      );
+                      setState(() {
+                        widget.activity = model.atividade;
+                      });
                     },
                     onDeletePressed: () {
                       remove(model);

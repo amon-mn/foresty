@@ -1,6 +1,7 @@
 class BatchActivity {
   String id;
   String tipoAtividade;
+  String dataDaAtividade;
 
   // Preparo de Solo
   PreparoSolo? preparoSolo;
@@ -26,6 +27,7 @@ class BatchActivity {
   BatchActivity({
     required this.id,
     required this.tipoAtividade,
+    required this.dataDaAtividade,
     this.preparoSolo,
     this.plantio,
     this.manejoDoencas,
@@ -38,6 +40,7 @@ class BatchActivity {
   BatchActivity.fromMap(Map<String, dynamic> map)
       : id = map['id'],
         tipoAtividade = map['tipoAtividade'],
+        dataDaAtividade = map['dataDaAtividade'],
         preparoSolo = map['preparoSolo'] != null
             ? PreparoSolo.fromMap(map['preparoSolo'])
             : null,
@@ -61,6 +64,7 @@ class BatchActivity {
     return {
       'id': id,
       'tipoAtividade': tipoAtividade,
+      'dataDaAtividade': dataDaAtividade,
       'preparoSolo': preparoSolo?.toMap(),
       'plantio': plantio?.toMap(),
       'manejoDoencas': manejoDoencas?.toMap(),
@@ -77,7 +81,7 @@ class BatchActivity {
 class PreparoSolo {
   String tipo;
   double tamanho;
-  bool usouCalcario;
+  bool? usouCalcario;
   double? quantidadeCalcario;
   Adubacao? adubacao;
   bool naoFezAdubacao;
@@ -85,7 +89,7 @@ class PreparoSolo {
   PreparoSolo({
     required this.tipo,
     required this.tamanho,
-    required this.usouCalcario,
+    this.usouCalcario,
     this.quantidadeCalcario,
     this.adubacao,
     required this.naoFezAdubacao,
@@ -194,8 +198,8 @@ class AdubacaoCobertura {
 
 class Adubacao {
   String tipoAdubo;
-  double? quantidade;
-  double? unidade;
+  String? quantidade;
+  String? unidade;
 
   Adubacao({
     required this.tipoAdubo,

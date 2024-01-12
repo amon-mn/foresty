@@ -1,3 +1,4 @@
+import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:uuid/uuid.dart';
 
 class ProductBatch {
@@ -12,6 +13,7 @@ class ProductBatch {
   String ambiente;
   String tipoCultivo;
   String? nomeProduto;
+  BatchActivity? atividade;
 
   ProductBatch({
     required this.id,
@@ -25,6 +27,7 @@ class ProductBatch {
     required this.ambiente,
     required this.tipoCultivo,
     this.nomeProduto,
+    this.atividade,
   });
 
   ProductBatch.fromMap(Map<String, dynamic> map)
@@ -38,7 +41,10 @@ class ProductBatch {
         finalidade = map["finalidade"],
         ambiente = map["ambiente"],
         tipoCultivo = map["tipoCultivo"],
-        nomeProduto = map["nomeProduto"];
+        nomeProduto = map["nomeProduto"],
+        atividade = map['atividade'] != null
+            ? BatchActivity.fromMap(map['atividade'])
+            : null;
 
   Map<String, dynamic> toMap() {
     return {
@@ -53,6 +59,7 @@ class ProductBatch {
       "ambiente": ambiente,
       "tipoCultivo": tipoCultivo,
       "nomeProduto": nomeProduto,
+      'atividade': atividade?.toMap(),
     };
   }
 }
