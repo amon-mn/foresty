@@ -25,6 +25,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   final TextEditingController _quantidade1 = TextEditingController();
   final TextEditingController _quantidade2 = TextEditingController();
   final TextEditingController _quantidade3 = TextEditingController();
+  final TextEditingController _produtoUtilizado = TextEditingController();
 
   final TextEditingController _outroTratoController = TextEditingController();
   final TextEditingController _nomeDaDoenca = TextEditingController();
@@ -416,7 +417,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         const SizedBox(height: 4),
                         MyTextFieldWrapper(
                           hintText: 'Nome',
-                          controller: _tamanho1, // Use um novo controller
+                          controller:
+                              _produtoUtilizado, // Use um novo controller
                           obscureText: false,
                         ),
                         const SizedBox(height: 16),
@@ -1686,17 +1688,18 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   BatchActivity createBatchActivityObject(String batchId) {
     PreparoSolo preparoSolo;
 
-    if (selectedAtividade.value == 'Preparo de Solo') {
+    if (selectedAtividade.value == 'Preparo do solo') {
       preparoSolo = PreparoSolo(
         tipo: selectedPreparoSolo.value,
         tamanho: double.parse(_tamanho1.text),
         usouCalcario: _selectedRadioValue,
         quantidadeCalcario: double.parse(_quantidade1.text),
         adubacao: Adubacao(
-          tipoAdubo: selectedTipoAduboQuimico.value,
-          quantidade: double.parse(_quantidade2.text),
-          unidade: selectedTipoUnid1.value,
-        ),
+            tipoAdubo: selectedTipoAduboQuimico.value,
+            unidade: selectedTipoUnid1.value,
+            produtoUtilizado: _produtoUtilizado.text,
+            doseAplicada: double.parse(_quantidade2.text),
+            quantidade: double.parse(_quantidade3.text)),
         naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação',
       );
     } else {

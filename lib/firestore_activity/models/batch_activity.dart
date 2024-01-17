@@ -224,28 +224,38 @@ class Adubacao {
   String tipoAdubo;
   double? quantidade;
   String? unidade;
+  String? produtoUtilizado;
+  double? doseAplicada;
 
   Adubacao({
     required this.tipoAdubo,
     this.quantidade,
     this.unidade,
+    this.produtoUtilizado,
+    this.doseAplicada,
   });
 
   Adubacao.empty()
       : tipoAdubo = '',
         quantidade = 0.0,
-        unidade = '';
+        unidade = '',
+        doseAplicada = 0,
+        produtoUtilizado = '';
 
   Adubacao.fromMap(Map<String, dynamic> map)
       : tipoAdubo = map['tipoAdubo'],
         quantidade = map['quantidade'],
-        unidade = map['unidade'];
+        unidade = map['unidade'],
+        doseAplicada = map['doseAplicada'],
+        produtoUtilizado = map['produtoUtilizado'];
 
   Map<String, dynamic> toMap() {
     return {
       'tipoAdubo': tipoAdubo,
       'quantidade': quantidade,
       'unidade': unidade,
+      'doseAplicada': doseAplicada,
+      'produtoUtilizado': produtoUtilizado,
     };
   }
 }
