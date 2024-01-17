@@ -95,6 +95,14 @@ class PreparoSolo {
     required this.naoFezAdubacao,
   });
 
+  PreparoSolo.empty()
+      : tipo = '',
+        tamanho = 0.0,
+        usouCalcario = false,
+        quantidadeCalcario = 0.0,
+        adubacao = null,
+        naoFezAdubacao = false;
+
   PreparoSolo.fromMap(Map<String, dynamic> map)
       : tipo = map['tipo'],
         tamanho = map['tamanho'],
@@ -129,6 +137,12 @@ class Plantio {
     this.comprimento,
   });
 
+  Plantio.empty()
+      : tipo = '',
+        quantidade = 0,
+        largura = 0.0,
+        comprimento = 0.0;
+
   Plantio.fromMap(Map<String, dynamic> map)
       : tipo = map['tipo'],
         quantidade = map['quantidade'],
@@ -156,6 +170,11 @@ class ManejoDoencas {
     this.tipoVetor,
   });
 
+  ManejoDoencas.empty()
+      : nomeDoenca = '',
+        tipoControle = '',
+        tipoVetor = '';
+
   ManejoDoencas.fromMap(Map<String, dynamic> map)
       : nomeDoenca = map['nomeDoenca'],
         tipoControle = map['tipoControle'],
@@ -181,6 +200,11 @@ class AdubacaoCobertura {
     required this.naoFezAdubacao,
   });
 
+  AdubacaoCobertura.empty()
+      : tipo = '',
+        adubacao = null,
+        naoFezAdubacao = false;
+
   AdubacaoCobertura.fromMap(Map<String, dynamic> map)
       : tipo = map['tipo'],
         adubacao =
@@ -198,7 +222,7 @@ class AdubacaoCobertura {
 
 class Adubacao {
   String tipoAdubo;
-  String? quantidade;
+  double? quantidade;
   String? unidade;
 
   Adubacao({
@@ -206,6 +230,11 @@ class Adubacao {
     this.quantidade,
     this.unidade,
   });
+
+  Adubacao.empty()
+      : tipoAdubo = '',
+        quantidade = 0.0,
+        unidade = '';
 
   Adubacao.fromMap(Map<String, dynamic> map)
       : tipoAdubo = map['tipoAdubo'],
@@ -233,6 +262,12 @@ class Capina {
     required this.quantidadeAplicada,
     required this.dimensao,
   });
+
+  Capina.empty()
+      : tipo = '',
+        nomeProduto = '',
+        quantidadeAplicada = 0.0,
+        dimensao = '';
 
   Capina.fromMap(Map<String, dynamic> map)
       : tipo = map['tipo'],
@@ -262,6 +297,12 @@ class ManejoPragas {
     this.aplicacaoAgrotoxico,
     this.controleNatural,
   });
+
+  ManejoPragas.empty()
+      : nomePraga = '',
+        tipo = '',
+        aplicacaoAgrotoxico = null,
+        controleNatural = null;
 
   ManejoPragas.fromMap(Map<String, dynamic> map)
       : nomePraga = map['nomePraga'],
@@ -296,6 +337,12 @@ class AplicacaoAgrotoxico {
     required this.unidade,
   });
 
+  AplicacaoAgrotoxico.empty()
+      : nomeAgrotoxico = '',
+        quantidadeRecomendada = 0.0,
+        quantidadeAplicada = 0.0,
+        unidade = '';
+
   AplicacaoAgrotoxico.fromMap(Map<String, dynamic> map)
       : nomeAgrotoxico = map['nomeAgrotoxico'],
         quantidadeRecomendada = map['quantidadeRecomendada'],
@@ -324,6 +371,12 @@ class ControleNatural {
     this.coletaEliminacao,
     this.usoInimigoNatural,
   });
+
+  ControleNatural.empty()
+      : tipoControle = '',
+        aplicacaoDefensivo = null,
+        coletaEliminacao = null,
+        usoInimigoNatural = null;
 
   ControleNatural.fromMap(Map<String, dynamic> map)
       : tipoControle = map['tipoControle'],
@@ -359,6 +412,12 @@ class DefensivoNatural {
       required this.quantidadeAplicada,
       required this.unidade});
 
+  DefensivoNatural.empty()
+      : nomeOuTipo = '',
+        quantidadeRecomendada = 0.0,
+        quantidadeAplicada = 0.0,
+        unidade = '';
+
   DefensivoNatural.fromMap(Map<String, dynamic> map)
       : nomeOuTipo = map['nomeOuTipo'],
         quantidadeRecomendada = map['quantidadeRecomendada'],
@@ -383,6 +442,8 @@ class ColetaEliminacao {
   ColetaEliminacao.fromMap(Map<String, dynamic> map)
       : tipoColeta = map['tipoColeta'];
 
+  ColetaEliminacao.empty() : tipoColeta = '';
+
   Map<String, dynamic> toMap() {
     return {
       'tipoColeta': tipoColeta,
@@ -398,6 +459,10 @@ class UsoInimigoNatural {
     required this.nomeInimigoNatural,
     required this.formaUso,
   });
+
+  UsoInimigoNatural.empty()
+      : nomeInimigoNatural = '',
+        formaUso = '';
 
   UsoInimigoNatural.fromMap(Map<String, dynamic> map)
       : nomeInimigoNatural = map['nomeInimigoNatural'],
@@ -417,6 +482,8 @@ class TratosCulturais {
   TratosCulturais({
     required this.tipoControle,
   });
+
+  TratosCulturais.empty() : tipoControle = '';
 
   TratosCulturais.fromMap(Map<String, dynamic> map)
       : tipoControle = map['tipoControle'];

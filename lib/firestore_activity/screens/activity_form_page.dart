@@ -24,8 +24,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   final TextEditingController _tamanho2 = TextEditingController();
   final TextEditingController _quantidade1 = TextEditingController();
   final TextEditingController _quantidade2 = TextEditingController();
+  final TextEditingController _quantidade3 = TextEditingController();
 
-  final TextEditingController _quantidadeSDController = TextEditingController();
   final TextEditingController _outroTratoController = TextEditingController();
   final TextEditingController _nomeDaDoenca = TextEditingController();
 
@@ -55,7 +55,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoCapina = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoTrato = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoUnid = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoUnid1 = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoUnid2 = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoColeta = ValueNotifier<String>('Selecione');
 
   // Variável para armazenar a data selecionada
@@ -396,6 +397,74 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     },
                   ),
                   const SizedBox(height: 16),
+                  if (selectedAdubacao.value == 'Química')
+                    Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Nome do Produto Utilizado',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        MyTextFieldWrapper(
+                          hintText: 'Nome',
+                          controller: _tamanho1, // Use um novo controller
+                          obscureText: false,
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Dose Aplicada',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 336,
+                              child: Column(
+                                children: [
+                                  MyTextFieldWrapper(
+                                    inputFormatter: MaskTextInputFormatter(
+                                      filter: {"#": RegExp(r'[0-9xX]')},
+                                      type: MaskAutoCompletionType.lazy,
+                                    ),
+                                    controller:
+                                        _quantidade2, // Use um novo controller
+                                    hintText: 'Quantidade',
+                                    obscureText: false,
+                                    validator: (value) {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            Column(
+                              children: [
+                                Text('ml'),
+                                Text('/'),
+                                Text('L'),
+                              ],
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
                   if (selectedAdubacao.value != 'Selecione' &&
                       selectedAdubacao.value != 'Não fez adubação' &&
                       selectedAdubacao.value != 'Química')
@@ -451,7 +520,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                       ],
                     ),
                   const SizedBox(height: 16),
-                  if (selectedAdubacao.value != 'Selecione' &&
+                  if (selectedTipoAduboQuimico.value != 'Selecione' &&
                       selectedAdubacao.value != 'Não fez adubação')
                     Row(
                       children: [
@@ -474,7 +543,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               width: 180,
                               child: MyTextFieldWrapper(
                                 hintText: 'Número',
-                                controller: _quantidade2,
+                                controller: _quantidade3,
                                 obscureText: false,
                               ),
                             ),
@@ -499,11 +568,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             SizedBox(
                               width: 180,
                               child: MyDropdownFormField(
-                                selectedValueNotifier: selectedTipoUnid,
+                                selectedValueNotifier: selectedTipoUnid1,
                                 itemsList: itemListTipoUnid,
                                 onChanged: (value) {
                                   setState(() {
-                                    selectedTipoUnid.value = value!;
+                                    selectedTipoUnid1.value = value!;
                                   });
                                 },
                               ),
@@ -748,11 +817,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           SizedBox(
                             width: 180,
                             child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid,
+                              selectedValueNotifier: selectedTipoUnid1,
                               itemsList: itemListTipoUnid,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedTipoUnid.value = value!;
+                                  selectedTipoUnid1.value = value!;
                                 });
                               },
                             ),
@@ -808,11 +877,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           SizedBox(
                             width: 180,
                             child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid,
+                              selectedValueNotifier: selectedTipoUnid2,
                               itemsList: itemListTipoUnid,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedTipoUnid.value = value!;
+                                  selectedTipoUnid2.value = value!;
                                 });
                               },
                             ),
@@ -918,11 +987,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           SizedBox(
                             width: 180,
                             child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid,
+                              selectedValueNotifier: selectedTipoUnid1,
                               itemsList: itemListTipoUnid,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedTipoUnid.value = value!;
+                                  selectedTipoUnid1.value = value!;
                                 });
                               },
                             ),
@@ -978,11 +1047,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           SizedBox(
                             width: 180,
                             child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid,
+                              selectedValueNotifier: selectedTipoUnid2,
                               itemsList: itemListTipoUnid,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedTipoUnid.value = value!;
+                                  selectedTipoUnid2.value = value!;
                                 });
                               },
                             ),
@@ -1289,11 +1358,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             SizedBox(
                               width: 180,
                               child: MyDropdownFormField(
-                                selectedValueNotifier: selectedTipoUnid,
+                                selectedValueNotifier: selectedTipoUnid1,
                                 itemsList: itemListTipoUnid,
                                 onChanged: (value) {
                                   setState(() {
-                                    selectedTipoUnid.value = value!;
+                                    selectedTipoUnid1.value = value!;
                                   });
                                 },
                               ),
@@ -1538,52 +1607,66 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   }
 
   BatchActivity createBatchActivityObject(String batchId) {
-    // Crie um objeto PreparoSolo com base nas informações do formulário
+    PreparoSolo preparoSolo;
 
-    // Crie um objeto BatchActivity com base nas informações do formulário
-    BatchActivity batchActivity = BatchActivity(
-      id: batchId, // Substitua pelo ID desejado
-      tipoAtividade: selectedAtividade.value,
-      dataDaAtividade: selectedDate,
-      preparoSolo: PreparoSolo(
+    if (selectedAtividade.value == 'Preparo de Solo') {
+      preparoSolo = PreparoSolo(
         tipo: selectedPreparoSolo.value,
         tamanho: double.parse(_tamanho1.text),
         usouCalcario: _selectedRadioValue,
         quantidadeCalcario: double.parse(_quantidade1.text),
         adubacao: Adubacao(
           tipoAdubo: selectedTipoAduboQuimico.value,
-          quantidade: _quantidade2.text,
-          unidade: selectedTipoUnid.value,
+          quantidade: double.parse(_quantidade2.text),
+          unidade: selectedTipoUnid1.value,
         ),
-        naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação'
-            ? true
-            : false, /* Preencha com a informação correta */
-      ),
-      // Preencha os outros atributos de BatchActivity conforme necessário
-      // ...
+        naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação',
+      );
+    } else {
+      preparoSolo = PreparoSolo.empty();
+    }
 
-      // Exemplo de preenchimento de outros atributos:
-      // plantio: Plantio(
-      //   tipo: selectedPlantio.value,
-      //   quantidade: int.parse(_quantidadeSDController.text),
-      //   largura: double.parse(_larguraPlantioController.text),
-      //   comprimento: double.parse(_comprimentoPlantioController.text),
-      // ),
-      // manejoDoencas: ManejoDoencas(
-      //   nomeDoenca: _nomeDaDoenca.text,
-      //   tipoControle: selectedTipoControleDoenca.value,
-      //   tipoVetor: /* Preencha com a informação correta */,
-      // ),
-      // adubacaoCobertura: AdubacaoCobertura(
-      //   tipo: selectedAdubacao.value,
-      //   adubacao: Adubacao(
-      //     tipoAdubo: selectedAduboComplementar.value,
-      //     quantidade: double.parse(/* Preencha com a informação correta */),
-      //     unidade: /* Preencha com a informação correta */,
-      //   ),
-      //   naoFezAdubacao: /* Preencha com a informação correta */,
-      // ),
-      // ...
+    Plantio plantio;
+
+    if (selectedAtividade.value == 'Plantio') {
+      plantio = Plantio(
+        tipo: selectedPlantio.value,
+        quantidade: int.parse(_quantidade1.text),
+        largura: selectedPlantio.value == 'Semeadura direta'
+            ? double.parse(_larguraPlantioController.text)
+            : 0,
+        comprimento: selectedPlantio.value == 'Semeadura direta'
+            ? double.parse(_comprimentoPlantioController.text)
+            : 0,
+      );
+    } else {
+      plantio = Plantio.empty();
+    }
+
+    // Crie um objeto BatchActivity com base nas informações do formulário
+    BatchActivity batchActivity = BatchActivity(
+      id: batchId, // Substitua pelo ID desejado
+      tipoAtividade: selectedAtividade.value,
+      dataDaAtividade: selectedDate,
+      preparoSolo: preparoSolo,
+      plantio: plantio,
+
+      manejoDoencas: ManejoDoencas(
+        nomeDoenca: _nomeDaDoenca.text,
+        tipoControle: selectedTipoControleDoenca.value,
+        // tipoVetor: /* Preencha com a informação correta */,
+      ),
+      /*
+      adubacaoCobertura: AdubacaoCobertura(
+        tipo: selectedAdubacao.value,
+        adubacao: Adubacao(
+          tipoAdubo: selectedAduboComplementar.value,
+           quantidade: double.parse(/* Preencha com a informação correta */),
+           unidade: /* Preencha com a informação correta */,
+        ),
+         naoFezAdubacao: /* Preencha com a informação correta */,
+      ),
+      */
     );
 
     return batchActivity;
