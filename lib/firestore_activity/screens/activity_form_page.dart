@@ -58,8 +58,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   ValueNotifier<String> selectedTipoTrato = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoUnid1 = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoUnid2 = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoUnid1 = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoUnid2 = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoColeta = ValueNotifier<String>('Selecione');
 
   // Variável para armazenar a data selecionada
