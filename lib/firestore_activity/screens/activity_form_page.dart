@@ -35,6 +35,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       TextEditingController();
   bool? _selectedRadioValue;
   bool? _selectedRadioValueUnid;
+  bool? _selectedRadioValueDim;
   String labelTitle = 'Adicionar Atividade';
   ValueNotifier<String> selectedAtividade = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedPreparoSolo =
@@ -55,7 +56,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoCapina = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoTrato = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoUnid = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoUnid1 = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoUnid2 = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoColeta = ValueNotifier<String>('Selecione');
 
   // Variável para armazenar a data selecionada
@@ -396,6 +398,76 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     },
                   ),
                   const SizedBox(height: 16),
+                  if (selectedAdubacao.value == 'Química')
+                  Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Nome do Produto Utilizado',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        MyTextFieldWrapper(
+                          hintText: 'Nome',
+                          controller: _tamanho1, // Use um novo controller
+                          obscureText: false,
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Dose Aplicada',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 336,
+                              child: Column(
+                                children: [
+                                  MyTextFieldWrapper(
+                                    inputFormatter: MaskTextInputFormatter(
+                                      filter: {"#": RegExp(r'[0-9xX]')},
+                                      type: MaskAutoCompletionType.lazy,
+                                    ),
+                                    controller:
+                                        _tamanho1, // Use um novo controller
+                                    hintText: 'Quantidade',
+                                    obscureText: false,
+                                    validator: (value) {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            Column(
+                              children: [
+                                Text('ml'),
+                                Text('/'),
+                                Text('L'),
+                              ],
+                            )
+                            
+                          ],
+                        ),
+                      const SizedBox(height: 16), 
+                      ],
+                    ),
+                  
                   if (selectedAdubacao.value != 'Selecione' &&
                       selectedAdubacao.value != 'Não fez adubação' &&
                       selectedAdubacao.value != 'Química')
@@ -499,11 +571,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             SizedBox(
                               width: 180,
                               child: MyDropdownFormField(
-                                selectedValueNotifier: selectedTipoUnid,
+                                selectedValueNotifier: selectedTipoUnid1,
                                 itemsList: itemListTipoUnid,
                                 onChanged: (value) {
                                   setState(() {
-                                    selectedTipoUnid.value = value!;
+                                    selectedTipoUnid1.value = value!;
                                   });
                                 },
                               ),
@@ -679,8 +751,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                 ],
               ),
             const SizedBox(height: 16),
-            if (selectedTipoManejoPragas.value != 'Selecione' &&
-                selectedTipoManejoPragas.value != 'Controle natural')
+            if (selectedTipoManejoPragas.value == 'Aplicação de agrotóxico' && selectedAtividade.value == 'Manejo de pragas')
               Column(
                 children: [
                   Container(
@@ -748,11 +819,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           SizedBox(
                             width: 180,
                             child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid,
+                              selectedValueNotifier: selectedTipoUnid1,
                               itemsList: itemListTipoUnid,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedTipoUnid.value = value!;
+                                  selectedTipoUnid1.value = value!;
                                 });
                               },
                             ),
@@ -783,7 +854,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             width: 180,
                             child: MyTextFieldWrapper(
                               hintText: 'Número',
-                              controller: _tamanho1,
+                              controller: _tamanho2,
                               obscureText: false,
                             ),
                           ),
@@ -808,11 +879,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           SizedBox(
                             width: 180,
                             child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid,
+                              selectedValueNotifier: selectedTipoUnid2,
                               itemsList: itemListTipoUnid,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedTipoUnid.value = value!;
+                                  selectedTipoUnid2.value = value!;
                                 });
                               },
                             ),
@@ -823,7 +894,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   ),
                 ],
               ),
-            if (selectedTipoManejoPragas.value == 'Controle natural')
+            if (selectedTipoManejoPragas.value == 'Controle natural' && selectedAtividade.value == 'Manejo de pragas')
               Column(
                 children: [
                   Container(
@@ -850,8 +921,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                 ],
               ),
             SizedBox(height: 16),
-            if (selectedTipoControlePragas.value ==
-                'Aplicação de defensivo natural')
+            if (selectedTipoControlePragas.value == 'Aplicação de defensivo natural' && selectedAtividade.value == 'Manejo de pragas' && selectedTipoManejoPragas.value == 'Controle natural')
               Column(
                 children: [
                   Container(
@@ -918,11 +988,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           SizedBox(
                             width: 180,
                             child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid,
+                              selectedValueNotifier: selectedTipoUnid1,
                               itemsList: itemListTipoUnid,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedTipoUnid.value = value!;
+                                  selectedTipoUnid1.value = value!;
                                 });
                               },
                             ),
@@ -978,11 +1048,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           SizedBox(
                             width: 180,
                             child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid,
+                              selectedValueNotifier: selectedTipoUnid2,
                               itemsList: itemListTipoUnid,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedTipoUnid.value = value!;
+                                  selectedTipoUnid2.value = value!;
                                 });
                               },
                             ),
@@ -993,7 +1063,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   ),
                 ],
               ),
-            if (selectedTipoControlePragas.value == 'Coleta e eliminação')
+            if (selectedTipoControlePragas.value == 'Coleta e eliminação' && selectedAtividade.value == 'Manejo de pragas' && selectedTipoManejoPragas.value == 'Controle natural')
               Column(
                 children: [
                   Container(
@@ -1093,7 +1163,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     ),
                 ],
               ),
-            if (_selectedRadioValueUnid == true) // Se "Químico" for selecionado
+            if (_selectedRadioValueUnid == true && selectedTipoControleDoenca.value == 'Controle de vetores' && selectedAtividade.value == 'Manejo de doenças') // Se "Químico" for selecionado
               Column(
                 children: [
                   const SizedBox(height: 8),
@@ -1185,6 +1255,75 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                       });
                     },
                   ),
+                  const SizedBox(height: 16),
+                  if(selectedAdubacao.value == 'Química')
+                    Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Nome do Produto Utilizado',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        MyTextFieldWrapper(
+                          hintText: 'Nome',
+                          controller: _tamanho1, // Use um novo controller
+                          obscureText: false,
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            'Dose Aplicada',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[900],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 336,
+                              child: Column(
+                                children: [
+                                  MyTextFieldWrapper(
+                                    inputFormatter: MaskTextInputFormatter(
+                                      filter: {"#": RegExp(r'[0-9xX]')},
+                                      type: MaskAutoCompletionType.lazy,
+                                    ),
+                                    controller:
+                                        _tamanho1, // Use um novo controller
+                                    hintText: 'Quantidade',
+                                    obscureText: false,
+                                    validator: (value) {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            Column(
+                              children: [
+                                Text('ml'),
+                                Text('/'),
+                                Text('L'),
+                              ],
+                            )
+                            
+                          ],
+                        ),
+                      ],
+                    ),
                   const SizedBox(height: 16),
                   if (selectedAdubacao.value != 'Selecione' &&
                       selectedAdubacao.value != 'Não fez adubação' &&
@@ -1289,11 +1428,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             SizedBox(
                               width: 180,
                               child: MyDropdownFormField(
-                                selectedValueNotifier: selectedTipoUnid,
+                                selectedValueNotifier: selectedTipoUnid1,
                                 itemsList: itemListTipoUnid,
                                 onChanged: (value) {
                                   setState(() {
-                                    selectedTipoUnid.value = value!;
+                                    selectedTipoUnid1.value = value!;
                                   });
                                 },
                               ),
@@ -1416,10 +1555,10 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     children: [
                       Radio<bool>(
                         value: true,
-                        groupValue: _selectedRadioValueUnid,
+                        groupValue: _selectedRadioValueDim,
                         onChanged: (value) {
                           setState(() {
-                            _selectedRadioValueUnid = value;
+                            _selectedRadioValueDim = value;
                           });
                         },
                         activeColor: Colors.green[800]!,
@@ -1428,10 +1567,10 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                       SizedBox(width: 20),
                       Radio<bool>(
                         value: false,
-                        groupValue: _selectedRadioValueUnid,
+                        groupValue: _selectedRadioValueDim,
                         onChanged: (value) {
                           setState(() {
-                            _selectedRadioValueUnid = value;
+                            _selectedRadioValueDim = value;
                           });
                         },
                         activeColor: Colors.green[800]!,
@@ -1553,7 +1692,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         adubacao: Adubacao(
           tipoAdubo: selectedTipoAduboQuimico.value,
           quantidade: _quantidade2.text,
-          unidade: selectedTipoUnid.value,
+          unidade: selectedTipoUnid1.value,
         ),
         naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação'
             ? true
