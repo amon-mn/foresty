@@ -29,6 +29,12 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
 
   final TextEditingController _outroTratoController = TextEditingController();
   final TextEditingController _nomeDaDoenca = TextEditingController();
+  final TextEditingController _nomeDaPraga = TextEditingController();
+  final TextEditingController _nomeOuTipo = TextEditingController();
+  final TextEditingController _nomeAgrotoxico = TextEditingController();
+
+  final TextEditingController _nomeInimigoNatural = TextEditingController();
+  final TextEditingController _formaUsoInimigoNatural = TextEditingController();
 
   final TextEditingController _larguraPlantioController =
       TextEditingController();
@@ -722,7 +728,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   const SizedBox(height: 4),
                   MyTextFieldWrapper(
                     hintText: 'Digite um nome',
-                    controller: _tamanho1,
+                    controller: _nomeDaPraga,
                     obscureText: false,
                   ),
                   SizedBox(height: 16),
@@ -770,7 +776,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   const SizedBox(height: 4),
                   MyTextFieldWrapper(
                     hintText: 'Digite um nome',
-                    controller: _tamanho1,
+                    controller: _nomeAgrotoxico,
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
@@ -943,7 +949,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   ),
                   MyTextFieldWrapper(
                     hintText: 'Digite um nome',
-                    controller: _tamanho1,
+                    controller: _nomeOuTipo,
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
@@ -968,7 +974,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             width: 180,
                             child: MyTextFieldWrapper(
                               hintText: 'Número',
-                              controller: _tamanho1,
+                              controller: _quantidade1,
                               obscureText: false,
                             ),
                           ),
@@ -1028,7 +1034,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             width: 180,
                             child: MyTextFieldWrapper(
                               hintText: 'Número',
-                              controller: _tamanho1,
+                              controller: _quantidade2,
                               obscureText: false,
                             ),
                           ),
@@ -1093,6 +1099,50 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         selectedTipoColeta.value = value!;
                       });
                     },
+                  ),
+                ],
+              ),
+            if (selectedTipoControlePragas.value == 'Uso de inimigo natural' &&
+                selectedAtividade.value == 'Manejo de pragas' &&
+                selectedTipoManejoPragas.value == 'Controle natural')
+              Column(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Nome do Inimigo Natural',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  MyTextFieldWrapper(
+                    hintText: 'Nome',
+                    controller: _nomeInimigoNatural,
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Forma de Uso',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  MyTextFieldWrapper(
+                    hintText: 'Forma de Uso',
+                    controller: _formaUsoInimigoNatural,
+                    obscureText: false,
                   ),
                 ],
               ),
@@ -1192,7 +1242,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   const SizedBox(height: 4),
                   MyTextFieldWrapper(
                     hintText: 'Nome',
-                    controller: _tamanho1, // Use um novo controller
+                    controller: _produtoUtilizado, // Use um novo controller
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
@@ -1220,7 +1270,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 filter: {"#": RegExp(r'[0-9xX]')},
                                 type: MaskAutoCompletionType.lazy,
                               ),
-                              controller: _larguraPlantioController,
+                              controller: _quantidade1,
                               hintText: 'Quantidade',
                               obscureText: false,
                               validator: (value) {},
@@ -1284,7 +1334,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         const SizedBox(height: 4),
                         MyTextFieldWrapper(
                           hintText: 'Nome',
-                          controller: _tamanho1, // Use um novo controller
+                          controller:
+                              _produtoUtilizado, // Use um novo controller
                           obscureText: false,
                         ),
                         const SizedBox(height: 16),
@@ -1313,7 +1364,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                       type: MaskAutoCompletionType.lazy,
                                     ),
                                     controller:
-                                        _tamanho1, // Use um novo controller
+                                        _quantidade1, // Use um novo controller
                                     hintText: 'Quantidade',
                                     obscureText: false,
                                     validator: (value) {},
@@ -1412,7 +1463,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               width: 180,
                               child: MyTextFieldWrapper(
                                 hintText: 'Número',
-                                controller: _tamanho1,
+                                controller: _quantidade2,
                                 obscureText: false,
                               ),
                             ),
@@ -1723,6 +1774,125 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       plantio = Plantio.empty();
     }
 
+    ManejoDoencas manejoDoencas;
+
+    if (selectedAtividade.value == 'Manejo de doenças') {
+      manejoDoencas = ManejoDoencas(
+        nomeDoenca: _nomeDaDoenca.text,
+        tipoControle: selectedTipoControleDoenca.value,
+        tipoVetor: _selectedRadioValueUnid == true ? 'Químico' : 'Natural',
+        produtoUtilizado: _produtoUtilizado.text,
+        doseAplicada: double.parse(_quantidade1.text),
+      );
+    } else {
+      manejoDoencas = ManejoDoencas.empty();
+    }
+
+    AdubacaoCobertura adubacaoCobertura;
+    Adubacao adubacao;
+
+    if (selectedAdubacao.value == 'Orgânica') {
+      adubacao = Adubacao(
+        tipoAdubo: selectedTipoAduboOrganico.value,
+        quantidade: double.parse(_quantidade1.text),
+        unidade: selectedTipoUnid1.value,
+        produtoUtilizado: '',
+        doseAplicada: 0,
+      );
+    } else if (selectedAdubacao.value == 'Química') {
+      adubacao = Adubacao(
+        tipoAdubo: selectedTipoAduboQuimico.value,
+        quantidade: double.parse(_quantidade1.text),
+        unidade: selectedTipoUnid1.value,
+        produtoUtilizado: _produtoUtilizado.text,
+        doseAplicada: double.parse(_quantidade2.text),
+      );
+    } else {
+      adubacao = Adubacao.empty();
+    }
+
+    if (selectedAtividade.value == 'Adubação de Cobertura') {
+      adubacaoCobertura = AdubacaoCobertura(
+        tipo: selectedAdubacao.value,
+        adubacao: adubacao,
+        naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação',
+      );
+    } else {
+      adubacaoCobertura = AdubacaoCobertura.empty();
+    }
+
+    ManejoPragas manejoPragas;
+    AplicacaoAgrotoxico aplicacaoAgrotoxico;
+    ControleNatural controleNatural;
+
+    if (selectedTipoManejoPragas.value == 'Aplicação de agrotóxico') {
+      aplicacaoAgrotoxico = AplicacaoAgrotoxico(
+        nomeAgrotoxico: _nomeAgrotoxico.text,
+        quantidadeRecomendada: double.parse(_quantidade1.text),
+        quantidadeAplicada: double.parse(_quantidade2.text),
+        unidadeRecomendada: selectedTipoUnid1.value,
+        unidadeAplicada: selectedTipoUnid2.value,
+      );
+    } else {
+      aplicacaoAgrotoxico = AplicacaoAgrotoxico.empty();
+    }
+
+    if (selectedTipoManejoPragas.value == 'Controle natural') {
+      controleNatural = ControleNatural(
+        tipoControle: selectedTipoControlePragas.value,
+        aplicacaoDefensivo: DefensivoNatural(
+          nomeOuTipo: _nomeOuTipo.text,
+          quantidadeRecomendada: double.parse(_quantidade1.text),
+          unidadeRecomendada: selectedTipoUnid1.value,
+          quantidadeAplicada: double.parse(_quantidade2.text),
+          unidadeAplicada: selectedTipoUnid2.value,
+        ),
+        coletaEliminacao: ColetaEliminacao(
+          tipoColeta: selectedTipoColeta.value,
+        ),
+        usoInimigoNatural: UsoInimigoNatural(
+          nomeInimigoNatural: _nomeInimigoNatural.text,
+          formaUso: _formaUsoInimigoNatural.text,
+        ),
+      );
+    } else {
+      controleNatural = ControleNatural.empty();
+    }
+
+    if (selectedAtividade.value == 'Manejo de pragas') {
+      manejoPragas = ManejoPragas(
+        nomePraga: _nomeDaPraga.text,
+        tipo: selectedTipoManejoPragas.value,
+        aplicacaoAgrotoxico: aplicacaoAgrotoxico,
+        controleNatural: controleNatural,
+      );
+    } else {
+      manejoPragas = ManejoPragas.empty();
+    }
+
+    Capina capina;
+
+    if (selectedAtividade.value == 'Capina') {
+      capina = Capina(
+        tipo: selectedTipoCapina.value,
+        nomeProduto: _produtoUtilizado.text,
+        quantidadeAplicada: double.parse(_quantidade1.text),
+        dimensao: _selectedRadioValueDim == true ? 'Parte' : 'Todo',
+      );
+    } else {
+      capina = Capina.empty();
+    }
+
+    TratosCulturais tratosCulturais;
+
+    if (selectedAtividade.value == 'Tratos culturais') {
+      tratosCulturais = TratosCulturais(
+        tipoControle: selectedTipoTrato.value,
+      );
+    } else {
+      tratosCulturais = TratosCulturais.empty();
+    }
+
     // Crie um objeto BatchActivity com base nas informações do formulário
     BatchActivity batchActivity = BatchActivity(
       id: batchId, // Substitua pelo ID desejado
@@ -1730,23 +1900,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       dataDaAtividade: selectedDate,
       preparoSolo: preparoSolo,
       plantio: plantio,
-
-      manejoDoencas: ManejoDoencas(
-        nomeDoenca: _nomeDaDoenca.text,
-        tipoControle: selectedTipoControleDoenca.value,
-        // tipoVetor: /* Preencha com a informação correta */,
-      ),
-      /*
-      adubacaoCobertura: AdubacaoCobertura(
-        tipo: selectedAdubacao.value,
-        adubacao: Adubacao(
-          tipoAdubo: selectedAduboComplementar.value,
-           quantidade: double.parse(/* Preencha com a informação correta */),
-           unidade: /* Preencha com a informação correta */,
-        ),
-         naoFezAdubacao: /* Preencha com a informação correta */,
-      ),
-      */
+      manejoDoencas: manejoDoencas,
+      manejoPragas: manejoPragas,
+      adubacaoCobertura: adubacaoCobertura,
+      capina: capina,
+      tratosCulturais: tratosCulturais,
     );
 
     return batchActivity;

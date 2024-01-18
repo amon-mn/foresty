@@ -163,28 +163,37 @@ class ManejoDoencas {
   String nomeDoenca;
   String tipoControle;
   String? tipoVetor;
+  String? produtoUtilizado;
+  double? doseAplicada;
 
-  ManejoDoencas({
-    required this.nomeDoenca,
-    required this.tipoControle,
-    this.tipoVetor,
-  });
+  ManejoDoencas(
+      {required this.nomeDoenca,
+      required this.tipoControle,
+      this.tipoVetor,
+      this.produtoUtilizado,
+      this.doseAplicada});
 
   ManejoDoencas.empty()
       : nomeDoenca = '',
         tipoControle = '',
-        tipoVetor = '';
+        tipoVetor = '',
+        doseAplicada = 0,
+        produtoUtilizado = '';
 
   ManejoDoencas.fromMap(Map<String, dynamic> map)
       : nomeDoenca = map['nomeDoenca'],
         tipoControle = map['tipoControle'],
-        tipoVetor = map['tipoVetor'];
+        tipoVetor = map['tipoVetor'],
+        doseAplicada = map['doseAplicada'],
+        produtoUtilizado = map['produtoUtilizado'];
 
   Map<String, dynamic> toMap() {
     return {
       'nomeDoenca': nomeDoenca,
       'tipoControle': tipoControle,
       'tipoVetor': tipoVetor,
+      'doseAplicada': doseAplicada,
+      'produtoUtilizado': produtoUtilizado,
     };
   }
 }
@@ -338,33 +347,37 @@ class AplicacaoAgrotoxico {
   String nomeAgrotoxico;
   double quantidadeRecomendada;
   double quantidadeAplicada;
-  String unidade;
+  String unidadeRecomendada;
+  String unidadeAplicada;
 
-  AplicacaoAgrotoxico({
-    required this.nomeAgrotoxico,
-    required this.quantidadeRecomendada,
-    required this.quantidadeAplicada,
-    required this.unidade,
-  });
+  AplicacaoAgrotoxico(
+      {required this.nomeAgrotoxico,
+      required this.quantidadeRecomendada,
+      required this.quantidadeAplicada,
+      required this.unidadeRecomendada,
+      required this.unidadeAplicada});
 
   AplicacaoAgrotoxico.empty()
       : nomeAgrotoxico = '',
         quantidadeRecomendada = 0.0,
         quantidadeAplicada = 0.0,
-        unidade = '';
+        unidadeRecomendada = '',
+        unidadeAplicada = '';
 
   AplicacaoAgrotoxico.fromMap(Map<String, dynamic> map)
       : nomeAgrotoxico = map['nomeAgrotoxico'],
         quantidadeRecomendada = map['quantidadeRecomendada'],
         quantidadeAplicada = map['quantidadeAplicada'],
-        unidade = map['unidade'];
+        unidadeRecomendada = map['unidadeRecomendada'],
+        unidadeAplicada = map['unidadeAplicada'];
 
   Map<String, dynamic> toMap() {
     return {
       'nomeAgrotoxico': nomeAgrotoxico,
       'quantidadeRecomendada': quantidadeRecomendada,
       'quantidadeAplicada': quantidadeAplicada,
-      'unidade': unidade,
+      'unidadeRecomendada': unidadeRecomendada,
+      'unidadeAplicada': unidadeAplicada,
     };
   }
 }
@@ -414,32 +427,37 @@ class DefensivoNatural {
   String nomeOuTipo;
   double quantidadeRecomendada;
   double quantidadeAplicada;
-  String unidade;
+  String unidadeRecomendada;
+  String unidadeAplicada;
 
   DefensivoNatural(
       {required this.nomeOuTipo,
       required this.quantidadeRecomendada,
       required this.quantidadeAplicada,
-      required this.unidade});
+      required this.unidadeRecomendada,
+      required this.unidadeAplicada});
 
   DefensivoNatural.empty()
       : nomeOuTipo = '',
         quantidadeRecomendada = 0.0,
         quantidadeAplicada = 0.0,
-        unidade = '';
+        unidadeRecomendada = '',
+        unidadeAplicada = '';
 
   DefensivoNatural.fromMap(Map<String, dynamic> map)
       : nomeOuTipo = map['nomeOuTipo'],
         quantidadeRecomendada = map['quantidadeRecomendada'],
         quantidadeAplicada = map['quantidadeAplicada'],
-        unidade = map['unidade'];
+        unidadeRecomendada = map['unidadeRecomendada'],
+        unidadeAplicada = map['unidadeAplicada'];
 
   Map<String, dynamic> toMap() {
     return {
       'nomeOuTipo': nomeOuTipo,
       'quantidadeRecomendada': quantidadeRecomendada,
       'quantidadeAplicada': quantidadeAplicada,
-      'unidade': unidade,
+      'unidadeRecomendada': unidadeRecomendada,
+      'unidadeAplicada': unidadeAplicada,
     };
   }
 }
