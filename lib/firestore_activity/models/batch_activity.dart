@@ -80,9 +80,9 @@ class BatchActivity {
 
 class PreparoSolo {
   String tipo;
-  double tamanho;
+  String tamanho;
   bool? usouCalcario;
-  double? quantidadeCalcario;
+  String? quantidadeCalcario;
   Adubacao? adubacao;
   bool naoFezAdubacao;
 
@@ -97,9 +97,9 @@ class PreparoSolo {
 
   PreparoSolo.empty()
       : tipo = '',
-        tamanho = 0.0,
+        tamanho = '0',
         usouCalcario = false,
-        quantidadeCalcario = 0.0,
+        quantidadeCalcario = '0',
         adubacao = null,
         naoFezAdubacao = false;
 
@@ -232,10 +232,10 @@ class AdubacaoCobertura {
 class Adubacao {
   String tipoAdubo;
   String? tipoAdubacao;
-  double? quantidade;
+  String? quantidade;
   String? unidade;
   String? produtoUtilizado;
-  double? doseAplicada;
+  String? doseAplicada;
 
   Adubacao({
     required this.tipoAdubo,
@@ -249,9 +249,9 @@ class Adubacao {
   Adubacao.empty()
       : tipoAdubo = '',
         tipoAdubacao = '',
-        quantidade = 0.0,
+        quantidade = '0',
         unidade = '',
-        doseAplicada = 0,
+        doseAplicada = '0',
         produtoUtilizado = '';
 
   Adubacao.fromMap(Map<String, dynamic> map)
@@ -350,8 +350,8 @@ class ManejoPragas {
 
 class AplicacaoAgrotoxico {
   String nomeAgrotoxico;
-  double quantidadeRecomendada;
-  double quantidadeAplicada;
+  String quantidadeRecomendada;
+  String quantidadeAplicada;
   String unidadeRecomendada;
   String unidadeAplicada;
 
@@ -364,8 +364,8 @@ class AplicacaoAgrotoxico {
 
   AplicacaoAgrotoxico.empty()
       : nomeAgrotoxico = '',
-        quantidadeRecomendada = 0.0,
-        quantidadeAplicada = 0.0,
+        quantidadeRecomendada = '0',
+        quantidadeAplicada = '0',
         unidadeRecomendada = '',
         unidadeAplicada = '';
 
@@ -430,8 +430,8 @@ class ControleNatural {
 
 class DefensivoNatural {
   String nomeOuTipo;
-  double quantidadeRecomendada;
-  double quantidadeAplicada;
+  String quantidadeRecomendada;
+  String quantidadeAplicada;
   String unidadeRecomendada;
   String unidadeAplicada;
 
@@ -444,8 +444,8 @@ class DefensivoNatural {
 
   DefensivoNatural.empty()
       : nomeOuTipo = '',
-        quantidadeRecomendada = 0.0,
-        quantidadeAplicada = 0.0,
+        quantidadeRecomendada = '0',
+        quantidadeAplicada = '0',
         unidadeRecomendada = '',
         unidadeAplicada = '';
 

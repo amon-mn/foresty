@@ -33,22 +33,31 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   final TextEditingController _nomeAgrotoxico = TextEditingController();
   final TextEditingController _nomeInimigoNatural = TextEditingController();
   final TextEditingController _formaUsoInimigoNatural = TextEditingController();
-  final TextEditingController _larguraPlantioController = TextEditingController();
-  final TextEditingController _comprimentoPlantioController = TextEditingController();
+  final TextEditingController _larguraPlantioController =
+      TextEditingController();
+  final TextEditingController _comprimentoPlantioController =
+      TextEditingController();
   bool? _selectedRadioValue;
   bool? _selectedRadioValueUnid;
   bool? _selectedRadioValueDim;
   String labelTitle = 'Adicionar Atividade';
   ValueNotifier<String> selectedAtividade = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedPreparoSolo = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedPreparoSolo =
+      ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedAdubacao = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedPlantio = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoAduboQuimico = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoAduboOrganico = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedAduboComplementar = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoManejoPragas = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoControlePragas = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoControleDoenca = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoAduboQuimico =
+      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoAduboOrganico =
+      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedAduboComplementar =
+      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoManejoPragas =
+      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoControlePragas =
+      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoControleDoenca =
+      ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoCapina = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoTrato = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoUnid1 = ValueNotifier<String>('Selecione');
@@ -789,7 +798,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             width: 180,
                             child: MyTextFieldWrapper(
                               hintText: 'Número',
-                              controller: _tamanho1,
+                              controller: _quantidade1,
                               obscureText: false,
                             ),
                           ),
@@ -849,7 +858,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             width: 180,
                             child: MyTextFieldWrapper(
                               hintText: 'Número',
-                              controller: _tamanho2,
+                              controller: _quantidade2,
                               obscureText: false,
                             ),
                           ),
@@ -1537,7 +1546,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         const SizedBox(height: 4),
                         MyTextFieldWrapper(
                           hintText: 'Nome',
-                          controller: _produtoUtilizado, // Use um novo controller
+                          controller:
+                              _produtoUtilizado, // Use um novo controller
                           obscureText: false,
                         ),
                         const SizedBox(height: 16),
@@ -1726,24 +1736,24 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
 
   BatchActivity createBatchActivityObject(String batchId) {
     PreparoSolo preparoSolo;
-        Adubacao adubacaoPreparoSolo;
+    Adubacao adubacaoPreparoSolo;
 
     if (selectedAdubacao.value == 'Orgânica') {
       adubacaoPreparoSolo = Adubacao(
         tipoAdubacao: selectedAdubacao.value,
         tipoAdubo: selectedTipoAduboOrganico.value,
-        quantidade: double.parse(_quantidade3.text),
+        quantidade: _quantidade3.text,
         unidade: selectedTipoUnid1.value,
         produtoUtilizado: '',
-        doseAplicada: 0,
+        doseAplicada: '0',
       );
     } else if (selectedAdubacao.value == 'Química') {
       adubacaoPreparoSolo = Adubacao(
         tipoAdubacao: selectedAdubacao.value,
         produtoUtilizado: _produtoUtilizado.text,
-        doseAplicada: double.parse(_quantidade2.text),
+        doseAplicada: _quantidade2.text,
         tipoAdubo: selectedTipoAduboQuimico.value,
-        quantidade: double.parse(_quantidade3.text),
+        quantidade: _quantidade3.text,
         unidade: selectedTipoUnid1.value,
       );
     } else {
@@ -1753,9 +1763,9 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     if (selectedAtividade.value == 'Preparo do solo') {
       preparoSolo = PreparoSolo(
         tipo: selectedPreparoSolo.value,
-        tamanho: double.parse(_tamanho1.text),
+        tamanho: _tamanho1.text,
         usouCalcario: _selectedRadioValue,
-        quantidadeCalcario: _selectedRadioValue == true ? double.parse(_quantidade1.text) : 0,
+        quantidadeCalcario: _quantidade1.text,
         adubacao: adubacaoPreparoSolo,
         naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação',
       );
@@ -1769,8 +1779,12 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       plantio = Plantio(
         tipo: selectedPlantio.value,
         quantidade: int.parse(_quantidade1.text),
-        largura: selectedPlantio.value == 'Semeadura direta' ? double.parse(_larguraPlantioController.text) : 0,
-        comprimento: selectedPlantio.value == 'Semeadura direta' ? double.parse(_comprimentoPlantioController.text) : 0,
+        largura: selectedPlantio.value == 'Semeadura direta'
+            ? double.parse(_larguraPlantioController.text)
+            : 0,
+        comprimento: selectedPlantio.value == 'Semeadura direta'
+            ? double.parse(_comprimentoPlantioController.text)
+            : 0,
       );
     } else {
       plantio = Plantio.empty();
@@ -1783,8 +1797,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         nomeDoenca: _nomeDaDoenca.text,
         tipoControle: selectedTipoControleDoenca.value,
         tipoVetor: _selectedRadioValueUnid == true ? 'Químico' : 'Natural',
-        produtoUtilizado: _selectedRadioValueUnid == true ? _produtoUtilizado.text : '',
-        doseAplicada: _selectedRadioValueUnid == true ? double.parse(_quantidade1.text) : 0,
+        produtoUtilizado:
+            _selectedRadioValueUnid == true ? _produtoUtilizado.text : '',
+        doseAplicada: _selectedRadioValueUnid == true
+            ? double.parse(_quantidade1.text)
+            : 0,
       );
     } else {
       manejoDoencas = ManejoDoencas.empty();
@@ -1797,18 +1814,18 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       adubacaoDeCobertura = Adubacao(
         tipoAdubo: selectedTipoAduboOrganico.value,
         tipoAdubacao: selectedAdubacao.value,
-        quantidade: double.parse(_quantidade2.text),
+        quantidade: _quantidade2.text,
         unidade: selectedTipoUnid1.value,
         produtoUtilizado: '',
-        doseAplicada: 0,
+        doseAplicada: '0',
       );
     } else if (selectedAdubacao.value == 'Química') {
       adubacaoDeCobertura = Adubacao(
         tipoAdubo: selectedTipoAduboQuimico.value,
-        quantidade: double.parse(_quantidade1.text),
+        quantidade: _quantidade1.text,
         unidade: selectedTipoUnid1.value,
         produtoUtilizado: _produtoUtilizado.text,
-        doseAplicada: double.parse(_quantidade2.text),
+        doseAplicada: _quantidade2.text,
       );
     } else {
       adubacaoDeCobertura = Adubacao.empty();
@@ -1831,8 +1848,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     if (selectedTipoManejoPragas.value == 'Aplicação de agrotóxico') {
       aplicacaoAgrotoxico = AplicacaoAgrotoxico(
         nomeAgrotoxico: _nomeAgrotoxico.text,
-        quantidadeRecomendada: double.parse(_quantidade1.text),
-        quantidadeAplicada: double.parse(_quantidade2.text),
+        quantidadeRecomendada: _quantidade1.text,
+        quantidadeAplicada: _quantidade2.text,
         unidadeRecomendada: selectedTipoUnid1.value,
         unidadeAplicada: selectedTipoUnid2.value,
       );
@@ -1845,9 +1862,9 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         tipoControle: selectedTipoControlePragas.value,
         aplicacaoDefensivo: DefensivoNatural(
           nomeOuTipo: _nomeOuTipo.text,
-          quantidadeRecomendada: double.parse(_quantidade1.text),
+          quantidadeRecomendada: _quantidade1.text,
           unidadeRecomendada: selectedTipoUnid1.value,
-          quantidadeAplicada: double.parse(_quantidade2.text),
+          quantidadeAplicada: _quantidade2.text,
           unidadeAplicada: selectedTipoUnid2.value,
         ),
         coletaEliminacao: ColetaEliminacao(
@@ -1878,8 +1895,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     if (selectedAtividade.value == 'Capina') {
       capina = Capina(
         tipo: selectedTipoCapina.value,
-        nomeProduto: selectedTipoCapina.value == 'Química' ? _produtoUtilizado.text : '',
-        quantidadeAplicada: selectedTipoCapina.value == 'Química' ? double.parse(_quantidade1.text) : 0,
+        nomeProduto:
+            selectedTipoCapina.value == 'Química' ? _produtoUtilizado.text : '',
+        quantidadeAplicada: selectedTipoCapina.value == 'Química'
+            ? double.parse(_quantidade1.text)
+            : 0,
         dimensao: _selectedRadioValueDim == true ? 'Parte' : 'Todo',
       );
     } else {
