@@ -231,6 +231,7 @@ class AdubacaoCobertura {
 
 class Adubacao {
   String tipoAdubo;
+  String? tipoAdubacao;
   double? quantidade;
   String? unidade;
   String? produtoUtilizado;
@@ -238,6 +239,7 @@ class Adubacao {
 
   Adubacao({
     required this.tipoAdubo,
+    this.tipoAdubacao,
     this.quantidade,
     this.unidade,
     this.produtoUtilizado,
@@ -246,6 +248,7 @@ class Adubacao {
 
   Adubacao.empty()
       : tipoAdubo = '',
+        tipoAdubacao = '',
         quantidade = 0.0,
         unidade = '',
         doseAplicada = 0,
@@ -253,6 +256,7 @@ class Adubacao {
 
   Adubacao.fromMap(Map<String, dynamic> map)
       : tipoAdubo = map['tipoAdubo'],
+        tipoAdubacao = map['tipoAdubacao'],
         quantidade = map['quantidade'],
         unidade = map['unidade'],
         doseAplicada = map['doseAplicada'],
@@ -261,6 +265,7 @@ class Adubacao {
   Map<String, dynamic> toMap() {
     return {
       'tipoAdubo': tipoAdubo,
+      'tipoAdubacao': tipoAdubacao,
       'quantidade': quantidade,
       'unidade': unidade,
       'doseAplicada': doseAplicada,

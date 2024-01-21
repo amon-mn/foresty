@@ -26,41 +26,29 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   final TextEditingController _quantidade2 = TextEditingController();
   final TextEditingController _quantidade3 = TextEditingController();
   final TextEditingController _produtoUtilizado = TextEditingController();
-
   final TextEditingController _outroTratoController = TextEditingController();
   final TextEditingController _nomeDaDoenca = TextEditingController();
   final TextEditingController _nomeDaPraga = TextEditingController();
   final TextEditingController _nomeOuTipo = TextEditingController();
   final TextEditingController _nomeAgrotoxico = TextEditingController();
-
   final TextEditingController _nomeInimigoNatural = TextEditingController();
   final TextEditingController _formaUsoInimigoNatural = TextEditingController();
-
-  final TextEditingController _larguraPlantioController =
-      TextEditingController();
-  final TextEditingController _comprimentoPlantioController =
-      TextEditingController();
+  final TextEditingController _larguraPlantioController = TextEditingController();
+  final TextEditingController _comprimentoPlantioController = TextEditingController();
   bool? _selectedRadioValue;
   bool? _selectedRadioValueUnid;
   bool? _selectedRadioValueDim;
   String labelTitle = 'Adicionar Atividade';
   ValueNotifier<String> selectedAtividade = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedPreparoSolo =
-      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedPreparoSolo = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedAdubacao = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedPlantio = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoAduboQuimico =
-      ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoAduboOrganico =
-      ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedAduboComplementar =
-      ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoManejoPragas =
-      ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoControlePragas =
-      ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoControleDoenca =
-      ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoAduboQuimico = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoAduboOrganico = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedAduboComplementar = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoManejoPragas = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoControlePragas = ValueNotifier<String>('Selecione');
+  ValueNotifier<String> selectedTipoControleDoenca = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoCapina = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoTrato = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoUnid1 = ValueNotifier<String>('Selecione');
@@ -529,7 +517,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                       ],
                     ),
                   const SizedBox(height: 16),
-                  if (selectedTipoAduboQuimico.value != 'Selecione' &&
+                  if (selectedAdubacao.value != 'Selecione' &&
                       selectedAdubacao.value != 'Não fez adubação')
                     Row(
                       children: [
@@ -1549,7 +1537,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         const SizedBox(height: 4),
                         MyTextFieldWrapper(
                           hintText: 'Nome',
-                          controller: _tamanho1, // Use um novo controller
+                          controller: _produtoUtilizado, // Use um novo controller
                           obscureText: false,
                         ),
                         const SizedBox(height: 16),
@@ -1578,7 +1566,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                       type: MaskAutoCompletionType.lazy,
                                     ),
                                     controller:
-                                        _tamanho1, // Use um novo controller
+                                        _quantidade1, // Use um novo controller
                                     hintText: 'Quantidade',
                                     obscureText: false,
                                     validator: (value) {},
@@ -1738,19 +1726,37 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
 
   BatchActivity createBatchActivityObject(String batchId) {
     PreparoSolo preparoSolo;
+        Adubacao adubacaoPreparoSolo;
+
+    if (selectedAdubacao.value == 'Orgânica') {
+      adubacaoPreparoSolo = Adubacao(
+        tipoAdubacao: selectedAdubacao.value,
+        tipoAdubo: selectedTipoAduboOrganico.value,
+        quantidade: double.parse(_quantidade3.text),
+        unidade: selectedTipoUnid1.value,
+        produtoUtilizado: '',
+        doseAplicada: 0,
+      );
+    } else if (selectedAdubacao.value == 'Química') {
+      adubacaoPreparoSolo = Adubacao(
+        tipoAdubacao: selectedAdubacao.value,
+        produtoUtilizado: _produtoUtilizado.text,
+        doseAplicada: double.parse(_quantidade2.text),
+        tipoAdubo: selectedTipoAduboQuimico.value,
+        quantidade: double.parse(_quantidade3.text),
+        unidade: selectedTipoUnid1.value,
+      );
+    } else {
+      adubacaoPreparoSolo = Adubacao.empty();
+    }
 
     if (selectedAtividade.value == 'Preparo do solo') {
       preparoSolo = PreparoSolo(
         tipo: selectedPreparoSolo.value,
         tamanho: double.parse(_tamanho1.text),
         usouCalcario: _selectedRadioValue,
-        quantidadeCalcario: double.parse(_quantidade1.text),
-        adubacao: Adubacao(
-            tipoAdubo: selectedTipoAduboQuimico.value,
-            unidade: selectedTipoUnid1.value,
-            produtoUtilizado: _produtoUtilizado.text,
-            doseAplicada: double.parse(_quantidade2.text),
-            quantidade: double.parse(_quantidade3.text)),
+        quantidadeCalcario: _selectedRadioValue == true ? double.parse(_quantidade1.text) : 0,
+        adubacao: adubacaoPreparoSolo,
         naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação',
       );
     } else {
@@ -1763,12 +1769,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       plantio = Plantio(
         tipo: selectedPlantio.value,
         quantidade: int.parse(_quantidade1.text),
-        largura: selectedPlantio.value == 'Semeadura direta'
-            ? double.parse(_larguraPlantioController.text)
-            : 0,
-        comprimento: selectedPlantio.value == 'Semeadura direta'
-            ? double.parse(_comprimentoPlantioController.text)
-            : 0,
+        largura: selectedPlantio.value == 'Semeadura direta' ? double.parse(_larguraPlantioController.text) : 0,
+        comprimento: selectedPlantio.value == 'Semeadura direta' ? double.parse(_comprimentoPlantioController.text) : 0,
       );
     } else {
       plantio = Plantio.empty();
@@ -1781,26 +1783,27 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         nomeDoenca: _nomeDaDoenca.text,
         tipoControle: selectedTipoControleDoenca.value,
         tipoVetor: _selectedRadioValueUnid == true ? 'Químico' : 'Natural',
-        produtoUtilizado: _produtoUtilizado.text,
-        doseAplicada: double.parse(_quantidade1.text),
+        produtoUtilizado: _selectedRadioValueUnid == true ? _produtoUtilizado.text : '',
+        doseAplicada: _selectedRadioValueUnid == true ? double.parse(_quantidade1.text) : 0,
       );
     } else {
       manejoDoencas = ManejoDoencas.empty();
     }
 
     AdubacaoCobertura adubacaoCobertura;
-    Adubacao adubacao;
+    Adubacao adubacaoDeCobertura;
 
     if (selectedAdubacao.value == 'Orgânica') {
-      adubacao = Adubacao(
+      adubacaoDeCobertura = Adubacao(
         tipoAdubo: selectedTipoAduboOrganico.value,
-        quantidade: double.parse(_quantidade1.text),
+        tipoAdubacao: selectedAdubacao.value,
+        quantidade: double.parse(_quantidade2.text),
         unidade: selectedTipoUnid1.value,
         produtoUtilizado: '',
         doseAplicada: 0,
       );
     } else if (selectedAdubacao.value == 'Química') {
-      adubacao = Adubacao(
+      adubacaoDeCobertura = Adubacao(
         tipoAdubo: selectedTipoAduboQuimico.value,
         quantidade: double.parse(_quantidade1.text),
         unidade: selectedTipoUnid1.value,
@@ -1808,13 +1811,13 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         doseAplicada: double.parse(_quantidade2.text),
       );
     } else {
-      adubacao = Adubacao.empty();
+      adubacaoDeCobertura = Adubacao.empty();
     }
 
     if (selectedAtividade.value == 'Adubação de Cobertura') {
       adubacaoCobertura = AdubacaoCobertura(
         tipo: selectedAdubacao.value,
-        adubacao: adubacao,
+        adubacao: adubacaoDeCobertura,
         naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação',
       );
     } else {
@@ -1875,8 +1878,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     if (selectedAtividade.value == 'Capina') {
       capina = Capina(
         tipo: selectedTipoCapina.value,
-        nomeProduto: _produtoUtilizado.text,
-        quantidadeAplicada: double.parse(_quantidade1.text),
+        nomeProduto: selectedTipoCapina.value == 'Química' ? _produtoUtilizado.text : '',
+        quantidadeAplicada: selectedTipoCapina.value == 'Química' ? double.parse(_quantidade1.text) : 0,
         dimensao: _selectedRadioValueDim == true ? 'Parte' : 'Todo',
       );
     } else {
