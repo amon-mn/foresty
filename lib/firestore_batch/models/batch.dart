@@ -13,7 +13,7 @@ class ProductBatch {
   String ambiente;
   String tipoCultivo;
   String? nomeProduto;
-  BatchActivity? atividade;
+  List<BatchActivity> atividades; // Lista de atividades
 
   ProductBatch({
     required this.id,
@@ -27,8 +27,8 @@ class ProductBatch {
     required this.ambiente,
     required this.tipoCultivo,
     this.nomeProduto,
-    this.atividade,
-  });
+    List<BatchActivity>? atividades, // Inicialize a lista de atividades
+  }) : atividades = atividades ?? [];
 
   ProductBatch.fromMap(Map<String, dynamic> map)
       : id = map["id"],
@@ -42,9 +42,10 @@ class ProductBatch {
         ambiente = map["ambiente"],
         tipoCultivo = map["tipoCultivo"],
         nomeProduto = map["nomeProduto"],
-        atividade = map['atividade'] != null
-            ? BatchActivity.fromMap(map['atividade'])
-            : null;
+        atividades = (map['atividades'] as List<dynamic>?)
+                ?.map((activity) => BatchActivity.fromMap(activity))
+                .toList() ??
+            [];
 
   Map<String, dynamic> toMap() {
     return {
@@ -59,7 +60,11 @@ class ProductBatch {
       "ambiente": ambiente,
       "tipoCultivo": tipoCultivo,
       "nomeProduto": nomeProduto,
-      'atividade': atividade?.toMap(),
+      'atividades': atividades.map((activity) => activity.toMap()).toList(),
     };
+  }
+
+  void addActivity(BatchActivity activity) {
+    atividades.add(activity);
   }
 }

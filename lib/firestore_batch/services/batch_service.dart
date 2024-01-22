@@ -16,16 +16,22 @@ class BatchService {
         .set(batch.toMap());
   }
 
-  Future<void> addBatchActivity(
-      {required String lotId, required BatchActivity batchActivity}) async {
-    return firestore
+  Future<ProductBatch> addBatchActivity(
+      {required ProductBatch batch,
+      required BatchActivity batchActivity}) async {
+    // Adicione a atividade à lista de atividades no lote
+    batch.addActivity(batchActivity);
+
+    // Atualize o lote no banco de dados
+    await firestore
         .collection('users')
         .doc(user_id)
         .collection('lotes')
-        .doc(lotId)
-        .collection('atividades')
-        .doc(batchActivity.id)
-        .set(batchActivity.toMap());
+        .doc(batch.id)
+        .set(batch.toMap());
+
+    // Retorne o lote atualizado
+    return batch;
   }
 
   Future<List<ProductBatch>> readBatchs() async {

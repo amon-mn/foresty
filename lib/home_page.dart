@@ -27,26 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String profileImageUrl = '';
-  List<ProductBatch> listBatchs = [
-    /*
-    ProductBatch(
-        largura: 2,
-        comprimento: 3,
-        latitude: -40.7473,
-        longitude: 147.2552,
-        finalidade: "Plantio de Hortaliças",
-        ambiente: "Praia",
-        tipoCultivo: "Convencional"),
-    ProductBatch(
-        largura: 4,
-        comprimento: 5,
-        latitude: -40.7473,
-        longitude: 147.2552,
-        finalidade: "Plantio de Frutas",
-        ambiente: "AgroFloresta",
-        tipoCultivo: "Floresta"),
-        */
-  ];
+  List<ProductBatch> listBatchs = [];
   BatchService batchService = BatchService();
 
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -56,8 +37,15 @@ class _HomePageState extends State<HomePage> {
     refresh();
     fetchUserData(widget.user.uid);
     fetchProfileImage(); // Obtém a URL da imagem de perfil no início
-
+    loadBatchs();
     super.initState();
+  }
+
+  Future<void> loadBatchs() async {
+    List<ProductBatch> batches = await BatchService().readBatchs();
+    setState(() {
+      listBatchs = batches;
+    });
   }
 
   @override
@@ -150,14 +138,17 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 children: List.generate(listBatchs.length, (index) {
                   ProductBatch model = listBatchs[index];
+                  // Corrigindo a referência para model.atividades (plural)
+                  String? activityType = model.atividades.isNotEmpty
+                      ? model.atividades.last.tipoAtividade
+                      : null;
+
                   return BatchWidget(
-                    batchId:
-                        model.id, // Passando o ID do lote para o BatchWidget
+                    batchId: model.id,
                     title: model.nomeLote,
                     subtitle: model.nomeProduto,
-                    activity: model.atividade?.tipoAtividade,
+                    activity: activityType,
                     onEditPressed: () {
-                      print(model.atividade?.tipoAtividade);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -168,15 +159,17 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                     onCreateActivityPressed: () {
-                      Navigator.of(context).push(
+                      Navigator.of(context)
+                          .push(
                         MaterialPageRoute(
                           builder: (context) => ActivityFormPage(
                             batch: model,
                           ),
                         ),
-                      );
-                      setState(() {
-                        widget.activity = model.atividade;
+                      )
+                          .then((_) async {
+                        // Atualize a lista de lotes após adicionar uma atividade
+                        await loadBatchs();
                       });
                     },
                     onDeletePressed: () {

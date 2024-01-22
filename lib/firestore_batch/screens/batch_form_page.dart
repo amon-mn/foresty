@@ -565,7 +565,6 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                     tipoCultivo:
                                         _selectedValueNotifierTipoCultivo.value,
                                     nomeProduto: _productNameController.text,
-                                    atividade: widget.activity,
                                   );
 
                                   batchService.addBatch(batch: batch);

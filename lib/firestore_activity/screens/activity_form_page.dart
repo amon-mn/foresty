@@ -5,11 +5,12 @@ import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:foresty/firestore_batch/services/batch_service.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:uuid/uuid.dart';
 import '../../components/my_textfield.dart';
 import '../../firestore_batch/models/batch.dart';
 
 class ActivityFormPage extends StatefulWidget {
-  final ProductBatch? batch;
+  ProductBatch? batch;
   final BatchActivity? activity;
 
   ActivityFormPage({Key? key, this.batch, this.activity}) : super(key: key);
@@ -1711,14 +1712,14 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   width: 180,
                   child: MyButton(
                     onTap: () async {
-                      // Crie o objeto BatchActivity com base nas informações do formulário
-                      BatchActivity batchActivity =
-                          createBatchActivityObject(widget.batch!.id);
+                      // Crie o objeto BatchActivity com base nas informações do formulário e do lote
+                      BatchActivity batchActivity = createBatchActivityObject();
 
                       // Adicione o objeto ao banco de dados usando o serviço
-                      batchService.addBatchActivity(
-                          lotId: widget.batch!.id,
-                          batchActivity: batchActivity);
+                      await batchService.addBatchActivity(
+                        batch: widget.batch!,
+                        batchActivity: batchActivity,
+                      );
 
                       // Feche o formulário ou faça qualquer outra ação necessária
                       Navigator.pop(context);
@@ -1734,7 +1735,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     );
   }
 
-  BatchActivity createBatchActivityObject(String batchId) {
+  BatchActivity createBatchActivityObject() {
+    String activityId = Uuid().v4();
     PreparoSolo preparoSolo;
     Adubacao adubacaoPreparoSolo;
 
@@ -1918,7 +1920,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
 
     // Crie um objeto BatchActivity com base nas informações do formulário
     BatchActivity batchActivity = BatchActivity(
-      id: batchId, // Substitua pelo ID desejado
+      id: activityId, // Substitua pelo ID desejado
       tipoAtividade: selectedAtividade.value,
       dataDaAtividade: selectedDate,
       preparoSolo: preparoSolo,

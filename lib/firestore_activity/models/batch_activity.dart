@@ -2,26 +2,12 @@ class BatchActivity {
   String id;
   String tipoAtividade;
   String dataDaAtividade;
-
-  // Preparo de Solo
   PreparoSolo? preparoSolo;
-
-  // Plantio
   Plantio? plantio;
-
-  // Manejo de Doenças
   ManejoDoencas? manejoDoencas;
-
-  // Adubação de Cobertura
   AdubacaoCobertura? adubacaoCobertura;
-
-  // Capina
   Capina? capina;
-
-  // Manejo de Pragas
   ManejoPragas? manejoPragas;
-
-  // Tratos Culturais
   TratosCulturais? tratosCulturais;
 
   BatchActivity({
@@ -104,13 +90,13 @@ class PreparoSolo {
         naoFezAdubacao = false;
 
   PreparoSolo.fromMap(Map<String, dynamic> map)
-      : tipo = map['tipo'],
-        tamanho = map['tamanho'],
-        usouCalcario = map['usouCalcário'],
-        quantidadeCalcario = map['quantidadeCalcário'],
+      : tipo = map['tipo'] ?? '',
+        tamanho = map['tamanho'] ?? '0',
+        usouCalcario = map['usouCalcário'] ?? false,
+        quantidadeCalcario = map['quantidadeCalcário'] ?? '0',
         adubacao =
             map['adubacao'] != null ? Adubacao.fromMap(map['adubacao']) : null,
-        naoFezAdubacao = map['naoFezAdubacao'];
+        naoFezAdubacao = map['naoFezAdubacao'] ?? false;
 
   Map<String, dynamic> toMap() {
     return {
