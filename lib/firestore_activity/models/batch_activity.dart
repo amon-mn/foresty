@@ -69,7 +69,12 @@ class PreparoSolo {
   String tamanho;
   bool? usouCalcario;
   String? quantidadeCalcario;
-  Adubacao? adubacao;
+  String tipoAdubo;
+  String? tipoAdubacao;
+  String? quantidade;
+  String? unidade;
+  String? produtoUtilizado;
+  String? doseAplicada;
   bool naoFezAdubacao;
 
   PreparoSolo({
@@ -77,7 +82,12 @@ class PreparoSolo {
     required this.tamanho,
     this.usouCalcario,
     this.quantidadeCalcario,
-    this.adubacao,
+    required this.tipoAdubo,
+    this.tipoAdubacao,
+    this.quantidade,
+    this.unidade,
+    this.produtoUtilizado,
+    this.doseAplicada,
     required this.naoFezAdubacao,
   });
 
@@ -86,7 +96,12 @@ class PreparoSolo {
         tamanho = '0',
         usouCalcario = false,
         quantidadeCalcario = '0',
-        adubacao = null,
+        tipoAdubo = '',
+        tipoAdubacao = '',
+        quantidade = '0',
+        unidade = '',
+        doseAplicada = '0',
+        produtoUtilizado = '',
         naoFezAdubacao = false;
 
   PreparoSolo.fromMap(Map<String, dynamic> map)
@@ -94,8 +109,12 @@ class PreparoSolo {
         tamanho = map['tamanho'] ?? '0',
         usouCalcario = map['usouCalcário'] ?? false,
         quantidadeCalcario = map['quantidadeCalcário'] ?? '0',
-        adubacao =
-            map['adubacao'] != null ? Adubacao.fromMap(map['adubacao']) : null,
+        tipoAdubo = map['tipoAdubo'] ?? '',
+        tipoAdubacao = map['tipoAdubacao'] ?? '',
+        quantidade = map['quantidade'] ?? '0',
+        unidade = map['unidade'] ?? '',
+        doseAplicada = map['doseAplicada'] ?? '0',
+        produtoUtilizado = map['produtoUtilizado'] ?? '',
         naoFezAdubacao = map['naoFezAdubacao'] ?? false;
 
   Map<String, dynamic> toMap() {
@@ -104,7 +123,12 @@ class PreparoSolo {
       'tamanho': tamanho,
       'usouCalcário': usouCalcario,
       'quantidadeCalcário': quantidadeCalcario,
-      'adubação': adubacao?.toMap(),
+      'tipoAdubo': tipoAdubo,
+      'tipoAdubacao': tipoAdubacao,
+      'quantidade': quantidade,
+      'unidade': unidade,
+      'doseAplicada': doseAplicada,
+      'produtoUtilizado': produtoUtilizado,
       'não fez adubação': naoFezAdubacao,
     };
   }
@@ -186,35 +210,60 @@ class ManejoDoencas {
 
 class AdubacaoCobertura {
   String tipo;
-  Adubacao? adubacao;
+  String tipoAdubo;
+  String? tipoAdubacao;
+  String? quantidade;
+  String? unidade;
+  String? produtoUtilizado;
+  String? doseAplicada;
   bool naoFezAdubacao;
 
   AdubacaoCobertura({
     required this.tipo,
-    this.adubacao,
+    required this.tipoAdubo,
+    this.tipoAdubacao,
+    this.quantidade,
+    this.unidade,
+    this.produtoUtilizado,
+    this.doseAplicada,
     required this.naoFezAdubacao,
   });
 
   AdubacaoCobertura.empty()
       : tipo = '',
-        adubacao = null,
+        tipoAdubo = '',
+        tipoAdubacao = '',
+        quantidade = '0',
+        unidade = '',
+        doseAplicada = '0',
+        produtoUtilizado = '',
         naoFezAdubacao = false;
 
   AdubacaoCobertura.fromMap(Map<String, dynamic> map)
-      : tipo = map['tipo'],
-        adubacao =
-            map['adubacao'] != null ? Adubacao.fromMap(map['adubacao']) : null,
-        naoFezAdubacao = map['naoFezAdubacao'];
+      : tipo = map['tipo'] ?? '',
+        tipoAdubo = map['tipoAdubo'] ?? '',
+        tipoAdubacao = map['tipoAdubacao'] ?? '',
+        quantidade = map['quantidade'] ?? '0',
+        unidade = map['unidade'] ?? '',
+        doseAplicada = map['doseAplicada'] ?? '0',
+        produtoUtilizado = map['produtoUtilizado'] ?? '',
+        naoFezAdubacao = map['naoFezAdubacao'] ?? false;
 
   Map<String, dynamic> toMap() {
     return {
       'tipo': tipo,
-      'adubacaoOrganica': adubacao?.toMap(),
+      'tipoAdubo': tipoAdubo,
+      'tipoAdubacao': tipoAdubacao,
+      'quantidade': quantidade,
+      'unidade': unidade,
+      'doseAplicada': doseAplicada,
+      'produtoUtilizado': produtoUtilizado,
       'naoFezAdubacao': naoFezAdubacao,
     };
   }
 }
 
+/*
 class Adubacao {
   String tipoAdubo;
   String? tipoAdubacao;
@@ -259,6 +308,7 @@ class Adubacao {
     };
   }
 }
+*/
 
 class Capina {
   String tipo;
@@ -298,199 +348,100 @@ class Capina {
 class ManejoPragas {
   String nomePraga;
   String tipo;
-  AplicacaoAgrotoxico? aplicacaoAgrotoxico;
-  ControleNatural? controleNatural;
+  String? nomeAgrotoxico;
+  String? quantidadeRecomendadaAgrotoxico;
+  String? quantidadeAplicadaAgrotoxico;
+  String? unidadeRecomendadaAgrotoxico;
+  String? unidadeAplicadaAgrotoxico;
+  String? tipoControle;
+  String? nomeDefensivoNatural;
+  String? quantidadeRecomendadaDefensivoNatural;
+  String? quantidadeAplicadaDefensivoNatural;
+  String? unidadeRecomendadaDefensivoNatural;
+  String? unidadeAplicadaDefensivoNatural;
+  String? tipoColeta;
+  String? nomeInimigoNatural;
+  String? formaUsoInimigoNatural;
 
   ManejoPragas({
     required this.nomePraga,
     required this.tipo,
-    this.aplicacaoAgrotoxico,
-    this.controleNatural,
+    this.nomeAgrotoxico,
+    this.quantidadeRecomendadaAgrotoxico,
+    this.quantidadeAplicadaAgrotoxico,
+    this.unidadeRecomendadaAgrotoxico,
+    this.unidadeAplicadaAgrotoxico,
+    this.tipoControle,
+    this.nomeDefensivoNatural,
+    this.quantidadeRecomendadaDefensivoNatural,
+    this.quantidadeAplicadaDefensivoNatural,
+    this.unidadeRecomendadaDefensivoNatural,
+    this.unidadeAplicadaDefensivoNatural,
+    this.tipoColeta,
+    this.nomeInimigoNatural,
+    this.formaUsoInimigoNatural,
   });
 
   ManejoPragas.empty()
       : nomePraga = '',
         tipo = '',
-        aplicacaoAgrotoxico = null,
-        controleNatural = null;
+        nomeAgrotoxico = '',
+        quantidadeRecomendadaAgrotoxico = '0',
+        quantidadeAplicadaAgrotoxico = '0',
+        unidadeRecomendadaAgrotoxico = '',
+        unidadeAplicadaAgrotoxico = '',
+        tipoControle = '',
+        nomeDefensivoNatural = '',
+        quantidadeRecomendadaDefensivoNatural = '0',
+        quantidadeAplicadaDefensivoNatural = '0',
+        unidadeRecomendadaDefensivoNatural = '',
+        unidadeAplicadaDefensivoNatural = '',
+        tipoColeta = '',
+        nomeInimigoNatural = '',
+        formaUsoInimigoNatural = '';
 
   ManejoPragas.fromMap(Map<String, dynamic> map)
       : nomePraga = map['nomePraga'],
         tipo = map['tipo'],
-        aplicacaoAgrotoxico = map['aplicacaoAgrotoxico'] != null
-            ? AplicacaoAgrotoxico.fromMap(map['aplicacaoAgrotoxico'])
-            : null,
-        controleNatural = map['controleNatural'] != null
-            ? ControleNatural.fromMap(map['controleNatural'])
-            : null;
+        nomeAgrotoxico = map['nomeAgrotoxico'],
+        quantidadeRecomendadaAgrotoxico =
+            map['quantidadeRecomendadaAgrotoxico'],
+        quantidadeAplicadaAgrotoxico = map['quantidadeAplicadaAgrotoxico'],
+        unidadeRecomendadaAgrotoxico = map['unidadeRecomendadaAgrotoxico'],
+        unidadeAplicadaAgrotoxico = map['unidadeAplicadaAgrotoxico'],
+        tipoControle = map['tipoControle'],
+        nomeDefensivoNatural = map['nomeDefensivoNatural'],
+        quantidadeRecomendadaDefensivoNatural =
+            map['quantidadeRecomendadaDefensivoNatural'],
+        quantidadeAplicadaDefensivoNatural =
+            map['quantidadeAplicadaDefensivoNatural'],
+        unidadeRecomendadaDefensivoNatural =
+            map['unidadeRecomendadaDefensivoNatural'],
+        unidadeAplicadaDefensivoNatural =
+            map['unidadeAplicadaDefensivoNatural'],
+        tipoColeta = map['tipoColeta'],
+        nomeInimigoNatural = map['nomeInimigoNatural'],
+        formaUsoInimigoNatural = map['formaUsoInimigoNatural'];
 
   Map<String, dynamic> toMap() {
     return {
       'nomePraga': nomePraga,
       'tipo': tipo,
-      'aplicacaoAgrotoxico': aplicacaoAgrotoxico?.toMap(),
-      'controleNatural': controleNatural?.toMap(),
-    };
-  }
-}
-
-class AplicacaoAgrotoxico {
-  String nomeAgrotoxico;
-  String quantidadeRecomendada;
-  String quantidadeAplicada;
-  String unidadeRecomendada;
-  String unidadeAplicada;
-
-  AplicacaoAgrotoxico(
-      {required this.nomeAgrotoxico,
-      required this.quantidadeRecomendada,
-      required this.quantidadeAplicada,
-      required this.unidadeRecomendada,
-      required this.unidadeAplicada});
-
-  AplicacaoAgrotoxico.empty()
-      : nomeAgrotoxico = '',
-        quantidadeRecomendada = '0',
-        quantidadeAplicada = '0',
-        unidadeRecomendada = '',
-        unidadeAplicada = '';
-
-  AplicacaoAgrotoxico.fromMap(Map<String, dynamic> map)
-      : nomeAgrotoxico = map['nomeAgrotoxico'],
-        quantidadeRecomendada = map['quantidadeRecomendada'],
-        quantidadeAplicada = map['quantidadeAplicada'],
-        unidadeRecomendada = map['unidadeRecomendada'],
-        unidadeAplicada = map['unidadeAplicada'];
-
-  Map<String, dynamic> toMap() {
-    return {
       'nomeAgrotoxico': nomeAgrotoxico,
-      'quantidadeRecomendada': quantidadeRecomendada,
-      'quantidadeAplicada': quantidadeAplicada,
-      'unidadeRecomendada': unidadeRecomendada,
-      'unidadeAplicada': unidadeAplicada,
-    };
-  }
-}
-
-class ControleNatural {
-  String tipoControle;
-  DefensivoNatural? aplicacaoDefensivo;
-  ColetaEliminacao? coletaEliminacao;
-  UsoInimigoNatural? usoInimigoNatural;
-
-  ControleNatural({
-    required this.tipoControle,
-    this.aplicacaoDefensivo,
-    this.coletaEliminacao,
-    this.usoInimigoNatural,
-  });
-
-  ControleNatural.empty()
-      : tipoControle = '',
-        aplicacaoDefensivo = null,
-        coletaEliminacao = null,
-        usoInimigoNatural = null;
-
-  ControleNatural.fromMap(Map<String, dynamic> map)
-      : tipoControle = map['tipoControle'],
-        aplicacaoDefensivo = map['aplicacaoDefensivo'] != null
-            ? DefensivoNatural.fromMap(map['aplicacaoDefensivo'])
-            : null,
-        coletaEliminacao = map['coletaEliminacao'] != null
-            ? ColetaEliminacao.fromMap(map['coletaEliminacao'])
-            : null,
-        usoInimigoNatural = map['usoInimigoNatural'] != null
-            ? UsoInimigoNatural.fromMap(map['usoInimigoNatural'])
-            : null;
-
-  Map<String, dynamic> toMap() {
-    return {
+      'quantidadeRecomendadaAgrotoxico': quantidadeRecomendadaAgrotoxico,
+      'quantidadeAplicadaAgrotoxico': quantidadeAplicadaAgrotoxico,
+      'unidadeRecomendadaAgrotoxico': unidadeRecomendadaAgrotoxico,
+      'unidadeAplicadaAgrotoxico': unidadeAplicadaAgrotoxico,
       'tipoControle': tipoControle,
-      'aplicacaoDefensivo': aplicacaoDefensivo?.toMap(),
-      'coletaEliminacao': coletaEliminacao?.toMap(),
-      'usoInimigoNatural': usoInimigoNatural?.toMap(),
-    };
-  }
-}
-
-class DefensivoNatural {
-  String nomeOuTipo;
-  String quantidadeRecomendada;
-  String quantidadeAplicada;
-  String unidadeRecomendada;
-  String unidadeAplicada;
-
-  DefensivoNatural(
-      {required this.nomeOuTipo,
-      required this.quantidadeRecomendada,
-      required this.quantidadeAplicada,
-      required this.unidadeRecomendada,
-      required this.unidadeAplicada});
-
-  DefensivoNatural.empty()
-      : nomeOuTipo = '',
-        quantidadeRecomendada = '0',
-        quantidadeAplicada = '0',
-        unidadeRecomendada = '',
-        unidadeAplicada = '';
-
-  DefensivoNatural.fromMap(Map<String, dynamic> map)
-      : nomeOuTipo = map['nomeOuTipo'],
-        quantidadeRecomendada = map['quantidadeRecomendada'],
-        quantidadeAplicada = map['quantidadeAplicada'],
-        unidadeRecomendada = map['unidadeRecomendada'],
-        unidadeAplicada = map['unidadeAplicada'];
-
-  Map<String, dynamic> toMap() {
-    return {
-      'nomeOuTipo': nomeOuTipo,
-      'quantidadeRecomendada': quantidadeRecomendada,
-      'quantidadeAplicada': quantidadeAplicada,
-      'unidadeRecomendada': unidadeRecomendada,
-      'unidadeAplicada': unidadeAplicada,
-    };
-  }
-}
-
-class ColetaEliminacao {
-  String tipoColeta;
-
-  ColetaEliminacao({required this.tipoColeta});
-
-  ColetaEliminacao.fromMap(Map<String, dynamic> map)
-      : tipoColeta = map['tipoColeta'];
-
-  ColetaEliminacao.empty() : tipoColeta = '';
-
-  Map<String, dynamic> toMap() {
-    return {
+      'nomeDefensivoNatural': nomeDefensivoNatural,
+      'quantidadeRecomendadaDefensivoNatural':
+          quantidadeRecomendadaDefensivoNatural,
+      'quantidadeAplicadaDefensivoNatural': quantidadeAplicadaDefensivoNatural,
+      'unidadeRecomendadaDefensivoNatural': unidadeRecomendadaDefensivoNatural,
+      'unidadeAplicadaDefensivoNatural': unidadeAplicadaDefensivoNatural,
       'tipoColeta': tipoColeta,
-    };
-  }
-}
-
-class UsoInimigoNatural {
-  String nomeInimigoNatural;
-  String formaUso;
-
-  UsoInimigoNatural({
-    required this.nomeInimigoNatural,
-    required this.formaUso,
-  });
-
-  UsoInimigoNatural.empty()
-      : nomeInimigoNatural = '',
-        formaUso = '';
-
-  UsoInimigoNatural.fromMap(Map<String, dynamic> map)
-      : nomeInimigoNatural = map['nomeInimigoNatural'],
-        formaUso = map['formaUso'];
-
-  Map<String, dynamic> toMap() {
-    return {
       'nomeInimigoNatural': nomeInimigoNatural,
-      'formaUso': formaUso,
+      'formaUsoInimigoNatural': formaUsoInimigoNatural,
     };
   }
 }

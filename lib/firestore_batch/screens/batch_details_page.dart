@@ -198,19 +198,31 @@ class BatchDetailsPage extends StatelessWidget {
     ];
 
     if (preparoSolo.usouCalcario != null) {
-      widgets.add(_buildDetailRow(
-          'Usou Calcário', preparoSolo.usouCalcario! ? 'Sim' : 'Não'));
+      widgets.add(
+        _buildDetailRow(
+            'Usou Calcário', preparoSolo.usouCalcario! ? 'Sim' : 'Não'),
+      );
       if (preparoSolo.usouCalcario!) {
-        widgets.add(_buildDetailRow('Quantidade de Calcário',
-            preparoSolo.quantidadeCalcario ?? 'Não disponível'));
+        widgets.add(_buildDetailRow(
+          'Quantidade de Calcário',
+          preparoSolo.quantidadeCalcario ?? 'Não disponível',
+        ));
       }
     }
 
-    if (preparoSolo.naoFezAdubacao == false) {
-      widgets.add(_buildDetailRow('Tipo de Adubação',
-          preparoSolo.adubacao?.tipoAdubacao ?? 'Não disponível'));
-
-      //widgets.addAll(_buildAdubacaoDetails(preparoSolo.adubacao));
+    if (!preparoSolo.naoFezAdubacao) {
+      widgets.addAll([
+        _buildDetailRow('Tipo de Adubo', preparoSolo.tipoAdubo),
+        _buildDetailRow(
+            'Tipo de Adubação', preparoSolo.tipoAdubacao ?? 'Não disponível'),
+        _buildDetailRow(
+            'Quantidade', preparoSolo.quantidade ?? 'Não disponível'),
+        _buildDetailRow('Unidade', preparoSolo.unidade ?? 'Não disponível'),
+        _buildDetailRow('Produto Utilizado',
+            preparoSolo.produtoUtilizado ?? 'Não disponível'),
+        _buildDetailRow(
+            'Dose Aplicada', preparoSolo.doseAplicada ?? 'Não disponível'),
+      ]);
     }
 
     return Column(
@@ -302,21 +314,27 @@ class BatchDetailsPage extends StatelessWidget {
           color: Colors.grey[900],
         ),
       ),
-      _buildDetailRowListWidgets(
-          'Tipo de Adubação', [Text(adubacaoCobertura.tipo)]),
+      _buildDetailRow('Tipo de Adubação', adubacaoCobertura.tipo),
     ];
 
-    if (adubacaoCobertura.adubacao != null) {
-      widgets.add(_buildDetailRowListWidgets(
-        'Adubação',
-        _buildAdubacaoDetails(adubacaoCobertura.adubacao!),
-      ));
+    if (adubacaoCobertura.tipoAdubacao != null) {
+      widgets.addAll([
+        _buildDetailRow('Tipo de Adubo', adubacaoCobertura.tipoAdubo),
+        _buildDetailRow('Tipo de Adubação',
+            adubacaoCobertura.tipoAdubacao ?? 'Não disponível'),
+        _buildDetailRow(
+            'Quantidade', adubacaoCobertura.quantidade ?? 'Não disponível'),
+        _buildDetailRow(
+            'Unidade', adubacaoCobertura.unidade ?? 'Não disponível'),
+        _buildDetailRow('Produto Utilizado',
+            adubacaoCobertura.produtoUtilizado ?? 'Não disponível'),
+        _buildDetailRow('Dose Aplicada',
+            adubacaoCobertura.doseAplicada ?? 'Não disponível'),
+      ]);
     }
 
-    widgets.add(_buildDetailRowListWidgets(
-      'Não Fez Adubação',
-      [Text(adubacaoCobertura.naoFezAdubacao ? 'Sim' : 'Não')],
-    ));
+    widgets.add(_buildDetailRow(
+        'Não Fez Adubação', adubacaoCobertura.naoFezAdubacao ? 'Sim' : 'Não'));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,10 +393,45 @@ class BatchDetailsPage extends StatelessWidget {
     ];
 
     if (manejoPragas.tipo == 'Aplicação de agrotóxico') {
-      widgets.add(
-          _buildAplicacaoAgrotoxicoDetails(manejoPragas.aplicacaoAgrotoxico));
+      widgets.addAll([
+        _buildDetailRow('Nome do Agrotóxico',
+            manejoPragas.nomeAgrotoxico ?? 'Não disponível'),
+        _buildDetailRow('Quantidade Recomendada',
+            manejoPragas.quantidadeRecomendadaAgrotoxico ?? 'Não disponível'),
+        _buildDetailRow('Quantidade Aplicada',
+            manejoPragas.quantidadeAplicadaAgrotoxico ?? 'Não disponível'),
+        _buildDetailRow('Unidade Recomendada',
+            manejoPragas.unidadeRecomendadaAgrotoxico ?? 'Não disponível'),
+        _buildDetailRow('Unidade Aplicada',
+            manejoPragas.unidadeAplicadaAgrotoxico ?? 'Não disponível'),
+      ]);
     } else if (manejoPragas.tipo == 'Controle natural') {
-      widgets.add(_buildControleNaturalDetails(manejoPragas.controleNatural));
+      widgets.addAll([
+        _buildDetailRow(
+            'Tipo de Controle', manejoPragas.tipoControle ?? 'Não disponível'),
+        _buildDetailRow('Nome do Defensivo Natural',
+            manejoPragas.nomeDefensivoNatural ?? 'Não disponível'),
+        _buildDetailRow(
+            'Quantidade Recomendada',
+            manejoPragas.quantidadeRecomendadaDefensivoNatural ??
+                'Não disponível'),
+        _buildDetailRow(
+            'Quantidade Aplicada',
+            manejoPragas.quantidadeAplicadaDefensivoNatural ??
+                'Não disponível'),
+        _buildDetailRow(
+            'Unidade Recomendada',
+            manejoPragas.unidadeRecomendadaDefensivoNatural ??
+                'Não disponível'),
+        _buildDetailRow('Unidade Aplicada',
+            manejoPragas.unidadeAplicadaDefensivoNatural ?? 'Não disponível'),
+        _buildDetailRow(
+            'Tipo de Coleta', manejoPragas.tipoColeta ?? 'Não disponível'),
+        _buildDetailRow('Nome do Inimigo Natural',
+            manejoPragas.nomeInimigoNatural ?? 'Não disponível'),
+        _buildDetailRow('Forma de Uso do Inimigo Natural',
+            manejoPragas.formaUsoInimigoNatural ?? 'Não disponível'),
+      ]);
     }
 
     return Column(
@@ -407,120 +460,5 @@ class BatchDetailsPage extends StatelessWidget {
         // Adicione mais detalhes conforme necessário
       ],
     );
-  }
-
-  Widget _buildAplicacaoAgrotoxicoDetails(
-      AplicacaoAgrotoxico? aplicacaoAgrotoxico) {
-    if (aplicacaoAgrotoxico == null) {
-      return Container(); // Não há detalhes de Aplicação de Agrotóxico para mostrar
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Detalhes da Aplicação de Agrotóxico:',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey[900],
-          ),
-        ),
-        _buildDetailRow(
-            'Nome do Agrotóxico', aplicacaoAgrotoxico.nomeAgrotoxico),
-        _buildDetailRow('Quantidade Recomendada',
-            aplicacaoAgrotoxico.quantidadeRecomendada),
-        _buildDetailRow(
-            'Quantidade Aplicada', aplicacaoAgrotoxico.quantidadeAplicada),
-        _buildDetailRow(
-            'Unidade Recomendada', aplicacaoAgrotoxico.unidadeRecomendada),
-        _buildDetailRow(
-            'Unidade Aplicada', aplicacaoAgrotoxico.unidadeAplicada),
-      ],
-    );
-  }
-
-  List<Widget> _buildAdubacaoDetails(Adubacao? adubacao) {
-    if (adubacao == null) {
-      return [];
-    }
-
-    List<Widget> adubacaoDetails = [
-      _buildDetailRow(
-          'Tipo de Adubação', adubacao.tipoAdubacao ?? 'Não disponível'),
-      _buildDetailRow('Tipo de Adubo', adubacao.tipoAdubo),
-      _buildDetailRow('Quantidade', adubacao.quantidade ?? 'Não disponível'),
-      _buildDetailRow('Unidade', adubacao.unidade ?? 'Não disponível'),
-      _buildDetailRow(
-          'Produto Utilizado', adubacao.produtoUtilizado ?? 'Não disponível'),
-      _buildDetailRow(
-          'Dose Aplicada', adubacao.doseAplicada ?? 'Não disponível'),
-    ];
-
-    return adubacaoDetails;
-  }
-
-  Widget _buildControleNaturalDetails(ControleNatural? controleNatural) {
-    if (controleNatural == null) {
-      return Container(); // Não há detalhes de Controle Natural para mostrar
-    }
-
-    List<Widget> widgets = [
-      Text(
-        'Detalhes do Controle Natural:',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.grey[900],
-        ),
-      ),
-      _buildDetailRow('Tipo de Controle', controleNatural.tipoControle),
-    ];
-
-    if (controleNatural.aplicacaoDefensivo != null) {
-      widgets.add(
-          _buildDefensivoNaturalDetails(controleNatural.aplicacaoDefensivo!));
-    }
-
-    if (controleNatural.coletaEliminacao != null) {
-      widgets.add(
-          _buildColetaEliminacaoDetails(controleNatural.coletaEliminacao!));
-    }
-
-    if (controleNatural.usoInimigoNatural != null) {
-      widgets.add(
-          _buildUsoInimigoNaturalDetails(controleNatural.usoInimigoNatural!));
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: widgets,
-    );
-  }
-
-  Widget _buildDefensivoNaturalDetails(DefensivoNatural defensivoNatural) {
-    return _buildDetailRowListWidgets('Detalhes do Defensivo Natural', [
-      _buildDetailRow('Nome ou Tipo', defensivoNatural.nomeOuTipo),
-      _buildDetailRow(
-          'Quantidade Recomendada', defensivoNatural.quantidadeRecomendada),
-      _buildDetailRow(
-          'Quantidade Aplicada', defensivoNatural.quantidadeAplicada),
-      _buildDetailRow(
-          'Unidade Recomendada', defensivoNatural.unidadeRecomendada),
-      _buildDetailRow('Unidade Aplicada', defensivoNatural.unidadeAplicada),
-    ]);
-  }
-
-  Widget _buildColetaEliminacaoDetails(ColetaEliminacao coletaEliminacao) {
-    return _buildDetailRow(
-        'Tipo de Coleta/Eliminação', coletaEliminacao.tipoColeta);
-  }
-
-  Widget _buildUsoInimigoNaturalDetails(UsoInimigoNatural usoInimigoNatural) {
-    return _buildDetailRowListWidgets('Detalhes do Uso de Inimigo Natural', [
-      _buildDetailRow(
-          'Nome do Inimigo Natural', usoInimigoNatural.nomeInimigoNatural),
-      _buildDetailRow('Forma de Uso', usoInimigoNatural.formaUso),
-    ]);
   }
 }

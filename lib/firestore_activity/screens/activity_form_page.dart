@@ -1738,29 +1738,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   BatchActivity createBatchActivityObject() {
     String activityId = Uuid().v4();
     PreparoSolo preparoSolo;
-    Adubacao adubacaoPreparoSolo;
-
-    if (selectedAdubacao.value == 'Orgânica') {
-      adubacaoPreparoSolo = Adubacao(
-        tipoAdubacao: selectedAdubacao.value,
-        tipoAdubo: selectedTipoAduboOrganico.value,
-        quantidade: _quantidade3.text,
-        unidade: selectedTipoUnid1.value,
-        produtoUtilizado: '',
-        doseAplicada: '0',
-      );
-    } else if (selectedAdubacao.value == 'Química') {
-      adubacaoPreparoSolo = Adubacao(
-        tipoAdubacao: selectedAdubacao.value,
-        produtoUtilizado: _produtoUtilizado.text,
-        doseAplicada: _quantidade2.text,
-        tipoAdubo: selectedTipoAduboQuimico.value,
-        quantidade: _quantidade3.text,
-        unidade: selectedTipoUnid1.value,
-      );
-    } else {
-      adubacaoPreparoSolo = Adubacao.empty();
-    }
 
     if (selectedAtividade.value == 'Preparo do solo') {
       preparoSolo = PreparoSolo(
@@ -1768,7 +1745,18 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         tamanho: _tamanho1.text,
         usouCalcario: _selectedRadioValue,
         quantidadeCalcario: _quantidade1.text,
-        adubacao: adubacaoPreparoSolo,
+        tipoAdubo: selectedAdubacao.value == 'Não fez adubação'
+            ? ''
+            : selectedAdubacao.value == 'Orgânica'
+                ? selectedTipoAduboOrganico.value
+                : selectedTipoAduboQuimico.value,
+        tipoAdubacao: selectedAdubacao.value,
+        quantidade: _quantidade3.text,
+        unidade: selectedTipoUnid1.value,
+        produtoUtilizado:
+            selectedAdubacao.value == 'Química' ? _produtoUtilizado.text : '',
+        doseAplicada:
+            selectedAdubacao.value == 'Química' ? _quantidade2.text : '0',
         naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação',
       );
     } else {
@@ -1810,33 +1798,24 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     }
 
     AdubacaoCobertura adubacaoCobertura;
-    Adubacao adubacaoDeCobertura;
-
-    if (selectedAdubacao.value == 'Orgânica') {
-      adubacaoDeCobertura = Adubacao(
-        tipoAdubo: selectedTipoAduboOrganico.value,
-        tipoAdubacao: selectedAdubacao.value,
-        quantidade: _quantidade2.text,
-        unidade: selectedTipoUnid1.value,
-        produtoUtilizado: '',
-        doseAplicada: '0',
-      );
-    } else if (selectedAdubacao.value == 'Química') {
-      adubacaoDeCobertura = Adubacao(
-        tipoAdubo: selectedTipoAduboQuimico.value,
-        quantidade: _quantidade1.text,
-        unidade: selectedTipoUnid1.value,
-        produtoUtilizado: _produtoUtilizado.text,
-        doseAplicada: _quantidade2.text,
-      );
-    } else {
-      adubacaoDeCobertura = Adubacao.empty();
-    }
 
     if (selectedAtividade.value == 'Adubação de Cobertura') {
       adubacaoCobertura = AdubacaoCobertura(
         tipo: selectedAdubacao.value,
-        adubacao: adubacaoDeCobertura,
+        tipoAdubo: selectedAdubacao.value == 'Não fez adubação'
+            ? ''
+            : selectedAdubacao.value == 'Orgânica'
+                ? selectedTipoAduboOrganico.value
+                : selectedTipoAduboQuimico.value,
+        tipoAdubacao: selectedAdubacao.value,
+        quantidade: selectedAdubacao.value == 'Química'
+            ? _quantidade1.text
+            : _quantidade2.text,
+        unidade: selectedTipoUnid1.value,
+        produtoUtilizado:
+            selectedAdubacao.value == 'Química' ? _produtoUtilizado.text : '',
+        doseAplicada:
+            selectedAdubacao.value == 'Química' ? _quantidade2.text : '0',
         naoFezAdubacao: selectedAdubacao.value == 'Não fez adubação',
       );
     } else {
@@ -1844,49 +1823,30 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     }
 
     ManejoPragas manejoPragas;
-    AplicacaoAgrotoxico aplicacaoAgrotoxico;
-    ControleNatural controleNatural;
 
     if (selectedTipoManejoPragas.value == 'Aplicação de agrotóxico') {
-      aplicacaoAgrotoxico = AplicacaoAgrotoxico(
-        nomeAgrotoxico: _nomeAgrotoxico.text,
-        quantidadeRecomendada: _quantidade1.text,
-        quantidadeAplicada: _quantidade2.text,
-        unidadeRecomendada: selectedTipoUnid1.value,
-        unidadeAplicada: selectedTipoUnid2.value,
-      );
-    } else {
-      aplicacaoAgrotoxico = AplicacaoAgrotoxico.empty();
-    }
-
-    if (selectedTipoManejoPragas.value == 'Controle natural') {
-      controleNatural = ControleNatural(
-        tipoControle: selectedTipoControlePragas.value,
-        aplicacaoDefensivo: DefensivoNatural(
-          nomeOuTipo: _nomeOuTipo.text,
-          quantidadeRecomendada: _quantidade1.text,
-          unidadeRecomendada: selectedTipoUnid1.value,
-          quantidadeAplicada: _quantidade2.text,
-          unidadeAplicada: selectedTipoUnid2.value,
-        ),
-        coletaEliminacao: ColetaEliminacao(
-          tipoColeta: selectedTipoColeta.value,
-        ),
-        usoInimigoNatural: UsoInimigoNatural(
-          nomeInimigoNatural: _nomeInimigoNatural.text,
-          formaUso: _formaUsoInimigoNatural.text,
-        ),
-      );
-    } else {
-      controleNatural = ControleNatural.empty();
-    }
-
-    if (selectedAtividade.value == 'Manejo de pragas') {
       manejoPragas = ManejoPragas(
         nomePraga: _nomeDaPraga.text,
         tipo: selectedTipoManejoPragas.value,
-        aplicacaoAgrotoxico: aplicacaoAgrotoxico,
-        controleNatural: controleNatural,
+        nomeAgrotoxico: _nomeAgrotoxico.text,
+        quantidadeRecomendadaAgrotoxico: _quantidade1.text,
+        quantidadeAplicadaAgrotoxico: _quantidade2.text,
+        unidadeRecomendadaAgrotoxico: selectedTipoUnid1.value,
+        unidadeAplicadaAgrotoxico: selectedTipoUnid2.value,
+      );
+    } else if (selectedTipoManejoPragas.value == 'Controle natural') {
+      manejoPragas = ManejoPragas(
+        nomePraga: _nomeDaPraga.text,
+        tipo: selectedTipoManejoPragas.value,
+        tipoControle: selectedTipoControlePragas.value,
+        nomeDefensivoNatural: _nomeOuTipo.text,
+        quantidadeRecomendadaDefensivoNatural: _quantidade1.text,
+        quantidadeAplicadaDefensivoNatural: _quantidade2.text,
+        unidadeRecomendadaDefensivoNatural: selectedTipoUnid1.value,
+        unidadeAplicadaDefensivoNatural: selectedTipoUnid2.value,
+        tipoColeta: selectedTipoColeta.value,
+        nomeInimigoNatural: _nomeInimigoNatural.text,
+        formaUsoInimigoNatural: _formaUsoInimigoNatural.text,
       );
     } else {
       manejoPragas = ManejoPragas.empty();
