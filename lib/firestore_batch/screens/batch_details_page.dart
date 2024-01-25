@@ -17,27 +17,31 @@ class BatchDetailsPage extends StatelessWidget {
         ),
         backgroundColor: Color.fromARGB(255, 0, 90, 3),
       ),
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        color: Color.fromRGBO(238, 238, 238, 1),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildDetailRow('ID do Lote', batch.id),
-            _buildDetailRow('Nome do Lote', batch.nomeLote ?? 'Não disponível'),
-            _buildDetailRow('Largura', batch.largura.toString()),
-            _buildDetailRow('Comprimento', batch.comprimento.toString()),
-            _buildDetailRow('Área', batch.area?.toString() ?? 'Não disponível'),
-            _buildDetailRow('Latitude', batch.latitude.toString()),
-            _buildDetailRow('Longitude', batch.longitude.toString()),
-            _buildDetailRow('Finalidade', batch.finalidade),
-            _buildDetailRow('Ambiente', batch.ambiente),
-            _buildDetailRow('Tipo de Cultivo', batch.tipoCultivo),
-            _buildDetailRow(
-                'Nome do Produto', batch.nomeProduto ?? 'Não disponível'),
-            SizedBox(height: 16),
-            _buildActivitySection(batch.atividades),
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          color: Color.fromRGBO(238, 238, 238, 1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildDetailRow('ID do Lote', batch.id),
+              _buildDetailRow(
+                  'Nome do Lote', batch.nomeLote ?? 'Não disponível'),
+              _buildDetailRow('Largura', batch.largura.toString()),
+              _buildDetailRow('Comprimento', batch.comprimento.toString()),
+              _buildDetailRow(
+                  'Área', batch.area?.toString() ?? 'Não disponível'),
+              _buildDetailRow('Latitude', batch.latitude.toString()),
+              _buildDetailRow('Longitude', batch.longitude.toString()),
+              _buildDetailRow('Finalidade', batch.finalidade),
+              _buildDetailRow('Ambiente', batch.ambiente),
+              _buildDetailRow('Tipo de Cultivo', batch.tipoCultivo),
+              _buildDetailRow(
+                  'Nome do Produto', batch.nomeProduto ?? 'Não disponível'),
+              SizedBox(height: 16),
+              _buildActivitySection(batch.atividades),
+            ],
+          ),
         ),
       ),
     );
@@ -156,19 +160,19 @@ class BatchDetailsPage extends StatelessWidget {
 
   Widget _buildSpecificActivityDetails(BatchActivity activity) {
     switch (activity.tipoAtividade) {
-      case 'Preparo de Solo':
+      case 'Preparo do solo':
         return _buildPreparoSoloDetails(activity.preparoSolo);
       case 'Plantio':
         return _buildPlantioDetails(activity.plantio);
-      case 'Manejo de Doenças':
+      case 'Manejo de doenças':
         return _buildManejoDoencasDetails(activity.manejoDoencas);
-      case 'Adubação de Cobertura':
+      case 'Adubação de cobertura':
         return _buildAdubacaoCoberturaDetails(activity.adubacaoCobertura);
       case 'Capina':
         return _buildCapinaDetails(activity.capina);
-      case 'Manejo de Pragas':
+      case 'Manejo de pragas':
         return _buildManejoPragasDetails(activity.manejoPragas);
-      case 'Tratos Culturais':
+      case 'Tratos culturais':
         return _buildTratosCulturaisDetails(activity.tratosCulturais);
       default:
         return const Text('Detalhes não disponíveis para esta atividade');
@@ -202,14 +206,12 @@ class BatchDetailsPage extends StatelessWidget {
       }
     }
 
-    // Adicione mais detalhes conforme necessário
+    if (preparoSolo.naoFezAdubacao == false) {
+      widgets.add(_buildDetailRow('Tipo de Adubação',
+          preparoSolo.adubacao?.tipoAdubacao ?? 'Não disponível'));
 
-    if (preparoSolo.adubacao != null) {
-      widgets.addAll(_buildAdubacaoDetails(preparoSolo.adubacao)!);
+      //widgets.addAll(_buildAdubacaoDetails(preparoSolo.adubacao));
     }
-
-    widgets.add(_buildDetailRow(
-        'Não Fez Adubação', preparoSolo.naoFezAdubacao ? 'Sim' : 'Não'));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,7 +233,7 @@ class BatchDetailsPage extends StatelessWidget {
           color: Colors.grey[900],
         ),
       ),
-      _buildDetailRow('Tipo de Planta', plantio.tipo),
+      _buildDetailRow('Tipo de Plantação', plantio.tipo),
       _buildDetailRow('Quantidade', plantio.quantidade.toString()),
     ];
 
@@ -300,8 +302,8 @@ class BatchDetailsPage extends StatelessWidget {
           color: Colors.grey[900],
         ),
       ),
-      _buildDetailRowListWidgets('Tipo de Adubação',
-          [Text(adubacaoCobertura.tipo ?? 'Não disponível')]),
+      _buildDetailRowListWidgets(
+          'Tipo de Adubação', [Text(adubacaoCobertura.tipo)]),
     ];
 
     if (adubacaoCobertura.adubacao != null) {
@@ -440,25 +442,19 @@ class BatchDetailsPage extends StatelessWidget {
 
   List<Widget> _buildAdubacaoDetails(Adubacao? adubacao) {
     if (adubacao == null) {
-      return []; // Retorna uma lista vazia se adubacao for nulo
-    }
-
-    // Função auxiliar para converter String? em String, tratando casos de nulo
-    String convertNullableString(String? value) {
-      return value ?? 'Não disponível';
+      return [];
     }
 
     List<Widget> adubacaoDetails = [
       _buildDetailRow(
-          'Tipo de Adubação', convertNullableString(adubacao.tipoAdubacao)),
+          'Tipo de Adubação', adubacao.tipoAdubacao ?? 'Não disponível'),
+      _buildDetailRow('Tipo de Adubo', adubacao.tipoAdubo),
+      _buildDetailRow('Quantidade', adubacao.quantidade ?? 'Não disponível'),
+      _buildDetailRow('Unidade', adubacao.unidade ?? 'Não disponível'),
       _buildDetailRow(
-          'Tipo de Adubo', convertNullableString(adubacao.tipoAdubo)),
-      _buildDetailRow('Quantidade', convertNullableString(adubacao.quantidade)),
-      _buildDetailRow('Unidade', convertNullableString(adubacao.unidade)),
-      _buildDetailRow('Produto Utilizado',
-          convertNullableString(adubacao.produtoUtilizado)),
+          'Produto Utilizado', adubacao.produtoUtilizado ?? 'Não disponível'),
       _buildDetailRow(
-          'Dose Aplicada', convertNullableString(adubacao.doseAplicada)),
+          'Dose Aplicada', adubacao.doseAplicada ?? 'Não disponível'),
     ];
 
     return adubacaoDetails;
