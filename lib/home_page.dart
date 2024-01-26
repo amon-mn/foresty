@@ -43,9 +43,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> loadBatchs() async {
     List<ProductBatch> batches = await BatchService().readBatchs();
-    setState(() {
-      listBatchs = batches;
-    });
+    if (mounted) {
+      setState(() {
+        listBatchs = batches;
+      });
+    }
   }
 
   @override

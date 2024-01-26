@@ -448,17 +448,19 @@ class ManejoPragas {
 
 class TratosCulturais {
   String tipoControle;
+  String? outroTipo;
 
-  TratosCulturais({
-    required this.tipoControle,
-  });
+  TratosCulturais({required this.tipoControle, this.outroTipo});
 
-  TratosCulturais.empty() : tipoControle = '';
+  TratosCulturais.empty()
+      : tipoControle = '',
+        outroTipo = '';
 
   TratosCulturais.fromMap(Map<String, dynamic> map)
-      : tipoControle = map['tipoControle'];
+      : tipoControle = map['tipoControle'],
+        outroTipo = map['outroTipo'];
 
   Map<String, dynamic> toMap() {
-    return {'tipoControle': tipoControle};
+    return {'tipoControle': tipoControle, 'outroTipo': outroTipo};
   }
 }

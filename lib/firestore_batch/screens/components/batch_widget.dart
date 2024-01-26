@@ -9,9 +9,9 @@ class BatchWidget extends StatelessWidget {
   final VoidCallback? onEditPressed;
   final VoidCallback? onCreateActivityPressed;
   final VoidCallback? onDeletePressed;
-  final VoidCallback? onLongPress; // Novo parâmetro
-  final VoidCallback? onTap; // Novo parâmetro
-  final String? batchId; // Novo parâmetro - Adicionando o batchId
+  final VoidCallback? onLongPress;
+  final VoidCallback? onTap;
+  final String? batchId;
 
   BatchWidget({
     required this.title,
@@ -20,9 +20,9 @@ class BatchWidget extends StatelessWidget {
     this.onEditPressed,
     this.onCreateActivityPressed,
     this.onDeletePressed,
-    this.onLongPress, // Novo parâmetro
-    this.onTap, // Novo parâmetro
-    this.batchId, // Atualizando o construtor para incluir batchId
+    this.onLongPress,
+    this.onTap,
+    this.batchId,
   });
 
   @override
@@ -30,8 +30,8 @@ class BatchWidget extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
-      onLongPress: onLongPress, // Atribui o onLongPress
-      onTap: onTap, // Atribui o onTap
+      onLongPress: onLongPress,
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(
@@ -56,7 +56,11 @@ class BatchWidget extends StatelessWidget {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(
-                            left: 80, top: 2, bottom: 2, right: 2),
+                          left: 80,
+                          top: 2,
+                          bottom: 2,
+                          right: 2,
+                        ),
                         width: screenWidth,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -66,61 +70,48 @@ class BatchWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width / 8,
-                                    top: 10,
-                                  ),
-                                  width: 100,
-                                  child: Text(
-                                    title ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      overflow: TextOverflow.fade,
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: screenWidth / 8,
+                                top: 10,
+                              ),
+                              width: screenWidth * 0.7 - screenWidth * 0.04,
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      title ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        overflow: TextOverflow.fade,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Container(
-                                  width: 20,
-                                  margin: EdgeInsets.only(
-                                    top: 10,
-                                  ),
-                                  child: Text(
-                                    '-',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      overflow: TextOverflow.fade,
+                                  const Text(
+                                    ' - ',
+                                    style: TextStyle(
+                                      fontSize:
+                                          16, // Pode ajustar o tamanho conforme necessário
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    top: 10,
-                                  ),
-                                  width: 100,
-                                  child: Text(
-                                    activity ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      overflow: TextOverflow.fade,
+                                  Flexible(
+                                    child: Text(
+                                      activity ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        overflow: TextOverflow
+                                            .ellipsis, // Adiciona '...' se o texto for muito longo
+                                      ),
                                     ),
                                   ),
-                                )
-                              ],
+                                ],
+                              ),
                             ),
                             Container(
                               margin: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width / 8,
+                                left: screenWidth / 8,
                               ),
-                              width: 200,
+                              width: screenWidth * 0.5,
                               child: Text(
                                 subtitle ?? '',
                                 style: const TextStyle(
@@ -162,14 +153,14 @@ class BatchWidget extends StatelessWidget {
               ),
             ),
             Positioned(
-              left: MediaQuery.of(context).size.width / 3,
+              left: screenWidth / 3,
               bottom: 5,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
                     icon: Icon(Icons.edit),
-                    onPressed: onEditPressed, //onEditPressed
+                    onPressed: onEditPressed,
                   ),
                   IconButton(
                     icon: Icon(Icons.add),
@@ -194,10 +185,7 @@ class BatchWidget extends StatelessWidget {
                     ),
                     onPressed: () async {
                       if (batchId != null) {
-                        // Chama a função para remover o lote do Firebase
                         await BatchService().removeBatch(batchId: batchId!);
-                        // Você pode implementar a lógica para atualizar a interface ou a lista após a remoção do lote
-                        // Isso pode envolver a remoção do widget da árvore de widgets ou atualizar o estado que controla a exibição dos lotes
                       }
                     },
                   ),

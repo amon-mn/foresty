@@ -445,20 +445,28 @@ class BatchDetailsPage extends StatelessWidget {
       return Container(); // Não há detalhes de Tratos Culturais para mostrar
     }
 
+    List<Widget> widgets = [
+      Text(
+        'Detalhes dos Tratos Culturais:',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.grey[900],
+        ),
+      ),
+      _buildDetailRow('Tipo de Controle', tratosCulturais.tipoControle),
+    ];
+
+    if (tratosCulturais.tipoControle == 'Outro') {
+      widgets.add(
+        _buildDetailRow(
+            'Tipo Especificado', tratosCulturais.outroTipo ?? 'Não disponível'),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Detalhes dos Tratos Culturais:',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey[900],
-          ),
-        ),
-        _buildDetailRow('Tipo de Controle', tratosCulturais.tipoControle),
-        // Adicione mais detalhes conforme necessário
-      ],
+      children: widgets,
     );
   }
 }
