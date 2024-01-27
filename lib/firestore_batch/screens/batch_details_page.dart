@@ -210,21 +210,21 @@ class BatchDetailsPage extends StatelessWidget {
       }
     }
 
-    if (!preparoSolo.naoFezAdubacao) {
+    widgets.add(
+      _buildDetailRow('Tipo de Adubação', preparoSolo.tipoAdubacao ?? 'Não disponível'),
+    );
+    if (preparoSolo.tipoAdubacao == 'Química' || preparoSolo.tipoAdubacao == 'Orgânica') {
       widgets.addAll([
-        _buildDetailRow('Tipo de Adubo', preparoSolo.tipoAdubo),
-        _buildDetailRow(
-            'Tipo de Adubação', preparoSolo.tipoAdubacao ?? 'Não disponível'),
-        _buildDetailRow(
-            'Quantidade', preparoSolo.quantidade ?? 'Não disponível'),
+        _buildDetailRow('Quantidade', preparoSolo.quantidade ?? 'Não disponível'),
         _buildDetailRow('Unidade', preparoSolo.unidade ?? 'Não disponível'),
-        _buildDetailRow('Produto Utilizado',
-            preparoSolo.produtoUtilizado ?? 'Não disponível'),
-        _buildDetailRow(
-            'Dose Aplicada', preparoSolo.doseAplicada ?? 'Não disponível'),
       ]);
+      if(preparoSolo.tipoAdubacao == 'Química' && !preparoSolo.naoFezAdubacao){
+        widgets.addAll([
+          _buildDetailRow('Produto Utilizado', preparoSolo.produtoUtilizado ?? 'Não disponível'),
+          _buildDetailRow('Dose Aplicada', preparoSolo.doseAplicada ?? 'Não disponível'),
+        ]);
+        }
     }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: widgets,
@@ -317,24 +317,20 @@ class BatchDetailsPage extends StatelessWidget {
       _buildDetailRow('Tipo de Adubação', adubacaoCobertura.tipo),
     ];
 
-    if (adubacaoCobertura.tipoAdubacao != null) {
+    if (adubacaoCobertura.tipoAdubacao == 'Química' || adubacaoCobertura.tipoAdubacao == 'Orgânica') {
       widgets.addAll([
         _buildDetailRow('Tipo de Adubo', adubacaoCobertura.tipoAdubo),
-        _buildDetailRow('Tipo de Adubação',
-            adubacaoCobertura.tipoAdubacao ?? 'Não disponível'),
         _buildDetailRow(
             'Quantidade', adubacaoCobertura.quantidade ?? 'Não disponível'),
         _buildDetailRow(
             'Unidade', adubacaoCobertura.unidade ?? 'Não disponível'),
-        _buildDetailRow('Produto Utilizado',
-            adubacaoCobertura.produtoUtilizado ?? 'Não disponível'),
-        _buildDetailRow('Dose Aplicada',
-            adubacaoCobertura.doseAplicada ?? 'Não disponível'),
       ]);
+      if (adubacaoCobertura.tipoAdubacao == 'Química')
+        widgets.addAll([
+          _buildDetailRow('Produto Utilizado', adubacaoCobertura.produtoUtilizado ?? 'Não disponível'),
+          _buildDetailRow('Dose Aplicada', adubacaoCobertura.doseAplicada ?? 'Não disponível'),
+        ]);
     }
-
-    widgets.add(_buildDetailRow(
-        'Não Fez Adubação', adubacaoCobertura.naoFezAdubacao ? 'Sim' : 'Não'));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,33 +401,26 @@ class BatchDetailsPage extends StatelessWidget {
         _buildDetailRow('Unidade Aplicada',
             manejoPragas.unidadeAplicadaAgrotoxico ?? 'Não disponível'),
       ]);
+
     } else if (manejoPragas.tipo == 'Controle natural') {
+      widgets.add(_buildDetailRow('Tipo de Controle', manejoPragas.tipoControle ?? 'Não disponível'));
+      if (manejoPragas.tipoControle == 'Aplicação de defensivo natural'){
       widgets.addAll([
-        _buildDetailRow(
-            'Tipo de Controle', manejoPragas.tipoControle ?? 'Não disponível'),
-        _buildDetailRow('Nome do Defensivo Natural',
-            manejoPragas.nomeDefensivoNatural ?? 'Não disponível'),
-        _buildDetailRow(
-            'Quantidade Recomendada',
-            manejoPragas.quantidadeRecomendadaDefensivoNatural ??
-                'Não disponível'),
-        _buildDetailRow(
-            'Quantidade Aplicada',
-            manejoPragas.quantidadeAplicadaDefensivoNatural ??
-                'Não disponível'),
-        _buildDetailRow(
-            'Unidade Recomendada',
-            manejoPragas.unidadeRecomendadaDefensivoNatural ??
-                'Não disponível'),
-        _buildDetailRow('Unidade Aplicada',
-            manejoPragas.unidadeAplicadaDefensivoNatural ?? 'Não disponível'),
-        _buildDetailRow(
-            'Tipo de Coleta', manejoPragas.tipoColeta ?? 'Não disponível'),
-        _buildDetailRow('Nome do Inimigo Natural',
-            manejoPragas.nomeInimigoNatural ?? 'Não disponível'),
-        _buildDetailRow('Forma de Uso do Inimigo Natural',
-            manejoPragas.formaUsoInimigoNatural ?? 'Não disponível'),
+        _buildDetailRow('Nome do Defensivo Natural', manejoPragas.nomeDefensivoNatural ?? 'Não disponível'),
+        _buildDetailRow('Quantidade Recomendada',manejoPragas.quantidadeRecomendadaDefensivoNatural ??'Não disponível'),
+        _buildDetailRow('Quantidade Aplicada', manejoPragas.quantidadeAplicadaDefensivoNatural ??'Não disponível'),
+        _buildDetailRow('Unidade Recomendada',manejoPragas.unidadeRecomendadaDefensivoNatural ??'Não disponível'),
+        _buildDetailRow('Unidade Aplicada', manejoPragas.unidadeAplicadaDefensivoNatural ?? 'Não disponível'),
       ]);
+      }
+      else if(manejoPragas.tipoControle == 'Coleta e eliminação'){
+        widgets.add(_buildDetailRow('Tipo de Coleta', manejoPragas.tipoColeta ?? 'Não disponível'));
+      }
+      else if(manejoPragas.tipoControle == 'Uso de inimigo natural'){
+        widgets.addAll([_buildDetailRow('Nome do Inimigo Natural', manejoPragas.nomeInimigoNatural ?? 'Não disponível'),
+        _buildDetailRow('Forma de Uso do Inimigo Natural', manejoPragas.formaUsoInimigoNatural ?? 'Não disponível'),
+        ]);
+      }
     }
 
     return Column(

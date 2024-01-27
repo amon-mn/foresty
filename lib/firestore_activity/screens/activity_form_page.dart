@@ -1799,7 +1799,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
 
     AdubacaoCobertura adubacaoCobertura;
 
-    if (selectedAtividade.value == 'Adubação de Cobertura') {
+    if (selectedAtividade.value == 'Adubação de cobertura') {
       adubacaoCobertura = AdubacaoCobertura(
         tipo: selectedAdubacao.value,
         tipoAdubo: selectedAdubacao.value == 'Não fez adubação'
