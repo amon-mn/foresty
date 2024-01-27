@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foresty/authentication/screens/add_info_user.dart';
+import 'package:foresty/authentication/screens/adm_page.dart';
 import 'package:foresty/home_page.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../components/my_button.dart';
@@ -93,30 +95,54 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // sign user in method
-  void signUserIn() {
-    String email = _emailController.text;
-    String pass = _passwordController.text;
+void signUserIn() {
+  String email = _emailController.text;
+  String pass = _passwordController.text;
 
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      authService.loginUser(email: email, password: pass).then((String? erro) {
-        if (erro != null) {
-          showSnackBar(context: context, mensagem: erro);
-        } else {
-          // Redirecionar para a tela principal após o login
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  HomePage(user: FirebaseAuth.instance.currentUser!),
-            ),
-          );
-        }
-      });
-    }
+  if (_formKey.currentState!.validate()) {
+    setState(() {
+      _isLoading = true;
+    });
+    authService.loginUser(email: email, password: pass).then((String? erro) {
+      if (erro != null) {
+        showSnackBar(context: context, mensagem: erro);
+      } else {
+        // Obtenha o ID do usuário atualmente autenticado
+        String userId = FirebaseAuth.instance.currentUser!.uid;
+
+        // Verifique o userType do usuário atual
+        getUserType(userId).then((String userType) {
+          if (userType == "ADM") {
+            // Redirecione para a tela de super usuário (AdmPage).
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdmPage(user: FirebaseAuth.instance.currentUser!),
+              ),
+            );
+          } else {
+            // Redirecione para a tela regular do usuário (HomePage).
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(user: FirebaseAuth.instance.currentUser!),
+              ),
+            );
+          }
+        });
+      }
+    });
   }
+}
+
+Future<String> getUserType(String userId) async {
+  // Use o Firebase para buscar os dados do usuário no banco de dados.
+  // Retorne o valor do campo userType.
+  DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+  Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+  return userData['userType'];
+}
+
 
   forgotMyPassword() {
     String email = _emailController.text;
