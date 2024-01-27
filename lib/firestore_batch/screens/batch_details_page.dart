@@ -10,9 +10,10 @@ class BatchDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(238, 238, 238, 1),
       appBar: AppBar(
         title: Text(
-          'Detalhes do Lote',
+          batch.nomeLote ?? 'Nome não disponível',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color.fromARGB(255, 0, 90, 3),
@@ -24,21 +25,57 @@ class BatchDetailsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildDetailRow('ID do Lote', batch.id),
-              _buildDetailRow(
-                  'Nome do Lote', batch.nomeLote ?? 'Não disponível'),
-              _buildDetailRow('Largura', batch.largura.toString()),
-              _buildDetailRow('Comprimento', batch.comprimento.toString()),
-              _buildDetailRow(
-                  'Área', batch.area?.toString() ?? 'Não disponível'),
-              _buildDetailRow('Latitude', batch.latitude.toString()),
-              _buildDetailRow('Longitude', batch.longitude.toString()),
-              _buildDetailRow('Finalidade', batch.finalidade),
-              _buildDetailRow('Ambiente', batch.ambiente),
-              _buildDetailRow('Tipo de Cultivo', batch.tipoCultivo),
-              _buildDetailRow(
-                  'Nome do Produto', batch.nomeProduto ?? 'Não disponível'),
-              SizedBox(height: 16),
+              // Adicione um título para a seção de informações do lote
+              Text(
+                'Informações do Lote:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[900],
+                ),
+              ),
+              SizedBox(height: 8),
+              // Envolve os atributos em um Container
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildDetailRow('ID do Lote', batch.id),
+                    _buildDetailRow(
+                        'Nome do Lote', batch.nomeLote ?? 'Não disponível'),
+                    _buildDetailRow('Largura', batch.largura.toString()),
+                    _buildDetailRow(
+                        'Comprimento', batch.comprimento.toString()),
+                    _buildDetailRow(
+                        'Área', batch.area?.toString() ?? 'Não disponível'),
+                    _buildDetailRow('Latitude', batch.latitude.toString()),
+                    _buildDetailRow('Longitude', batch.longitude.toString()),
+                    _buildDetailRow(
+                        'Finalidade',
+                        batch.finalidade == 'Outro (Especificar)'
+                            ? batch.outraFinalidade!
+                            : batch.finalidade),
+                    _buildDetailRow(
+                        'Ambiente',
+                        batch.ambiente == 'Outro (Especificar)'
+                            ? batch.outroAmbiente!
+                            : batch.ambiente),
+                    _buildDetailRow(
+                        'Tipo de Cultivo',
+                        batch.tipoCultivo == 'Outro (Especificar)'
+                            ? batch.outroTipoCultivo!
+                            : batch.tipoCultivo),
+                    _buildDetailRow('Nome do Produto',
+                        batch.nomeProduto ?? 'Não disponível'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
               _buildActivitySection(batch.atividades),
             ],
           ),
@@ -434,20 +471,28 @@ class BatchDetailsPage extends StatelessWidget {
       return Container(); // Não há detalhes de Tratos Culturais para mostrar
     }
 
+    List<Widget> widgets = [
+      Text(
+        'Detalhes dos Tratos Culturais:',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.grey[900],
+        ),
+      ),
+      _buildDetailRow('Tipo de Controle', tratosCulturais.tipoControle),
+    ];
+
+    if (tratosCulturais.tipoControle == 'Outro') {
+      widgets.add(
+        _buildDetailRow(
+            'Tipo Especificado', tratosCulturais.outroTipo ?? 'Não disponível'),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Detalhes dos Tratos Culturais:',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey[900],
-          ),
-        ),
-        _buildDetailRow('Tipo de Controle', tratosCulturais.tipoControle),
-        // Adicione mais detalhes conforme necessário
-      ],
+      children: widgets,
     );
   }
 }

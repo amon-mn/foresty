@@ -1873,6 +1873,9 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
     if (selectedAtividade.value == 'Tratos culturais') {
       tratosCulturais = TratosCulturais(
         tipoControle: selectedTipoTrato.value,
+        outroTipo: selectedTipoTrato.value == 'Outro'
+            ? _outroTratoController.text
+            : '',
       );
     } else {
       tratosCulturais = TratosCulturais.empty();

@@ -10,8 +10,11 @@ class ProductBatch {
   double latitude;
   double longitude;
   String finalidade;
+  String? outraFinalidade;
   String ambiente;
+  String? outroAmbiente;
   String tipoCultivo;
+  String? outroTipoCultivo;
   String? nomeProduto;
   List<BatchActivity> atividades; // Lista de atividades
 
@@ -24,8 +27,11 @@ class ProductBatch {
     required this.latitude,
     required this.longitude,
     required this.finalidade,
+    this.outraFinalidade,
     required this.ambiente,
+    this.outroAmbiente,
     required this.tipoCultivo,
+    this.outroTipoCultivo,
     this.nomeProduto,
     List<BatchActivity>? atividades, // Inicialize a lista de atividades
   }) : atividades = atividades ?? [];
@@ -39,8 +45,11 @@ class ProductBatch {
         latitude = map["latitude"],
         longitude = map["longitude"],
         finalidade = map["finalidade"],
+        outraFinalidade = map["outraFinalidade"],
         ambiente = map["ambiente"],
+        outroAmbiente = map["outroAmbiente"],
         tipoCultivo = map["tipoCultivo"],
+        outroTipoCultivo = map["outroTipoCultivo"],
         nomeProduto = map["nomeProduto"],
         atividades = (map['atividades'] as List<dynamic>?)
                 ?.map((activity) => BatchActivity.fromMap(activity))
@@ -57,8 +66,11 @@ class ProductBatch {
       "latitude": latitude,
       "longitude": longitude,
       "finalidade": finalidade,
+      "outraFinalidade": outraFinalidade,
       "ambiente": ambiente,
+      "outroAmbiente": outroAmbiente,
       "tipoCultivo": tipoCultivo,
+      "outroTipoCultivo": outroTipoCultivo,
       "nomeProduto": nomeProduto,
       'atividades': atividades.map((activity) => activity.toMap()).toList(),
     };
