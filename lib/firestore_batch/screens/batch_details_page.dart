@@ -10,6 +10,7 @@ class BatchDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(238, 238, 238, 1),
       appBar: AppBar(
         title: Text(
           'Detalhes do Lote',
@@ -20,7 +21,6 @@ class BatchDetailsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(16.0),
-          color: Color.fromRGBO(238, 238, 238, 1),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -50,7 +50,7 @@ class BatchDetailsPage extends StatelessWidget {
                       : batch.tipoCultivo),
               _buildDetailRow(
                   'Nome do Produto', batch.nomeProduto ?? 'Não disponível'),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               _buildActivitySection(batch.atividades),
             ],
           ),
