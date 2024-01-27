@@ -100,6 +100,19 @@ class _BatchFormPageState extends State<BatchFormPage> {
       _selectedValueNotifierAmbiente.value = widget.batch!.ambiente;
       _selectedValueNotifierTipoCultivo.value = widget.batch!.tipoCultivo;
       _productNameController.text = widget.batch!.nomeProduto ?? '';
+
+      if (widget.batch!.outraFinalidade != null) {
+        _especificarFinalidadeController.text = widget.batch!.outraFinalidade!;
+      }
+
+      if (widget.batch!.outroAmbiente != null) {
+        _especificarAmbienteController.text = widget.batch!.outroAmbiente!;
+      }
+
+      if (widget.batch!.outroTipoCultivo != null) {
+        _especificarTipoCultivoController.text =
+            widget.batch!.outroTipoCultivo!;
+      }
     }
   }
 
@@ -560,11 +573,32 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                     longitude: _longBatch,
                                     finalidade:
                                         _selectedValueNotifierFinalidade.value,
+                                    outraFinalidade:
+                                        _selectedValueNotifierFinalidade
+                                                    .value ==
+                                                'Outro (Especificar)'
+                                            ? _especificarFinalidadeController
+                                                .text
+                                            : '',
                                     ambiente:
                                         _selectedValueNotifierAmbiente.value,
+                                    outroAmbiente:
+                                        _selectedValueNotifierAmbiente.value ==
+                                                'Outro (Especificar)'
+                                            ? _especificarAmbienteController
+                                                .text
+                                            : '',
                                     tipoCultivo:
                                         _selectedValueNotifierTipoCultivo.value,
+                                    outroTipoCultivo:
+                                        _selectedValueNotifierTipoCultivo
+                                                    .value ==
+                                                'Outro (Especificar)'
+                                            ? _especificarTipoCultivoController
+                                                .text
+                                            : '',
                                     nomeProduto: _productNameController.text,
+                                    atividades: widget.batch?.atividades ?? [],
                                   );
 
                                   batchService.addBatch(batch: batch);

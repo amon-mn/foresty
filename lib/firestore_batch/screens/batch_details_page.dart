@@ -33,9 +33,21 @@ class BatchDetailsPage extends StatelessWidget {
                   'Área', batch.area?.toString() ?? 'Não disponível'),
               _buildDetailRow('Latitude', batch.latitude.toString()),
               _buildDetailRow('Longitude', batch.longitude.toString()),
-              _buildDetailRow('Finalidade', batch.finalidade),
-              _buildDetailRow('Ambiente', batch.ambiente),
-              _buildDetailRow('Tipo de Cultivo', batch.tipoCultivo),
+              _buildDetailRow(
+                  'Finalidade',
+                  batch.finalidade == 'Outro (Especificar)'
+                      ? batch.outraFinalidade!
+                      : batch.finalidade),
+              _buildDetailRow(
+                  'Ambiente',
+                  batch.ambiente == 'Outro (Especificar)'
+                      ? batch.outroAmbiente!
+                      : batch.ambiente),
+              _buildDetailRow(
+                  'Tipo de Cultivo',
+                  batch.tipoCultivo == 'Outro (Especificar)'
+                      ? batch.outroTipoCultivo!
+                      : batch.tipoCultivo),
               _buildDetailRow(
                   'Nome do Produto', batch.nomeProduto ?? 'Não disponível'),
               SizedBox(height: 16),
