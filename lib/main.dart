@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foresty/authentication/screens/adm_page.dart';
 import 'package:foresty/authentication/screens/welcome_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -57,22 +59,39 @@ class AuthPage extends StatelessWidget {
           );
         } else {
           if (snapshot.hasData && snapshot.data != null) {
-            // Usuário está logado, navegue para HomePage
             final user = snapshot.data!;
-            Future.delayed(Duration.zero, () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage(user: user)),
-                (route) => false, // Remove todas as rotas anteriores
-              );
+
+            // Verifica o tipo de usuário imediatamente após a autenticação
+            getUserType(user.uid).then((String userType) {
+              if (userType == "ADM") {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdmPage(user: user)),
+                  (route) => false,
+                );
+              } else {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage(user: user)),
+                  (route) => false,
+                );
+              }
             });
+
             return Container(); // Você pode remover este Container
           } else {
-            // Usuário não está logado, mostre a WelcomeScreen
             return const WelcomeScreen();
           }
         }
       },
     );
+  }
+
+  Future<String> getUserType(String userId) async {
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    Map<String, dynamic> userData =
+        userSnapshot.data() as Map<String, dynamic>;
+    return userData['userType'];
   }
 }

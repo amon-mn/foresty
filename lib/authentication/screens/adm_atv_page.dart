@@ -10,9 +10,13 @@ class AdmAtvPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalhes da Atividade'),
+        title: Text('Detalhes da Atividade',
+        style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color.fromARGB(255, 0, 90, 3),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0), // Adicione margens ao redor do corpo da página
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -30,6 +34,7 @@ class AdmAtvPage extends StatelessWidget {
   Widget _buildActivitySection(List<Map<String, dynamic>> activities) {
     if (activities.isEmpty) {
       return Container(
+        margin: const EdgeInsets.only(bottom: 16.0), // Adicione margem inferior
         child: Text(
           'Nenhuma atividade cadastrada para este lote.',
           style: TextStyle(fontSize: 16),
@@ -40,15 +45,17 @@ class AdmAtvPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Atividades do Lote:',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey[900],
+        Container(
+          margin: const EdgeInsets.only(bottom: 16.0), // Adicione margem inferior
+          child: Text(
+            'Atividades do Lote:',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[900],
+            ),
           ),
         ),
-        SizedBox(height: 8),
         Column(
           children: activities.map((activity) {
             return _buildActivityRow(activity);
@@ -59,27 +66,26 @@ class AdmAtvPage extends StatelessWidget {
   }
 
   Widget _buildActivityRow(Map<String, dynamic> activity) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Tipo de Atividade: ${activity['tipoAtividade']}',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            'Data da Atividade: ${activity['dataDaAtividade']}',
-            style: TextStyle(fontSize: 14),
-          ),
-          SizedBox(height: 8),
-          _buildSpecificActivityDetails(BatchActivity.fromMap(activity)),
-        ],
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16.0), // Adicione margem inferior
+      color: Colors.grey[200],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Tipo de Atividade: ${activity['tipoAtividade']}',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'Data da Atividade: ${activity['dataDaAtividade']}',
+              style: TextStyle(fontSize: 14),
+            ),
+            SizedBox(height: 8),
+            _buildSpecificActivityDetails(BatchActivity.fromMap(activity)),
+          ],
+        ),
       ),
     );
   }

@@ -13,14 +13,31 @@ class AdmPage extends StatefulWidget {
 }
 
 class _AdmPageState extends State<AdmPage> {
+  // Chave global para o RefreshIndicator
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tela de ADM'),
+        title: Text('Tela de ADM', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 0, 90, 3),
       ),
-      body: _buildUserList(),
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: _handleRefresh,
+        child: _buildUserList(),
+      ),
     );
+  }
+
+  Future<void> _handleRefresh() async {
+    // Adicione aqui a lógica para recarregar os dados
+    // Por exemplo, você pode chamar uma função que busca novamente os dados do Firebase
+    // Aguarde a conclusão e, em seguida, chame o setState para reconstruir a UI
+    await Future.delayed(Duration(seconds: 1)); // Simulando uma operação assíncrona
+    setState(() {});
   }
 
   Widget _buildUserList() {
@@ -28,29 +45,57 @@ class _AdmPageState extends State<AdmPage> {
       stream: FirebaseFirestore.instance.collection('users').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // ou outro indicador de carregamento
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
         if (snapshot.hasError) {
-          return Text('Erro: ${snapshot.error}');
+          return Center(
+            child: Text('Erro: ${snapshot.error}'),
+          );
         }
 
-        // Aqui você pode processar os dados e construir a lista de usuários
         List<Widget> userListWidgets = [];
         snapshot.data!.docs.forEach((DocumentSnapshot document) {
-          Map<String, dynamic> userData = document.data() as Map<String, dynamic>;
+          Map<String, dynamic> userData =
+              document.data() as Map<String, dynamic>;
           String name = userData['name'];
           String cpf = userData['cpf'];
-          String userId = document.id; // ID do documento
+          String userId = document.id;
 
           userListWidgets.add(
             InkWell(
               onTap: () {
                 _navigateToAdmInfoPage(userId);
               },
-              child: ListTile(
-                title: Text('Nome: $name'),
-                subtitle: Text('CPF: $cpf'),
+              child: Card(
+                color: Colors.grey[200],
+                margin: EdgeInsets.all(8),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Nome: $name',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'CPF: $cpf',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[900],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           );
@@ -64,8 +109,7 @@ class _AdmPageState extends State<AdmPage> {
   }
 
   void _navigateToAdmInfoPage(String userId) {
-    Navigator.push(
-      context,
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AdmInfoPage(userId: userId),
       ),

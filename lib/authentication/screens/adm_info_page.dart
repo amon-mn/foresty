@@ -26,9 +26,10 @@ class AdmInfoPage extends StatelessWidget {
             Map<String, dynamic> userData = snapshot.data!.data() as Map<String, dynamic>;
             String name = userData['name'];
 
-            return Text('Lotes - $name');
+            return Text('Lotes - $name', style: TextStyle(color: Colors.white));
           },
         ),
+        backgroundColor: Color.fromARGB(255, 0, 90, 3),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance.collection('users').doc(userId).get(),
@@ -65,8 +66,8 @@ class AdmInfoPage extends StatelessWidget {
 
               List<Widget> widgets = [
                 SizedBox(height: 20),
-                Text('Nome: $name', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text('CPF: $cpf', style: TextStyle(fontSize: 16)),
+                Text('Nome: $name', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[900])),
+                Text('CPF: $cpf', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
                 SizedBox(height: 20),
               ];
 
@@ -88,26 +89,27 @@ class AdmInfoPage extends StatelessWidget {
                       },
                       child: Card(
                         elevation: 2,
+                        color: Colors.grey[200],
                         margin: EdgeInsets.symmetric(vertical: 10),
                         child: Padding(
                           padding: EdgeInsets.all(16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('ID do Lote: $idLote', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                            Text('Finalidade: ${lote['finalidade'] == "Outro (Especificar)" ? lote['outraFinalidade'] : lote['finalidade']}', style: TextStyle(fontSize: 16)),
-                            Text('Nome do Lote: ${lote['nomeLote']}', style: TextStyle(fontSize: 16)),
-                            Text('Nome do Produto: ${lote['nomeProduto']}', style: TextStyle(fontSize: 16)),
-                            Text('Tipo de Cultivo: ${lote['tipoCultivo'] == "Outro (Especificar)" ? lote['outroTipoCultivo'] : lote['tipoCultivo']}', style: TextStyle(fontSize: 16)),
-                            Text('Ambiente: ${lote['ambiente'] == "Outro (Especificar)" ? lote['outroAmbiente'] : lote['ambiente']}', style: TextStyle(fontSize: 16)),
-                            Text('Área: ${lote['area']}', style: TextStyle(fontSize: 16)),
-                            Text('Comprimento: ${lote['comprimento']}', style: TextStyle(fontSize: 16)),
-                            Text('Largura: ${lote['largura']}', style: TextStyle(fontSize: 16)),
-                            Text('Latitude: ${lote['latitude']}', style: TextStyle(fontSize: 16)),
-                            Text('Longitude: ${lote['longitude']}', style: TextStyle(fontSize: 16)),
-                            _buildAtividadesWidgets(lote['atividades']),
-                            // Add other fields as needed
-                          ],
+                            children: [
+                              Text('ID do Lote: $idLote', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[900])),
+                              Text('Finalidade: ${lote['finalidade'] == "Outro (Especificar)" ? lote['outraFinalidade'] : lote['finalidade']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              Text('Nome do Lote: ${lote['nomeLote']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              Text('Nome do Produto: ${lote['nomeProduto']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              Text('Tipo de Cultivo: ${lote['tipoCultivo'] == "Outro (Especificar)" ? lote['outroTipoCultivo'] : lote['tipoCultivo']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              Text('Ambiente: ${lote['ambiente'] == "Outro (Especificar)" ? lote['outroAmbiente'] : lote['ambiente']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              Text('Área: ${lote['area']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              Text('Comprimento: ${lote['comprimento']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              Text('Largura: ${lote['largura']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              Text('Latitude: ${lote['latitude']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              Text('Longitude: ${lote['longitude']}', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
+                              _buildAtividadesWidgets(lote['atividades']),
+                              // Add other fields as needed
+                            ],
                           ),
                         ),
                       ),
@@ -115,7 +117,7 @@ class AdmInfoPage extends StatelessWidget {
                   ]);
                 }
               } else {
-                widgets.add(Text('Sem lotes cadastrados', style: TextStyle(fontSize: 16)));
+                widgets.add(Text('Sem lotes cadastrados', style: TextStyle(fontSize: 16, color: Colors.grey[900])));
               }
 
               return SingleChildScrollView(
@@ -139,15 +141,15 @@ class AdmInfoPage extends StatelessWidget {
     if (atividades != null && atividades.isNotEmpty) {
       // Obter o último item da lista de atividades
       var ultimaAtividade = atividades.last;
-      
+
       // Extrair as informações da última atividade
       String tipoAtividade = ultimaAtividade['tipoAtividade'] as String? ?? 'Tipo de Atividade Indisponível';
 
       widgets.add(
-        Text('Última Atividade: $tipoAtividade', style: TextStyle(fontSize: 16)),
+        Text('Última Atividade: $tipoAtividade', style: TextStyle(fontSize: 16, color: Colors.grey[900])),
       );
     } else {
-      widgets.add(Text('Sem atividades cadastradas', style: TextStyle(fontSize: 16)));
+      widgets.add(Text('Sem atividades cadastradas', style: TextStyle(fontSize: 16, color: Colors.grey[900])));
     }
 
     return Column(
@@ -155,5 +157,4 @@ class AdmInfoPage extends StatelessWidget {
       children: widgets,
     );
   }
-
 }
