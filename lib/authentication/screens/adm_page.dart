@@ -2,6 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:foresty/authentication/screens/adm_info_page.dart';
+import 'package:foresty/authentication/screens/components/show_password_confirmation_dialog.dart';
+import 'package:foresty/authentication/screens/welcome_page.dart';
+import 'package:foresty/authentication/services/auth_service.dart';
+import 'package:foresty/components/my_drawer.dart';
 
 class AdmPage extends StatefulWidget {
   final User user;
@@ -24,6 +28,18 @@ class _AdmPageState extends State<AdmPage> {
         title: Text('Tela de ADM', style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 0, 90, 3),
       ),
+      drawer: MyDrawer(
+        user: widget.user,
+        onLogout: () => handleLogout(context),
+        onRemoveAccount: (email) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return PasswordConfirmationDialog(email: widget.user.email!);
+            },
+          );
+        },
+      ),
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _handleRefresh,
@@ -36,7 +52,8 @@ class _AdmPageState extends State<AdmPage> {
     // Adicione aqui a lógica para recarregar os dados
     // Por exemplo, você pode chamar uma função que busca novamente os dados do Firebase
     // Aguarde a conclusão e, em seguida, chame o setState para reconstruir a UI
-    await Future.delayed(Duration(seconds: 1)); // Simulando uma operação assíncrona
+    await Future.delayed(
+        Duration(seconds: 1)); // Simulando uma operação assíncrona
     setState(() {});
   }
 
@@ -114,5 +131,19 @@ class _AdmPageState extends State<AdmPage> {
         builder: (context) => AdmInfoPage(userId: userId),
       ),
     );
+  }
+
+  void handleLogout(BuildContext context) {
+    AuthService().logout().then((String? erro) {
+      if (erro == null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+          (route) => false,
+        );
+      } else {
+        print("Erro durante o logout: $erro");
+      }
+    });
   }
 }

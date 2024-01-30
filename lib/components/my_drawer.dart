@@ -9,16 +9,15 @@ class MyDrawer extends StatelessWidget {
   final User user;
   final VoidCallback onLogout;
   final Function(String) onRemoveAccount;
-  final String profileImageUrl;
-  final Function(String)
-      onUpdateProfileImage; // Função de atualização adicionada
+  final String? profileImageUrl;
+  final Function(String)? onUpdateProfileImage;
 
   const MyDrawer({
     required this.user,
     required this.onLogout,
     required this.onRemoveAccount,
-    required this.profileImageUrl,
-    required this.onUpdateProfileImage, // Certifique-se de que esta linha está presente
+    this.profileImageUrl,
+    this.onUpdateProfileImage, // Certifique-se de que esta linha está presente
   });
 
   Future<void> _pickImage(BuildContext context) async {
@@ -40,7 +39,10 @@ class MyDrawer extends StatelessWidget {
         String imageUrl = await storageRef.getDownloadURL();
 
         // Atualize a URL da imagem de perfil chamando a função de retorno de chamada
-        onUpdateProfileImage(imageUrl); // Chame a função de retorno de chamada
+        if (onUpdateProfileImage != null) {
+          onUpdateProfileImage!(
+              imageUrl); // Chame a função de retorno de chamada
+        }
 
         Navigator.of(context).pop(); // Feche o Drawer
         ScaffoldMessenger.of(context).showSnackBar(
@@ -61,25 +63,26 @@ class MyDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            currentAccountPicture: GestureDetector(
-              onTap: () {
-                // Chame a função _pickImage quando o usuário tocar na foto de perfil
-                _pickImage(context);
-              },
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: (profileImageUrl.isNotEmpty)
-                    ? NetworkImage(profileImageUrl)
-                    : null,
-                child: profileImageUrl.isEmpty
-                    ? Icon(
-                        Icons.add_a_photo,
-                        size: 40,
-                        color: Colors.white,
-                      )
-                    : null,
-              ),
-            ),
+            currentAccountPicture: (profileImageUrl != null)
+                ? GestureDetector(
+                    onTap: () {
+                      _pickImage(context);
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: (profileImageUrl!.isNotEmpty)
+                          ? NetworkImage(profileImageUrl!)
+                          : null,
+                      child: profileImageUrl!.isEmpty
+                          ? Icon(
+                              Icons.add_a_photo,
+                              size: 40,
+                              color: Colors.white,
+                            )
+                          : null,
+                    ),
+                  )
+                : null,
             accountName: Text(
               (user.displayName != null) ? user.displayName! : "",
             ),

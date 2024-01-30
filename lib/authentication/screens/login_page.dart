@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Importe o pacote font_awesome_flutter
 import 'package:foresty/authentication/screens/add_info_user.dart';
 import 'package:foresty/authentication/screens/adm_page.dart';
 import 'package:foresty/home_page.dart';
@@ -95,54 +96,56 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // sign user in method
-void signUserIn() {
-  String email = _emailController.text;
-  String pass = _passwordController.text;
+  void signUserIn() {
+    String email = _emailController.text;
+    String pass = _passwordController.text;
 
-  if (_formKey.currentState!.validate()) {
-    setState(() {
-      _isLoading = true;
-    });
-    authService.loginUser(email: email, password: pass).then((String? erro) {
-      if (erro != null) {
-        showSnackBar(context: context, mensagem: erro);
-      } else {
-        // Obtenha o ID do usuário atualmente autenticado
-        String userId = FirebaseAuth.instance.currentUser!.uid;
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      authService.loginUser(email: email, password: pass).then((String? erro) {
+        if (erro != null) {
+          showSnackBar(context: context, mensagem: erro);
+        } else {
+          // Obtenha o ID do usuário atualmente autenticado
+          String userId = FirebaseAuth.instance.currentUser!.uid;
 
-        // Verifique o userType do usuário atual
-        getUserType(userId).then((String userType) {
-          if (userType == "ADM") {
-            // Redirecione para a tela de super usuário (AdmPage).
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AdmPage(user: FirebaseAuth.instance.currentUser!),
-              ),
-            );
-          } else {
-            // Redirecione para a tela regular do usuário (HomePage).
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePage(user: FirebaseAuth.instance.currentUser!),
-              ),
-            );
-          }
-        });
-      }
-    });
+          // Verifique o userType do usuário atual
+          getUserType(userId).then((String userType) {
+            if (userType == "ADM") {
+              // Redirecione para a tela de super usuário (AdmPage).
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      AdmPage(user: FirebaseAuth.instance.currentUser!),
+                ),
+              );
+            } else {
+              // Redirecione para a tela regular do usuário (HomePage).
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      HomePage(user: FirebaseAuth.instance.currentUser!),
+                ),
+              );
+            }
+          });
+        }
+      });
+    }
   }
-}
 
-Future<String> getUserType(String userId) async {
-  // Use o Firebase para buscar os dados do usuário no banco de dados.
-  // Retorne o valor do campo userType.
-  DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('users').doc(userId).get();
-  Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
-  return userData['userType'];
-}
-
+  Future<String> getUserType(String userId) async {
+    // Use o Firebase para buscar os dados do usuário no banco de dados.
+    // Retorne o valor do campo userType.
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+    return userData['userType'];
+  }
 
   forgotMyPassword() {
     String email = _emailController.text;
@@ -319,29 +322,40 @@ Future<String> getUserType(String userId) async {
                   const SizedBox(height: 30),
 
                   // google / facebook / yahoo sign in buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // google button
-                      GestureDetector(
-                        onTap: () => handleGoogleLogin(context),
-                        child:
-                            const SquareTite(content: 'lib/assets/google.png'),
-                      ),
-
-                      const SizedBox(width: 15),
-
-                      // facebook button
-                      GestureDetector(
-                        onTap: signInWithFacebook,
-                        child: SquareTite(content: 'lib/assets/facebook.png'),
-                      ),
-
-                      const SizedBox(width: 15),
-
-                      // yahoo button
-                      const SquareTite(content: 'lib/assets/yahoo.png'),
-                    ],
+                  FractionallySizedBox(
+                    widthFactor: 0.9,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // google button
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton.icon(
+                            onPressed: () => handleGoogleLogin(context),
+                            icon: FaIcon(
+                              FontAwesomeIcons.google,
+                              color: Colors.red,
+                            ),
+                            label: Text(
+                              'Entrar com Google',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white, // Cor primária
+                              disabledForegroundColor:
+                                  Colors.black, // cor do texto desabilitado
+                              disabledBackgroundColor:
+                                  Colors.white, // Cor do fundo desabilitado
+                              minimumSize: Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    12.0), // Ajuste o valor do raio conforme necessário
+                              ), // Tamanho mínimo
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   )
 
                   // not a member? register now
