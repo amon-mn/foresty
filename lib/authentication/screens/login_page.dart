@@ -219,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 46),
 
                   ImageCard(
-                    imagePath: 'lib/assets/rastech_logo_with_text.png',
+                    imagePath: 'lib/assets/rastech_logo_with_name.png',
                   ),
 
                   const SizedBox(height: 76),
@@ -299,7 +299,7 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: signUserIn,
                             textButton: 'Entrar',
                           ),
-                          const SizedBox(height: 50),
+                          const SizedBox(height: 12),
                         ],
                       ),
                     ),
@@ -332,7 +332,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 12),
 
                   // google / facebook / yahoo sign in buttons
                   FractionallySizedBox(
@@ -340,38 +340,31 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // google button
                         Expanded(
                           flex: 1,
                           child: ElevatedButton.icon(
                             onPressed: () => handleGoogleLogin(context),
                             icon: FaIcon(
                               FontAwesomeIcons.google,
-                              color: Colors.red,
+                              color: Colors.white,
                             ),
                             label: Text(
                               'Entrar com Google',
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(color: Colors.white),
                             ),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white, // Cor primária
-                              disabledForegroundColor:
-                                  Colors.black, // cor do texto desabilitado
-                              disabledBackgroundColor:
-                                  Colors.white, // Cor do fundo desabilitado
+                              primary: Colors.red, // Cor primária
+                              onPrimary: Colors.black, // Cor do texto
                               minimumSize: Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    12.0), // Ajuste o valor do raio conforme necessário
-                              ), // Tamanho mínimo
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                   )
-
-                  // not a member? register now
                 ],
               ),
             ),

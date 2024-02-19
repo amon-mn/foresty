@@ -44,7 +44,7 @@ class _MyTextButtonState extends State<MyTextButton> {
           child: Text(
             widget.textButton,
             style: TextStyle(
-              color: _isPressed ? Colors.blue[800] : Colors.blue[600],
+              color: _isPressed ? Colors.green : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
