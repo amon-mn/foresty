@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Importe o pacote font_awesome_flutter
 import 'package:foresty/authentication/screens/add_info_user.dart';
 import 'package:foresty/authentication/screens/adm_page.dart';
+import 'package:foresty/authentication/screens/components/card_image.dart';
+
 import 'package:foresty/home_page.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfield.dart';
 import '../../components/show_snackbar.dart';
-import '../../components/square_tile.dart';
 import '../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -96,15 +97,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // sign user in method
-  void signUserIn() {
+  void signUserIn() async {
     String email = _emailController.text;
     String pass = _passwordController.text;
 
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      authService.loginUser(email: email, password: pass).then((String? erro) {
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+
+        String? erro =
+            await authService.loginUser(email: email, password: pass);
+
         if (erro != null) {
           showSnackBar(context: context, mensagem: erro);
         } else {
@@ -112,29 +117,37 @@ class _LoginPageState extends State<LoginPage> {
           String userId = FirebaseAuth.instance.currentUser!.uid;
 
           // Verifique o userType do usuário atual
-          getUserType(userId).then((String userType) {
-            if (userType == "ADM") {
-              // Redirecione para a tela de super usuário (AdmPage).
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      AdmPage(user: FirebaseAuth.instance.currentUser!),
-                ),
-              );
-            } else {
-              // Redirecione para a tela regular do usuário (HomePage).
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      HomePage(user: FirebaseAuth.instance.currentUser!),
-                ),
-              );
-            }
-          });
+          String userType = await getUserType(userId);
+
+          if (userType == "ADM") {
+            // Redirecione para a tela de super usuário (AdmPage).
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    AdmPage(user: FirebaseAuth.instance.currentUser!),
+              ),
+            );
+          } else {
+            // Redirecione para a tela regular do usuário (HomePage).
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    HomePage(user: FirebaseAuth.instance.currentUser!),
+              ),
+            );
+          }
         }
-      });
+      } catch (e) {
+        // Trate exceções, se necessário
+        print("Erro durante o login: $e");
+        showSnackBar(context: context, mensagem: "Erro durante o login");
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -204,13 +217,13 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 46),
-                  // logo
-                  const Icon(
-                    Icons.forest,
-                    size: 128,
-                    color: Color.fromARGB(255, 0, 90, 3),
+
+                  ImageCard(
+                    imagePath: 'lib/assets/rastech_logo_with_text.png',
                   ),
+
                   const SizedBox(height: 76),
+
                   // welcome
                   const Text(
                     'Bem Vindo!',
