@@ -1698,7 +1698,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 180,
+                  width: MediaQuery.of(context).size.width * 0.43,
                   child: MyButton(
                     isRed: true,
                     textButton: 'Descartar',
@@ -1709,7 +1709,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                 ),
                 SizedBox(width: 16),
                 SizedBox(
-                  width: 180,
+                  width: MediaQuery.of(context).size.width * 0.43,
                   child: MyButton(
                     onTap: () async {
                       // Crie o objeto BatchActivity com base nas informações do formulário e do lote

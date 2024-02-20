@@ -250,66 +250,83 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Container(
-                                      width: 232,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Color.fromRGBO(
-                                                135, 135, 135, 1)),
-                                        color: Color.fromRGBO(238, 238, 238, 1),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 05),
-                                            alignment: Alignment.topLeft,
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'Latitude: $_latBatch',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey[800],
-                                                fontWeight: FontWeight.w400,
-                                              ),
+                                    Expanded(
+                                      child: LayoutBuilder(
+                                        builder: (context, constraints) {
+                                          final maxWidth = constraints.maxWidth;
+                                          return Container(
+                                            width: maxWidth *
+                                                0.6, // Ajuste esse valor para definir a largura máxima do primeiro container
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Color.fromRGBO(
+                                                      135, 135, 135, 1)),
+                                              color: Color.fromRGBO(
+                                                  238, 238, 238, 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
                                             ),
-                                          ),
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 05),
-                                            alignment: Alignment.topLeft,
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'Longitude: $_longBatch',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey[800],
-                                                fontWeight: FontWeight.w400,
-                                              ),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      left: 5),
+                                                  alignment: Alignment.topLeft,
+                                                  padding:
+                                                      EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    'Latitude: $_latBatch',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.grey[800],
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      left: 5),
+                                                  alignment: Alignment.topLeft,
+                                                  padding:
+                                                      EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    'Longitude: $_longBatch',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.grey[800],
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
+                                          );
+                                        },
                                       ),
                                     ),
                                     Container(
                                       alignment: Alignment.topRight,
                                       padding: EdgeInsets.all(10),
                                       child: SizedBox(
+                                        width:
+                                            50, // Ajuste esse valor para definir o tamanho máximo do ícone
                                         child: GestureDetector(
                                           onTap: () {
                                             location
                                                 .getPosition(); // Chama a atualização da geolocalização
                                           },
                                           child: const SquareTite(
-                                              borderColor: Color.fromRGBO(
-                                                  135, 135, 135, 1),
-                                              isIcon: true,
-                                              content: Icon(
-                                                Icons.location_pin,
-                                                color: Color.fromARGB(
-                                                    255, 0, 90, 3),
-                                              )),
+                                            borderColor: Color.fromRGBO(
+                                                135, 135, 135, 1),
+                                            isIcon: true,
+                                            content: Icon(
+                                              Icons.location_pin,
+                                              color:
+                                                  Color.fromARGB(255, 0, 90, 3),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
