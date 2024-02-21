@@ -9,6 +9,7 @@ class BatchWidget extends StatelessWidget {
   final VoidCallback? onEditPressed;
   final VoidCallback? onCreateActivityPressed;
   final VoidCallback? onHarvestPressed;
+  final VoidCallback? onQrCodePressed;
   final VoidCallback? onDeletePressed;
   final VoidCallback? onLongPress;
   final VoidCallback? onTap;
@@ -22,6 +23,7 @@ class BatchWidget extends StatelessWidget {
     this.onCreateActivityPressed,
     this.onDeletePressed,
     this.onHarvestPressed,
+    this.onQrCodePressed,
     this.onLongPress,
     this.onTap,
     this.batchId,
@@ -174,9 +176,7 @@ class BatchWidget extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Icon(Icons.qr_code),
-                    onPressed: () {
-                      // Lógica para gerar QR code
-                    },
+                    onPressed: onQrCodePressed,
                   ),
                   IconButton(
                     icon: Icon(

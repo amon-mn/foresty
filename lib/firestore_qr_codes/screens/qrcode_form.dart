@@ -4,38 +4,25 @@ import 'package:foresty/components/my_button.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/components/my_textfield.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_qr_codes/screens/components/label_generator.dart';
 
-class HarvestFormPage extends StatefulWidget {
+class QrCodeFormPage extends StatefulWidget {
   ProductBatch? batch;
 
-  HarvestFormPage({Key? key, this.batch}) : super(key: key);
+  QrCodeFormPage({Key? key, this.batch}) : super(key: key);
 
   @override
-  _HarvestFormPageState createState() => _HarvestFormPageState();
+  _QrCodeFormPageState createState() => _QrCodeFormPageState();
 }
 
-class _HarvestFormPageState extends State<HarvestFormPage> {
+class _QrCodeFormPageState extends State<QrCodeFormPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  ValueNotifier<String> selectedUnit = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedSaleType = ValueNotifier<String>('Selecione');
   final TextEditingController _saleValue = TextEditingController();
   final TextEditingController _labelValue = TextEditingController();
-  final TextEditingController _quantityProduced = TextEditingController();
+  final TextEditingController _quantitySold = TextEditingController();
   final TextEditingController _quantityOfLabels = TextEditingController();
   final TextEditingController _quantityLabel = TextEditingController();
-
-  String harvestDate = '';
-
-  final _unitOfMeasurementItems = [
-    'Selecione',
-    'Quilo (kg)',
-    'Maço',
-    'Litro (L)',
-    'Unidade',
-    'Saca (50kg)',
-    'Cacho',
-  ];
 
   final _saleTypeItems = [
     'Selecione',
@@ -49,7 +36,7 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: Text('Colheita'),
+        title: Text('Gerar QR Code'),
       ),
       body: Form(
         key: _formKey,
@@ -60,11 +47,12 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
             physics: ClampingScrollPhysics(),
             padding: EdgeInsets.all(16.0),
             children: [
+              const SizedBox(height: 16),
               Container(
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                  'Data da Colheita',
+                  'Tipo de venda',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -73,42 +61,21 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                 ),
               ),
               const SizedBox(height: 4),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey[300]!,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: DateTimePicker(
-                  type: DateTimePickerType.date,
-                  dateMask: 'dd/MM/yyyy',
-                  initialValue: harvestDate,
-                  firstDate: DateTime(2023),
-                  lastDate: DateTime(2030),
-                  icon: Icon(
-                    Icons.calendar_today,
-                    color: Colors.green[800]!,
-                  ),
-                  dateLabelText: 'Ex: 31/10/2023',
-                  onChanged: (val) {
-                    setState(() {
-                      harvestDate = val;
-                    });
-                  },
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.grey[900]!,
-                  ),
-                ),
+              MyDropdownFormField(
+                selectedValueNotifier: selectedSaleType,
+                itemsList: _saleTypeItems,
+                onChanged: (value) {
+                  setState(() {
+                    selectedSaleType.value = value!;
+                  });
+                },
               ),
               const SizedBox(height: 16),
               Container(
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                  'Quantidade produzida',
+                  'Quantidade de venda',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -121,7 +88,7 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                 width: 180,
                 child: MyTextFieldWrapper(
                   hintText: 'Número',
-                  controller: _quantityProduced,
+                  controller: _quantitySold,
                   obscureText: false,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -136,7 +103,7 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                  'Unidade de medida',
+                  'Valor de venda',
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -145,14 +112,33 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                 ),
               ),
               const SizedBox(height: 4),
-              MyDropdownFormField(
-                selectedValueNotifier: selectedSaleType,
-                itemsList: _unitOfMeasurementItems,
-                onChanged: (value) {
-                  setState(() {
-                    selectedSaleType.value = value!;
-                  });
-                },
+              SizedBox(
+                width: 180,
+                child: MyTextFieldWrapper(
+                  hintText: 'Número',
+                  controller: _labelValue,
+                  obscureText: false,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, informe o valor que irá na etiqueta';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              EtiquetaProduto(
+                titulo: 'Nome do Produto',
+                peso: '250g',
+                lote: 'Cod-lote',
+                dataExpedicao: 'xx/xx/xxxx',
+                endereco: 'Rua talll - av xxxxxxx',
+                cep: 'xxxxx-xxx',
+                cpfCnpj: '00.0000-0001-00',
+                valor: 25.50,
+                imagemProduto:
+                    'lib/assets/logo_produto_organico.png', // Substitua pelo caminho real da imagem
+                produtoRastreado: 'PRODUTO RASTRADO',
               ),
               const SizedBox(height: 16),
               Row(
@@ -182,6 +168,7 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
             ],
           ),
         ),
