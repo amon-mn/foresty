@@ -2,6 +2,7 @@ class BatchActivity {
   String id;
   String tipoAtividade;
   String dataDaAtividade;
+  String custo;
   PreparoSolo? preparoSolo;
   Plantio? plantio;
   ManejoDoencas? manejoDoencas;
@@ -14,6 +15,7 @@ class BatchActivity {
     required this.id,
     required this.tipoAtividade,
     required this.dataDaAtividade,
+    required this.custo,
     this.preparoSolo,
     this.plantio,
     this.manejoDoencas,
@@ -27,6 +29,7 @@ class BatchActivity {
       : id = map['id'],
         tipoAtividade = map['tipoAtividade'],
         dataDaAtividade = map['dataDaAtividade'],
+        custo = map['custo'].toString(),
         preparoSolo = map['preparoSolo'] != null
             ? PreparoSolo.fromMap(map['preparoSolo'])
             : null,
@@ -51,6 +54,7 @@ class BatchActivity {
       'id': id,
       'tipoAtividade': tipoAtividade,
       'dataDaAtividade': dataDaAtividade,
+      'custo': custo,
       'preparoSolo': preparoSolo?.toMap(),
       'plantio': plantio?.toMap(),
       'manejoDoencas': manejoDoencas?.toMap(),

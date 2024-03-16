@@ -22,6 +22,7 @@ class ActivityFormPage extends StatefulWidget {
 class _ActivityFormPageState extends State<ActivityFormPage> {
   BatchService batchService = BatchService();
   final TextEditingController _tamanho1 = TextEditingController();
+  final TextEditingController _custo = TextEditingController();
   final TextEditingController _tamanho2 = TextEditingController();
   final TextEditingController _quantidade1 = TextEditingController();
   final TextEditingController _quantidade2 = TextEditingController();
@@ -240,6 +241,24 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   color: Colors.grey[900]!,
                 ),
               ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              alignment: Alignment.topLeft,
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                'Custo da Atividade',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[900],
+                ),
+              ),
+            ),
+            MyTextFieldWrapper(
+              hintText: 'Digite um número',
+              controller: _custo,
+              obscureText: false,
             ),
             const SizedBox(height: 16),
             Container(
@@ -1665,6 +1684,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                       });
                     },
                   ),
+                  const SizedBox(height: 16),
                   if (selectedTipoTrato.value == 'Outro')
                     Column(
                       children: [
@@ -1688,11 +1708,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           obscureText: false,
                           validator: (value) {},
                         ),
+                        const SizedBox(height: 16),
                       ],
                     ),
                 ],
               ),
-            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -1886,6 +1906,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       id: activityId, // Substitua pelo ID desejado
       tipoAtividade: selectedAtividade.value,
       dataDaAtividade: selectedDate,
+      custo: _custo.text,
       preparoSolo: preparoSolo,
       plantio: plantio,
       manejoDoencas: manejoDoencas,
