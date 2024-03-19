@@ -1,5 +1,4 @@
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
-import 'package:uuid/uuid.dart';
 
 class ProductBatch {
   String id;

@@ -9,6 +9,8 @@ import 'package:foresty/firestore_batch/screens/batch_details_page.dart';
 import 'package:foresty/firestore_batch/screens/batch_form_page.dart';
 import 'package:foresty/firestore_batch/screens/components/batch_widget.dart';
 import 'package:foresty/firestore_batch/services/batch_service.dart';
+import 'package:foresty/firestore_harvest/screens/harvest_form_page.dart';
+import 'package:foresty/firestore_qr_codes/screens/qrcode_form.dart';
 
 import 'authentication/services/auth_service.dart';
 import 'components/my_drawer.dart';
@@ -173,6 +175,26 @@ class _HomePageState extends State<HomePage> {
                         // Atualize a lista de lotes após adicionar uma atividade
                         await loadBatchs();
                       });
+                    },
+                    onHarvestPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HarvestFormPage(
+                            batch: model,
+                          ),
+                        ),
+                      );
+                    },
+                    onQrCodePressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QrCodeFormPage(
+                            batch: model,
+                          ),
+                        ),
+                      );
                     },
                     onDeletePressed: () {
                       remove(model);
