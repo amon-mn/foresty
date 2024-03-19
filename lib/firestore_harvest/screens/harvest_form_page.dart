@@ -4,6 +4,9 @@ import 'package:foresty/components/my_button.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/components/my_textfield.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_batch/services/batch_service.dart';
+import 'package:foresty/firestore_harvest/models/harvest.dart';
+import 'package:uuid/uuid.dart';
 
 class HarvestFormPage extends StatefulWidget {
   ProductBatch? batch;
@@ -16,14 +19,9 @@ class HarvestFormPage extends StatefulWidget {
 
 class _HarvestFormPageState extends State<HarvestFormPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  BatchService batchService = BatchService();
   ValueNotifier<String> selectedUnit = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedSaleType = ValueNotifier<String>('Selecione');
-  final TextEditingController _saleValue = TextEditingController();
-  final TextEditingController _labelValue = TextEditingController();
   final TextEditingController _quantityProduced = TextEditingController();
-  final TextEditingController _quantityOfLabels = TextEditingController();
-  final TextEditingController _quantityLabel = TextEditingController();
 
   String harvestDate = '';
 
@@ -35,12 +33,6 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
     'Unidade',
     'Saca (50kg)',
     'Cacho',
-  ];
-
-  final _saleTypeItems = [
-    'Selecione',
-    'Direta (para o consumidor)',
-    'Revenda (outro comerciante)',
   ];
 
   @override
@@ -146,11 +138,11 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
               ),
               const SizedBox(height: 4),
               MyDropdownFormField(
-                selectedValueNotifier: selectedSaleType,
+                selectedValueNotifier: selectedUnit,
                 itemsList: _unitOfMeasurementItems,
                 onChanged: (value) {
                   setState(() {
-                    selectedSaleType.value = value!;
+                    selectedUnit.value = value!;
                   });
                 },
               ),
@@ -174,7 +166,16 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                     width: MediaQuery.of(context).size.width * 0.43,
                     child: MyButton(
                       onTap: () async {
-                        // Feche o formulário ou faça qualquer outra ação necessária
+                        Harvest harvest = Harvest(
+                          id: Uuid().v4(),
+                          quantidadeProduzida: _quantityProduced.text,
+                          unidade: selectedUnit.value,
+                          dataDaColheita: harvestDate,
+                        );
+
+                        await batchService.addHarvest(
+                            batch: widget.batch!, harvest: harvest);
+
                         Navigator.pop(context);
                       },
                       textButton: 'Salvar',

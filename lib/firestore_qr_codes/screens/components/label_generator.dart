@@ -3,24 +3,26 @@ import 'package:flutter/material.dart';
 class EtiquetaProduto extends StatelessWidget {
   final String titulo;
   final String peso;
+  final String unidade;
   final String lote;
   final String dataExpedicao;
   final String endereco;
   final String cep;
   final String cpfCnpj;
-  final double valor;
+  final ValueNotifier<double> valor; // Alterado para ValueNotifier
   final String imagemProduto;
   final String produtoRastreado;
 
   EtiquetaProduto({
     required this.titulo,
     required this.peso,
+    required this.unidade,
     required this.lote,
     required this.dataExpedicao,
     required this.endereco,
     required this.cep,
     required this.cpfCnpj,
-    required this.valor,
+    required this.valor, // Atualizado para ValueNotifier
     required this.imagemProduto,
     required this.produtoRastreado,
   });
@@ -46,7 +48,7 @@ class EtiquetaProduto extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Peso - $peso'),
+                  Text('Peso - $peso $unidade'),
                   Text('Lote: $lote'),
                   Text('Data de Expedição: $dataExpedicao'),
                   Text('Endereço: $endereco'),
@@ -58,7 +60,7 @@ class EtiquetaProduto extends StatelessWidget {
               Container(
                 height: 90,
                 width: 90,
-                color: Colors.grey, // Adapte conforme sua necessidade
+                color: Colors.grey,
                 child: Center(
                   child: Text('QR Code'),
                 ),
@@ -73,19 +75,22 @@ class EtiquetaProduto extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            'Valor: R\$ ${valor.toStringAsFixed(2)}',
-                            style: TextStyle(fontSize: 18.0),
-                          ),
-                          Text(
-                            '<< $produtoRastreado >>',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                    ValueListenableBuilder<double>(
+                      valueListenable: valor,
+                      builder: (context, valorAtual, _) {
+                        return Column(
+                          children: [
+                            Text(
+                              'Valor: R\$ ${valorAtual.toStringAsFixed(2)}', // Usando valorAtual
+                              style: TextStyle(fontSize: 18.0),
+                            ),
+                            Text(
+                              '<< $produtoRastreado >>',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -93,8 +98,8 @@ class EtiquetaProduto extends StatelessWidget {
               SizedBox(width: 16.0),
               Image.asset(
                 imagemProduto,
-                height: 80, // Aumentei o tamanho da imagem
-                width: 100, // Aumentei o tamanho da imagem
+                height: 80,
+                width: 100,
               ),
             ],
           ),

@@ -192,6 +192,7 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                           builder: (context) => QrCodeFormPage(
                             batch: model,
+                            user: widget.user,
                           ),
                         ),
                       );

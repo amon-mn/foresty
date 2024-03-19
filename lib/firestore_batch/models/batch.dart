@@ -1,4 +1,5 @@
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
+import 'package:foresty/firestore_harvest/models/harvest.dart';
 
 class ProductBatch {
   String id;
@@ -15,7 +16,8 @@ class ProductBatch {
   String tipoCultivo;
   String? outroTipoCultivo;
   String? nomeProduto;
-  List<BatchActivity> atividades; // Lista de atividades
+  List<BatchActivity> atividades;
+  Harvest? colheita; // Lista de atividades
 
   ProductBatch({
     required this.id,
@@ -32,7 +34,8 @@ class ProductBatch {
     required this.tipoCultivo,
     this.outroTipoCultivo,
     this.nomeProduto,
-    List<BatchActivity>? atividades, // Inicialize a lista de atividades
+    List<BatchActivity>? atividades,
+    this.colheita, // Inicialize a lista de atividades
   }) : atividades = atividades ?? [];
 
   ProductBatch.fromMap(Map<String, dynamic> map)
@@ -50,6 +53,8 @@ class ProductBatch {
         tipoCultivo = map["tipoCultivo"],
         outroTipoCultivo = map["outroTipoCultivo"],
         nomeProduto = map["nomeProduto"],
+        colheita =
+            map['colheita'] != null ? Harvest.fromMap(map['colheita']) : null,
         atividades = (map['atividades'] as List<dynamic>?)
                 ?.map((activity) => BatchActivity.fromMap(activity))
                 .toList() ??
@@ -71,11 +76,16 @@ class ProductBatch {
       "tipoCultivo": tipoCultivo,
       "outroTipoCultivo": outroTipoCultivo,
       "nomeProduto": nomeProduto,
+      'colheita': colheita?.toMap(),
       'atividades': atividades.map((activity) => activity.toMap()).toList(),
     };
   }
 
   void addActivity(BatchActivity activity) {
     atividades.add(activity);
+  }
+
+  void addHarvest(Harvest harvest) {
+    colheita = harvest;
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_harvest/models/harvest.dart';
 
 class BatchService {
   String user_id = FirebaseAuth.instance.currentUser!.uid;
@@ -31,6 +32,22 @@ class BatchService {
         .set(batch.toMap());
 
     // Retorne o lote atualizado
+    return batch;
+  }
+
+  Future<ProductBatch> addHarvest(
+      {required ProductBatch batch, required Harvest harvest}) async {
+    // Adiciona as informações de colheita ao lote
+    batch.addHarvest(harvest);
+    // Atualiza o lote no banco de dados
+    await firestore
+        .collection('users')
+        .doc(user_id)
+        .collection('lotes')
+        .doc(batch.id)
+        .set(batch.toMap());
+
+    // Retorna o lote atualizado
     return batch;
   }
 

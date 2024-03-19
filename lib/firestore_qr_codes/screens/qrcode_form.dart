@@ -1,15 +1,17 @@
-import 'package:date_time_picker/date_time_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foresty/components/my_button.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/components/my_textfield.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_qr_codes/screens/components/label_generator.dart';
+import 'package:intl/intl.dart'; // Importe a biblioteca intl
 
 class QrCodeFormPage extends StatefulWidget {
   ProductBatch? batch;
+  final User user;
 
-  QrCodeFormPage({Key? key, this.batch}) : super(key: key);
+  QrCodeFormPage({Key? key, this.batch, required this.user}) : super(key: key);
 
   @override
   _QrCodeFormPageState createState() => _QrCodeFormPageState();
@@ -23,12 +25,35 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
   final TextEditingController _quantitySold = TextEditingController();
   final TextEditingController _quantityOfLabels = TextEditingController();
   final TextEditingController _quantityLabel = TextEditingController();
-
   final _saleTypeItems = [
     'Selecione',
     'Direta (para o consumidor)',
     'Revenda (outro comerciante)',
   ];
+
+  ValueNotifier<double> _saleAmount = ValueNotifier<double>(0.0);
+
+  @override
+  void initState() {
+    super.initState();
+    // Adicione um listener para o controlador _labelValue
+    _labelValue.addListener(_updateSaleAmount);
+  }
+
+  @override
+  void dispose() {
+    // Remova o listener ao descartar a página para evitar memory leaks
+    _labelValue.removeListener(_updateSaleAmount);
+    super.dispose();
+  }
+
+  void _updateSaleAmount() {
+    // Atualize _saleAmount apenas com o valor válido do campo _labelValue
+    final double? saleAmount = double.tryParse(_labelValue.text);
+    if (saleAmount != null) {
+      _saleAmount.value = saleAmount;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,16 +154,18 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
               const SizedBox(height: 16),
               EtiquetaProduto(
                 titulo: 'Nome do Produto',
-                peso: '250g',
-                lote: 'Cod-lote',
-                dataExpedicao: 'xx/xx/xxxx',
-                endereco: 'Rua talll - av xxxxxxx',
-                cep: 'xxxxx-xxx',
-                cpfCnpj: '00.0000-0001-00',
-                valor: 25.50,
+                peso: widget.batch?.colheita?.quantidadeProduzida.toString() ??
+                    '',
+                unidade: widget.batch?.colheita?.unidade.toString() ?? '',
+                lote: widget.batch?.nomeLote.toString() ?? '',
+                dataExpedicao: DateFormat('dd/MM/yyyy').format(DateTime.now()),
+                endereco: '',
+                cep: '',
+                cpfCnpj: '', // Verifica se o usuário tem CPF ou CNPJ
+                valor: _saleAmount, // Passando o valor atualizado
                 imagemProduto:
                     'lib/assets/logo_produto_organico.png', // Substitua pelo caminho real da imagem
-                produtoRastreado: 'PRODUTO RASTRADO',
+                produtoRastreado: 'PRODUTO RASTREADO',
               ),
               const SizedBox(height: 16),
               Row(

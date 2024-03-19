@@ -11,9 +11,8 @@ import '../../firestore_batch/models/batch.dart';
 
 class ActivityFormPage extends StatefulWidget {
   ProductBatch? batch;
-  final BatchActivity? activity;
 
-  ActivityFormPage({Key? key, this.batch, this.activity}) : super(key: key);
+  ActivityFormPage({Key? key, this.batch}) : super(key: key);
 
   @override
   _ActivityFormPageState createState() => _ActivityFormPageState();
