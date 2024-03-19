@@ -130,7 +130,7 @@ class _SignupScreenState extends State<SignupScreen> {
             top: 180,
             child: SingleChildScrollView(
               child: Container(
-                height: MediaQuery.of(context).size.height - 250,
+                height: MediaQuery.of(context).size.height - 200,
                 padding: EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width - 40,
                 margin: EdgeInsets.symmetric(horizontal: 20),
@@ -212,46 +212,42 @@ class _SignupScreenState extends State<SignupScreen> {
                       buildProducerSection()
                     else
                       buildMerchantSection(),
-                    Expanded(
-                      flex: 1,
-                      child: FractionallySizedBox(
-                        widthFactor: 0.86,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              top: 40,
-                              bottom: 16), // Margem inferior para o botão
-                          child: MyButton(
-                            onTap: () {
-                              _signUserUp(isProducerScreen);
-                            },
-                            textButton: 'Cadastrar',
-                          ),
+                    FractionallySizedBox(
+                      widthFactor: 0.86,
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          top: 20,
+                          bottom: 10, // Reduzido o espaço inferior para o botão
+                        ),
+                        child: MyButton(
+                          onTap: () {
+                            _signUserUp(isProducerScreen);
+                          },
+                          textButton: 'Cadastrar',
+                          isRed: false, // Altere conforme necessário
                         ),
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: FractionallySizedBox(
-                        widthFactor: 0.86,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 8),
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text:
-                                  "Ao clicar em 'Cadastrar' você concorda com nossos ",
-                              style: TextStyle(
-                                  color: Color.fromRGBO(120, 131, 137, 1)),
-                              children: [
-                                TextSpan(
-                                  //recognizer: ,
-                                  text: "Termos de Uso",
-                                  style: TextStyle(
-                                    color: Colors.green[800],
-                                  ),
+                    FractionallySizedBox(
+                      widthFactor: 0.86,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 8),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text:
+                                "Ao clicar em 'Cadastrar' você concorda com nossos ",
+                            style: TextStyle(
+                                color: Color.fromRGBO(120, 131, 137, 1)),
+                            children: [
+                              TextSpan(
+                                //recognizer: ,
+                                text: "Termos de Uso",
+                                style: TextStyle(
+                                  color: Colors.green[800],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
