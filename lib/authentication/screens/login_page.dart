@@ -353,8 +353,7 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(color: Colors.white),
                             ),
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.red, // Cor primária
-                              onPrimary: Colors.black, // Cor do texto
+                              backgroundColor: Colors.red, // Cor primária
                               minimumSize: Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),

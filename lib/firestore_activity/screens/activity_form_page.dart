@@ -441,31 +441,35 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            SizedBox(
-                              width: 336,
+                            Expanded(
+                              flex: 10, // Define a proporção do primeiro componente
+                              child: SizedBox(
+                                width: double.infinity, // Para ocupar todo o espaço disponível
+                                child: Column(
+                                  children: [
+                                    MyTextFieldWrapper(
+                                      inputFormatter: MaskTextInputFormatter(
+                                        filter: {"#": RegExp(r'[0-9xX]')},
+                                        type: MaskAutoCompletionType.lazy,
+                                      ),
+                                      controller: _quantidade2, // Use um novo controller
+                                      hintText: 'Quantidade',
+                                      obscureText: false,
+                                      validator: (value) {},
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),// Adiciona espaço entre os componentes
+                            Expanded(
+                              flex: 1, // Define a proporção do segundo componente
                               child: Column(
                                 children: [
-                                  MyTextFieldWrapper(
-                                    inputFormatter: MaskTextInputFormatter(
-                                      filter: {"#": RegExp(r'[0-9xX]')},
-                                      type: MaskAutoCompletionType.lazy,
-                                    ),
-                                    controller:
-                                        _quantidade2, // Use um novo controller
-                                    hintText: 'Quantidade',
-                                    obscureText: false,
-                                    validator: (value) {},
-                                  ),
+                                  Text('ml'),
+                                  Text('/'),
+                                  Text('L'),
                                 ],
                               ),
-                            ),
-                            SizedBox(width: 16),
-                            Column(
-                              children: [
-                                Text('ml'),
-                                Text('/'),
-                                Text('L'),
-                              ],
                             )
                           ],
                         ),
@@ -531,60 +535,66 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                       selectedAdubacao.value != 'Não fez adubação')
                     Row(
                       children: [
-                        Column(
-                          children: [
-                            Container(
-                              alignment: Alignment.topLeft,
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Quantidade',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[900],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.topLeft,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Quantidade',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[900],
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            SizedBox(
-                              width: 180,
-                              child: MyTextFieldWrapper(
-                                hintText: 'Número',
-                                controller: _quantidade3,
-                                obscureText: false,
+                              const SizedBox(height: 4),
+                              SizedBox(
+                                width: double.infinity,
+                                child: MyTextFieldWrapper(
+                                  hintText: 'Número',
+                                  controller: _quantidade3,
+                                  obscureText: false,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         const SizedBox(width: 16),
-                        Column(
-                          children: [
-                            Container(
-                              alignment: Alignment.topLeft,
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Unid',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[900],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.topLeft,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Unid',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[900],
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            SizedBox(
-                              width: 180,
-                              child: MyDropdownFormField(
-                                selectedValueNotifier: selectedTipoUnid1,
-                                itemsList: itemListTipoUnid,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedTipoUnid1.value = value!;
-                                  });
-                                },
+                              const SizedBox(height: 4),
+                              SizedBox(
+                                width: double.infinity,
+                                child: MyDropdownFormField(
+                                  selectedValueNotifier: selectedTipoUnid1,
+                                  itemsList: itemListTipoUnid,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedTipoUnid1.value = value!;
+                                    });
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -664,14 +674,15 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            SizedBox(
-                              width: 336,
+                            Expanded(
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   MyTextFieldWrapper(
                                     inputFormatter: MaskTextInputFormatter(
-                                        filter: {"#": RegExp(r'[0-9xX]')},
-                                        type: MaskAutoCompletionType.lazy),
+                                      filter: {"#": RegExp(r'[0-9xX]')},
+                                      type: MaskAutoCompletionType.lazy,
+                                    ),
                                     controller: _larguraPlantioController,
                                     hintText: 'Largura',
                                     obscureText: false,
@@ -693,6 +704,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             ),
                             SizedBox(width: 16),
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('m'),
                                 SizedBox(height: 16),
@@ -703,6 +715,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             )
                           ],
                         ),
+
                       ],
                     ),
                 ],
@@ -778,119 +791,135 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
-                  Row(
+                  Column(
                     children: [
-                      Column(
+                      Row(
                         children: [
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Qtd. Recomendada',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[900],
-                              ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Qtd. Recomendada',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[900],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                SizedBox(
+                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyTextFieldWrapper(
+                                    hintText: 'Número',
+                                    controller: _quantidade1,
+                                    obscureText: false,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                            width: 180,
-                            child: MyTextFieldWrapper(
-                              hintText: 'Número',
-                              controller: _quantidade1,
-                              obscureText: false,
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Unid',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[900],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                SizedBox(
+                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyDropdownFormField(
+                                    selectedValueNotifier: selectedTipoUnid1,
+                                    itemsList: itemListTipoUnid,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedTipoUnid1.value = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(width: 16),
-                      Column(
+                      SizedBox(height: 16),
+                      Row(
                         children: [
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Unid',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[900],
-                              ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Qtd. Aplicada',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[900],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                SizedBox(
+                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyTextFieldWrapper(
+                                    hintText: 'Número',
+                                    controller: _quantidade2,
+                                    obscureText: false,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                            width: 180,
-                            child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid1,
-                              itemsList: itemListTipoUnid,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedTipoUnid1.value = value!;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Qtd. Aplicada',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[900],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                            width: 180,
-                            child: MyTextFieldWrapper(
-                              hintText: 'Número',
-                              controller: _quantidade2,
-                              obscureText: false,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 16),
-                      Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Unid',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[900],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                            width: 180,
-                            child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid2,
-                              itemsList: itemListTipoUnid,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedTipoUnid2.value = value!;
-                                });
-                              },
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Unid',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[900],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                SizedBox(
+                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyDropdownFormField(
+                                    selectedValueNotifier: selectedTipoUnid2,
+                                    itemsList: itemListTipoUnid,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedTipoUnid2.value = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -951,119 +980,135 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     obscureText: false,
                   ),
                   const SizedBox(height: 16),
-                  Row(
+                  Column(
                     children: [
-                      Column(
+                      Row(
                         children: [
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Qtd. Recomendada',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[900],
-                              ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Qtd. Recomendada',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[900],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                SizedBox(
+                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyTextFieldWrapper(
+                                    hintText: 'Número',
+                                    controller: _quantidade1,
+                                    obscureText: false,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                            width: 180,
-                            child: MyTextFieldWrapper(
-                              hintText: 'Número',
-                              controller: _quantidade1,
-                              obscureText: false,
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Unid',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[900],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                SizedBox(
+                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyDropdownFormField(
+                                    selectedValueNotifier: selectedTipoUnid1,
+                                    itemsList: itemListTipoUnid,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedTipoUnid1.value = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(width: 16),
-                      Column(
+                      SizedBox(height: 16),
+                      Row(
                         children: [
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Unid',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[900],
-                              ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Qtd. Aplicada',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[900],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                SizedBox(
+                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyTextFieldWrapper(
+                                    hintText: 'Número',
+                                    controller: _quantidade2,
+                                    obscureText: false,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                            width: 180,
-                            child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid1,
-                              itemsList: itemListTipoUnid,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedTipoUnid1.value = value!;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Qtd. Aplicada',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[900],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                            width: 180,
-                            child: MyTextFieldWrapper(
-                              hintText: 'Número',
-                              controller: _quantidade2,
-                              obscureText: false,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 16),
-                      Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Unid',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[900],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                            width: 180,
-                            child: MyDropdownFormField(
-                              selectedValueNotifier: selectedTipoUnid2,
-                              itemsList: itemListTipoUnid,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedTipoUnid2.value = value!;
-                                });
-                              },
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Unid',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[900],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                SizedBox(
+                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyDropdownFormField(
+                                    selectedValueNotifier: selectedTipoUnid2,
+                                    itemsList: itemListTipoUnid,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedTipoUnid2.value = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -1259,8 +1304,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      SizedBox(
-                        width: 336,
+                      Expanded(
                         child: Column(
                           children: [
                             MyTextFieldWrapper(
@@ -1352,17 +1396,16 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            SizedBox(
-                              width: 336,
+                            Expanded(
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   MyTextFieldWrapper(
                                     inputFormatter: MaskTextInputFormatter(
                                       filter: {"#": RegExp(r'[0-9xX]')},
                                       type: MaskAutoCompletionType.lazy,
                                     ),
-                                    controller:
-                                        _quantidade1, // Use um novo controller
+                                    controller: _quantidade1, // Use um novo controller
                                     hintText: 'Quantidade',
                                     obscureText: false,
                                     validator: (value) {},
@@ -1379,7 +1422,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               ],
                             )
                           ],
-                        ),
+                        )
                       ],
                     ),
                   const SizedBox(height: 16),
@@ -1442,60 +1485,66 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                       selectedAdubacao.value != 'Não fez adubação')
                     Row(
                       children: [
-                        Column(
-                          children: [
-                            Container(
-                              alignment: Alignment.topLeft,
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Quantidade',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[900],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.topLeft,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Quantidade',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[900],
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            SizedBox(
-                              width: 180,
-                              child: MyTextFieldWrapper(
-                                hintText: 'Número',
-                                controller: _quantidade2,
-                                obscureText: false,
+                              const SizedBox(height: 4),
+                              SizedBox(
+                                width: double.infinity,
+                                child: MyTextFieldWrapper(
+                                  hintText: 'Número',
+                                  controller: _quantidade2,
+                                  obscureText: false,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        const SizedBox(width: 16),
-                        Column(
-                          children: [
-                            Container(
-                              alignment: Alignment.topLeft,
-                              padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Unid',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[900],
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.topLeft,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Unid',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[900],
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            SizedBox(
-                              width: 180,
-                              child: MyDropdownFormField(
-                                selectedValueNotifier: selectedTipoUnid1,
-                                itemsList: itemListTipoUnid,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedTipoUnid1.value = value!;
-                                  });
-                                },
+                              const SizedBox(height: 4),
+                              SizedBox(
+                                width: double.infinity,
+                                child: MyDropdownFormField(
+                                  selectedValueNotifier: selectedTipoUnid1,
+                                  itemsList: itemListTipoUnid,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedTipoUnid1.value = value!;
+                                    });
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -1567,17 +1616,16 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            SizedBox(
-                              width: 336,
+                            Expanded(
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   MyTextFieldWrapper(
                                     inputFormatter: MaskTextInputFormatter(
                                       filter: {"#": RegExp(r'[0-9xX]')},
                                       type: MaskAutoCompletionType.lazy,
                                     ),
-                                    controller:
-                                        _quantidade1, // Use um novo controller
+                                    controller: _quantidade1, // Use um novo controller
                                     hintText: 'Quantidade',
                                     obscureText: false,
                                     validator: (value) {},
@@ -1697,34 +1745,40 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: 180,
-                  child: MyButton(
-                    isRed: true,
-                    textButton: 'Descartar',
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                Expanded(
+                  flex: 1, // Define a proporção do primeiro botão
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: MyButton(
+                      isRed: true,
+                      textButton: 'Descartar',
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                   ),
                 ),
-                SizedBox(width: 16),
-                SizedBox(
-                  width: 180,
-                  child: MyButton(
-                    onTap: () async {
-                      // Crie o objeto BatchActivity com base nas informações do formulário e do lote
-                      BatchActivity batchActivity = createBatchActivityObject();
+                SizedBox(width: 8), // Adiciona espaço entre os botões
+                Expanded(
+                  flex: 1, // Define a proporção do segundo botão
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: MyButton(
+                      onTap: () async {
+                        // Crie o objeto BatchActivity com base nas informações do formulário e do lote
+                        BatchActivity batchActivity = createBatchActivityObject();
 
-                      // Adicione o objeto ao banco de dados usando o serviço
-                      await batchService.addBatchActivity(
-                        batch: widget.batch!,
-                        batchActivity: batchActivity,
-                      );
+                        // Adicione o objeto ao banco de dados usando o serviço
+                        await batchService.addBatchActivity(
+                          batch: widget.batch!,
+                          batchActivity: batchActivity,
+                        );
 
-                      // Feche o formulário ou faça qualquer outra ação necessária
-                      Navigator.pop(context);
-                    },
-                    textButton: 'Salvar',
+                        // Feche o formulário ou faça qualquer outra ação necessária
+                        Navigator.pop(context);
+                      },
+                      textButton: 'Salvar',
+                    ),
                   ),
                 ),
               ],

@@ -358,6 +358,7 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
               MyButton(
                 onTap: () {
                   _saveAdditionalInfo();
+                
                 },
                 textButton: 'Salvar',
               ),
