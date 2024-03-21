@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart'; // Importe a biblioteca qr_flutter
 
 class EtiquetaProduto extends StatelessWidget {
-  final String titulo;
-  final String peso;
-  final String unidade;
+  final ValueNotifier<double> peso;
   final String lote;
   final String dataExpedicao;
   final String endereco;
-  final String cep;
   final String cpfCnpj;
-  final ValueNotifier<double> valor; // Alterado para ValueNotifier
+  final ValueNotifier<double> valor;
+  final ValueNotifier<String> unidade;
   final String imagemProduto;
-  final String produtoRastreado;
+  final String nomeDoProduto;
+  final bool
+      showImage; // Adicionado o atributo para controlar a visibilidade da imagem
 
   EtiquetaProduto({
-    required this.titulo,
     required this.peso,
     required this.unidade,
     required this.lote,
     required this.dataExpedicao,
     required this.endereco,
-    required this.cep,
     required this.cpfCnpj,
-    required this.valor, // Atualizado para ValueNotifier
+    required this.valor,
     required this.imagemProduto,
-    required this.produtoRastreado,
+    required this.nomeDoProduto,
+    required this.showImage, // Adicionado o parâmetro showImage
   });
 
   @override
@@ -38,38 +38,64 @@ class EtiquetaProduto extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            titulo,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            nomeDoProduto,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
           ),
-          SizedBox(height: 8.0),
+          SizedBox(height: 4.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Peso - $peso $unidade'),
-                  Text('Lote: $lote'),
-                  Text('Data de Expedição: $dataExpedicao'),
-                  Text('Endereço: $endereco'),
-                  Text('CEP: $cep'),
-                  Text('CPF/CNPJ: $cpfCnpj'),
-                ],
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ValueListenableBuilder<double>(
+                      valueListenable: peso,
+                      builder: (context, pesoAtual, _) {
+                        return Text(
+                          '$pesoAtual ${unidade.value}',
+                          style: const TextStyle(fontSize: 16),
+                        );
+                      },
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Lote: $lote',
+                          style: const TextStyle(fontSize: 10),
+                        ),
+                        const SizedBox(width: 4.0),
+                        Text(
+                          'Data de expedição: $dataExpedicao',
+                          style: const TextStyle(fontSize: 10),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 4.0),
+                    Text(
+                      endereco,
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                    SizedBox(height: 4.0),
+                    Text(
+                      'CPF/CNPJ: $cpfCnpj',
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(width: 16.0),
-              Container(
-                height: 90,
-                width: 90,
-                color: Colors.grey,
-                child: Center(
-                  child: Text('QR Code'),
-                ),
+              QrImageView(
+                data: 'RASTECH ',
+                version: QrVersions.auto,
+                size: 90.0,
               ),
             ],
           ),
-          SizedBox(height: 16.0),
+          SizedBox(height: 4.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: Column(
@@ -85,7 +111,7 @@ class EtiquetaProduto extends StatelessWidget {
                               style: TextStyle(fontSize: 18.0),
                             ),
                             Text(
-                              '<< $produtoRastreado >>',
+                              '<< PRODUTO RASTREADO >>',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -95,15 +121,18 @@ class EtiquetaProduto extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 16.0),
-              Image.asset(
-                imagemProduto,
-                height: 80,
-                width: 100,
+              SizedBox(width: 8.0),
+              Visibility(
+                visible:
+                    showImage, // Controla a visibilidade com base no estado do checkbox
+                child: Image.asset(
+                  imagemProduto,
+                  height: 70,
+                  width: 90,
+                ),
               ),
             ],
           ),
-          SizedBox(height: 16.0),
         ],
       ),
     );

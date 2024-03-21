@@ -51,6 +51,7 @@ dependencies:
   date_time_picker: ^2.0.1
   font_awesome_flutter: ^10.7.0
   intl: ^0.17.0
+  qr_flutter: ^4.1.0
   
 
 dev_dependencies:
