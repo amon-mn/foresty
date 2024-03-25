@@ -1,5 +1,7 @@
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:foresty/firestore_harvest/models/harvest.dart';
+import 'package:foresty/firestore_qr_codes/models/qrCode.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ProductBatch {
   String id;
@@ -16,8 +18,9 @@ class ProductBatch {
   String tipoCultivo;
   String? outroTipoCultivo;
   String? nomeProduto;
-  List<BatchActivity> atividades;
-  Harvest? colheita; // Lista de atividades
+  List<BatchActivity> atividades; // Lista de atividades
+  Harvest? colheita;
+  BatchQrCode? qrCode;
 
   ProductBatch({
     required this.id,
@@ -35,7 +38,8 @@ class ProductBatch {
     this.outroTipoCultivo,
     this.nomeProduto,
     List<BatchActivity>? atividades,
-    this.colheita, // Inicialize a lista de atividades
+    this.colheita,
+    this.qrCode, // Inicialize a lista de atividades
   }) : atividades = atividades ?? [];
 
   ProductBatch.fromMap(Map<String, dynamic> map)
@@ -55,6 +59,8 @@ class ProductBatch {
         nomeProduto = map["nomeProduto"],
         colheita =
             map['colheita'] != null ? Harvest.fromMap(map['colheita']) : null,
+        qrCode =
+            map['qrcode'] != null ? BatchQrCode.fromMap(map['qrcode']) : null,
         atividades = (map['atividades'] as List<dynamic>?)
                 ?.map((activity) => BatchActivity.fromMap(activity))
                 .toList() ??
@@ -77,6 +83,7 @@ class ProductBatch {
       "outroTipoCultivo": outroTipoCultivo,
       "nomeProduto": nomeProduto,
       'colheita': colheita?.toMap(),
+      'qrcode': qrCode?.toMap(),
       'atividades': atividades.map((activity) => activity.toMap()).toList(),
     };
   }
@@ -87,5 +94,9 @@ class ProductBatch {
 
   void addHarvest(Harvest harvest) {
     colheita = harvest;
+  }
+
+  void addQrCode(BatchQrCode qrcode) {
+    qrCode = qrcode;
   }
 }

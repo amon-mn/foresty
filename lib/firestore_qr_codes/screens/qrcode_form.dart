@@ -5,8 +5,11 @@ import 'package:foresty/components/my_button.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/components/my_textfield.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_batch/services/batch_service.dart';
+import 'package:foresty/firestore_qr_codes/models/qrCode.dart';
 import 'package:foresty/firestore_qr_codes/screens/components/label_generator.dart';
-import 'package:intl/intl.dart'; // Importe a biblioteca intl
+import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart'; // Importe a biblioteca intl
 
 class QrCodeFormPage extends StatefulWidget {
   ProductBatch? batch;
@@ -25,6 +28,7 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
   final TextEditingController _quantitySold = TextEditingController();
   ValueNotifier<String> selectedUnit = ValueNotifier<String>('Selecione');
   bool showImage = false; // Estado do checkbox
+  BatchService batchService = BatchService();
 
   final _saleTypeItems = [
     'Selecione',
@@ -254,10 +258,10 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
                 dataExpedicao: DateFormat('dd/MM/yyyy').format(DateTime.now()),
                 endereco: address, // Usando o endereço recuperado
                 cpfCnpj: cpfCnpj, // Usando o CPF/CNPJ recuperado
+                dataQrCode: 'RASTECH',
                 valor: _saleAmount,
                 showImage: showImage, // Passando o valor atualizado
-                imagemProduto:
-                    'lib/assets/logo_produto_organico.png', // Substitua pelo caminho real da imagem
+                // Substitua pelo caminho real da imagem
               ),
               const SizedBox(height: 16),
               Row(
@@ -279,7 +283,29 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
                     width: MediaQuery.of(context).size.width * 0.43,
                     child: MyButton(
                       onTap: () async {
-                        // Feche o formulário ou faça qualquer outra ação necessária
+                        BatchQrCode batchQrCode = BatchQrCode(
+                          id: Uuid().v4(),
+                          tipoDeVenda: selectedSaleType.value,
+                          pesoDaVenda: _quantitySoldValue.value.toString(),
+                          unidadeDeMedida: selectedUnit.value,
+                          etiqueta: Etiqueta(
+                            peso: _quantitySoldValue.value.toString(),
+                            unidade: selectedUnit.value,
+                            codLote: widget.batch?.nomeLote.toString() ?? '',
+                            dataExpedicao:
+                                DateFormat('dd/MM/yyyy').format(DateTime.now()),
+                            endereco: address,
+                            cpfCnpj: cpfCnpj,
+                            dataQrCode: 'RASTECH',
+                            valor: _saleAmount.value.toString(),
+                            nomeDoProduto:
+                                widget.batch?.nomeProduto.toString() ?? '',
+                          ),
+                          isOrganico: showImage,
+                        ); // Feche o formulário ou faça qualquer outra ação necessária
+
+                        batchService.addQrCode(
+                            batch: widget.batch!, batchQrCode: batchQrCode);
                         Navigator.pop(context);
                       },
                       textButton: 'Salvar',

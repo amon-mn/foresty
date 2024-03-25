@@ -7,9 +7,9 @@ class EtiquetaProduto extends StatelessWidget {
   final String dataExpedicao;
   final String endereco;
   final String cpfCnpj;
+  final String dataQrCode;
   final ValueNotifier<double> valor;
   final ValueNotifier<String> unidade;
-  final String imagemProduto;
   final String nomeDoProduto;
   final bool
       showImage; // Adicionado o atributo para controlar a visibilidade da imagem
@@ -21,8 +21,8 @@ class EtiquetaProduto extends StatelessWidget {
     required this.dataExpedicao,
     required this.endereco,
     required this.cpfCnpj,
+    required this.dataQrCode,
     required this.valor,
-    required this.imagemProduto,
     required this.nomeDoProduto,
     required this.showImage, // Adicionado o parâmetro showImage
   });
@@ -86,7 +86,7 @@ class EtiquetaProduto extends StatelessWidget {
               ),
               SizedBox(width: 16.0),
               QrImageView(
-                data: 'RASTECH ',
+                data: dataQrCode,
                 version: QrVersions.auto,
                 size: 90.0,
               ),
@@ -126,7 +126,7 @@ class EtiquetaProduto extends StatelessWidget {
                 visible:
                     showImage, // Controla a visibilidade com base no estado do checkbox
                 child: Image.asset(
-                  imagemProduto,
+                  'lib/assets/logo_produto_organico.png',
                   height: 70,
                   width: 90,
                 ),
