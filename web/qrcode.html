@@ -1,0 +1,89 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Usuário</title>
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        }
+        .message {
+        font-size: 24px;
+        color: green;
+        margin-bottom: 20px;
+        }
+        input[type="text"] {
+        width: 200px;
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 10px;
+        }
+        button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        }
+    </style>
+    </head>
+    <body>
+    <div class="message">Consulta de Usuário</div>
+    <input type="text" id="cpfInput" placeholder="Digite o CPF do usuário">
+    <button onclick="consultarUsuario()">Enviar CPF</button>
+    <div id="result"></div>
+
+    <!-- Carregue o Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-firestore.js"></script>
+
+    <script>
+        // Configure o Firebase
+        var firebaseConfig = {
+        apiKey: "AIzaSyCDll66xmGhwbYBFRRBxj8lvQIFrwXydqw",
+        authDomain: "forest-traceability.firebaseapp.com",
+        projectId: "forest-traceability",
+        storageBucket: "forest-traceability.appspot.com",
+        messagingSenderId: "883889030916",
+        appId: "1:883889030916:web:1a9ce44e058b39d7fa7251",
+        measurementId: "G-3Q760CMJBM"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Inicialize o Firestore
+        var db = firebase.firestore();
+
+        // Função para consultar o usuário com base no CPF digitado
+        function consultarUsuario() {
+        var cpf = document.getElementById('cpfInput').value;
+
+        // Consulta o usuário com base no CPF
+        db.collection('users').where('cpf', '==', cpf).get().then((querySnapshot) => {
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            if (querySnapshot.empty) {
+            resultDiv.textContent = 'Nenhum usuário encontrado com este CPF.';
+            } else {
+            querySnapshot.forEach((doc) => {
+                var userName = doc.data().name;
+                var userResult = document.createElement('div');
+                userResult.textContent = 'Nome do usuário: ' + userName;
+                resultDiv.appendChild(userResult);
+            });
+            }
+        }).catch((error) => {
+            console.error('Erro ao consultar usuário:', error);
+        });
+        }
+    </script>
+    </body>
+    </html>
