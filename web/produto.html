@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Produto e do Produtor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .info {
+            margin-bottom: 10px;
+        }
+
+        .info label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <h2>Informações do Produto</h2>
+            <div class="info">
+                <label>Nome do Produto:</label>
+                <span id="productName"></span>
+            </div>
+            <div class="info">
+                <label>Id do Lote:</label>
+                <span id="batchId"></span>
+            </div>
+            <div class="info">
+                <label>Peso e Unidade do QrCode:</label>
+                <span id="qrCodeInfo"></span>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Informações do Produtor</h2>
+            <div class="info">
+                <label>CPF:</label>
+                <span id="cpf"></span>
+            </div>
+            <div class="info">
+                <label>Endereço:</label>
+                <span id="endereco"></span>
+            </div>
+            <div class="info">
+                <label>Email:</label>
+                <span id="email"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importar o SDK do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
+
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDll66xmGhwbYBFRRBxj8lvQIFrwXydqw",
+            authDomain: "forest-traceability.firebaseapp.com",
+            projectId: "forest-traceability",
+            storageBucket: "forest-traceability.appspot.com",
+            messagingSenderId: "883889030916",
+            appId: "1:883889030916:web:1a9ce44e058b39d7fa7251",
+            measurementId: "G-3Q760CMJBM"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Inicializar o Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Referência ao Firestore
+        const db = firebase.firestore();
+
+        // Função para carregar e exibir as informações do produto e do produtor
+        async function carregarInformacoes() {
+            try {
+                // Buscar informações do produto
+                const produtosSnapshot = await db.collection('produtos').get();
+                const produtos = produtosSnapshot.docs.map(doc => doc.data());
+
+                // Buscar informações do produtor
+                const produtoresSnapshot = await db.collection('produtores').get();
+                const produtores = produtoresSnapshot.docs.map(doc => doc.data());
+
+                // Exibindo informações do produto
+                document.getElementById('productName').textContent = produtos[0].nomeProduto;
+                document.getElementById('batchId').textContent = produtos[0].idLote;
+                document.getElementById('qrCodeInfo').textContent = produtos[0].peso + ' ' + produtos[0].unidade;
+
+                // Exibindo informações do produtor
+                document.getElementById('cpf').textContent = produtores[0].cpf;
+                document.getElementById('endereco').textContent = produtores[0].endereco;
+                document.getElementById('email').textContent = produtores[0].email;
+            } catch (error) {
+                console.error("Erro ao carregar informações:", error);
+            }
+        }
+
+        // Chamando a função para carregar e exibir as informações
+        carregarInformacoes();
+    </script>
+</body>
+</html>
