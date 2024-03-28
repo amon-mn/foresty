@@ -18,9 +18,10 @@ var firebaseConfig = {
   
   // Função para consultar QR Code
   function consultarQrCode() {
-    window.location.href = "produto.html";
+    window.location.href = "qrcode.html";
   }
   
+
   // Função para carregar os usuários e lotes
 function carregarUsuariosELotes() {
     usersRef.get().then((querySnapshot) => {
@@ -70,6 +71,7 @@ function carregarUsuariosELotes() {
         console.error("Erro ao obter usuários: ", error);
     });
 }
+
 
 /*
 // Função para carregar as informações dos produtores do banco de dados
@@ -140,56 +142,37 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("Erro ao carregar informações:", error);
         });
 });
-*/
 
-// Função para carregar os usuários e lotes do banco de dados
-async function carregarUsuariosELotes() {
-    try {
-        const querySnapshot = await usersRef.get();
-        const produtos = [];
-        const produtores = [];
 
-        querySnapshot.forEach((userDoc) => {
-            const userData = userDoc.data();
-
-            // Informações do produtor
-            const produtor = {
-                cpf: userData.cpf,
-                endereco: userData.endereco,
-                email: userData.email
-            };
-            produtores.push(produtor);
-
-            // Referência para a subcoleção 'lotes' do usuário atual
-            const lotesRef = userDoc.ref.collection('lotes');
-            lotesRef.get().then((lotesQuerySnapshot) => {
-                lotesQuerySnapshot.forEach((loteDoc) => {
-                    // Mapear os documentos de lote para objetos ProductBatch
-                    const loteData = loteDoc.data();
-                    const produto = {
-                        idLote: loteData.id,
-                        nomeProduto: loteData.nomeProduto,
-                        peso: loteData.qrCode ? loteData.qrCode.peso : '',
-                        unidade: loteData.qrCode ? loteData.qrCode.unidade : ''
-                    };
-                    produtos.push(produto);
-                });
-            }).catch((error) => {
-                console.error("Erro ao obter lotes do usuário " + userDoc.id + ": ", error);
-            });
+function carregarUsuariosELotes() {
+    usersRef.get().then((querySnapshot) => {
+      var usersList = document.getElementById('users');
+      querySnapshot.forEach((userDoc) => {
+        var userName = userDoc.data().name;
+        var userLi = document.createElement('li');
+        userLi.textContent = "Usuário: " + userName;
+        usersList.appendChild(userLi);
+  
+        var lotesRef = userDoc.ref.collection('lotes');
+        lotesRef.get().then((lotesQuerySnapshot) => {
+          lotesQuerySnapshot.forEach((loteDoc) => {
+            var loteLi = document.createElement('li');
+            loteLi.textContent = "Nome do Lote: " + loteDoc.data().nomeLote;
+            loteLi.classList.add('lote');
+            userLi.appendChild(loteLi);
+          });
+        }).catch((error) => {
+          console.error("Erro ao obter lotes do usuário " + userDoc.id + ": ", error);
         });
-
-        // Retornando as informações dos produtos e produtores
-        return { produtos, produtores };
-    } catch (error) {
-        console.error("Erro ao obter usuários: ", error);
-        return null;
-    }
-}
-
+      });
+    }).catch((error) => {
+      console.error("Erro ao obter usuários: ", error);
+    });
+  }
   
   // Chama a função para carregar usuários e lotes quando a página carregar
   document.addEventListener('DOMContentLoaded', function () {
     carregarUsuariosELotes();
   });
+  */
   
