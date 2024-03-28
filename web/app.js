@@ -22,6 +22,41 @@ var firebaseConfig = {
   }
   
 
+
+function carregarUsuariosELotes() {
+    usersRef.get().then((querySnapshot) => {
+      var usersList = document.getElementById('users');
+      querySnapshot.forEach((userDoc) => {
+        var userName = userDoc.data().name;
+        var userLi = document.createElement('li');
+        userLi.textContent = "Usuário: " + userName;
+        usersList.appendChild(userLi);
+  
+        var lotesRef = userDoc.ref.collection('lotes');
+        lotesRef.get().then((lotesQuerySnapshot) => {
+          lotesQuerySnapshot.forEach((loteDoc) => {
+            var loteLi = document.createElement('li');
+            loteLi.textContent = "Nome do Lote: " + loteDoc.data().nomeLote;
+            loteLi.classList.add('lote');
+            userLi.appendChild(loteLi);
+          });
+        }).catch((error) => {
+          console.error("Erro ao obter lotes do usuário " + userDoc.id + ": ", error);
+        });
+      });
+    }).catch((error) => {
+      console.error("Erro ao obter usuários: ", error);
+    });
+  }
+  
+  // Chama a função para carregar usuários e lotes quando a página carregar
+  document.addEventListener('DOMContentLoaded', function () {
+    carregarUsuariosELotes();
+  });
+ 
+  
+  
+  /*
   // Função para carregar os usuários e lotes
 function carregarUsuariosELotes() {
     usersRef.get().then((querySnapshot) => {
@@ -73,7 +108,7 @@ function carregarUsuariosELotes() {
 }
 
 
-/*
+
 // Função para carregar as informações dos produtores do banco de dados
 function carregarInformacoes() {
     // Objeto para armazenar as informações dos produtos e produtores
@@ -142,37 +177,4 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("Erro ao carregar informações:", error);
         });
 });
-
-
-function carregarUsuariosELotes() {
-    usersRef.get().then((querySnapshot) => {
-      var usersList = document.getElementById('users');
-      querySnapshot.forEach((userDoc) => {
-        var userName = userDoc.data().name;
-        var userLi = document.createElement('li');
-        userLi.textContent = "Usuário: " + userName;
-        usersList.appendChild(userLi);
-  
-        var lotesRef = userDoc.ref.collection('lotes');
-        lotesRef.get().then((lotesQuerySnapshot) => {
-          lotesQuerySnapshot.forEach((loteDoc) => {
-            var loteLi = document.createElement('li');
-            loteLi.textContent = "Nome do Lote: " + loteDoc.data().nomeLote;
-            loteLi.classList.add('lote');
-            userLi.appendChild(loteLi);
-          });
-        }).catch((error) => {
-          console.error("Erro ao obter lotes do usuário " + userDoc.id + ": ", error);
-        });
-      });
-    }).catch((error) => {
-      console.error("Erro ao obter usuários: ", error);
-    });
-  }
-  
-  // Chama a função para carregar usuários e lotes quando a página carregar
-  document.addEventListener('DOMContentLoaded', function () {
-    carregarUsuariosELotes();
-  });
-  */
-  
+ */
