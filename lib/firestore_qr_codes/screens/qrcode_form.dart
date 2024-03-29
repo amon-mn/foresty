@@ -258,7 +258,7 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
                 dataExpedicao: DateFormat('dd/MM/yyyy').format(DateTime.now()),
                 endereco: address, // Usando o endereço recuperado
                 cpfCnpj: cpfCnpj, // Usando o CPF/CNPJ recuperado
-                dataQrCode: 'RASTECH',
+                dataQrCode: widget.user.uid,
                 valor: _saleAmount,
                 showImage: showImage, // Passando o valor atualizado
                 // Substitua pelo caminho real da imagem
@@ -296,7 +296,7 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
                                 DateFormat('dd/MM/yyyy').format(DateTime.now()),
                             endereco: address,
                             cpfCnpj: cpfCnpj,
-                            dataQrCode: 'RASTECH',
+                            dataQrCode: widget.user.uid,
                             valor: _saleAmount.value.toString(),
                             nomeDoProduto:
                                 widget.batch?.nomeProduto.toString() ?? '',

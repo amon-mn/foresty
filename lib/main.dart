@@ -66,7 +66,11 @@ class AuthPage extends StatelessWidget {
               if (userType == "ADM") {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => AdmPage(user: user)),
+                  MaterialPageRoute(
+                      builder: (context) => AdmPage(
+                            user: user,
+                            listBatchs: [],
+                          )),
                   (route) => false,
                 );
               } else {
@@ -90,8 +94,7 @@ class AuthPage extends StatelessWidget {
   Future<String> getUserType(String userId) async {
     DocumentSnapshot userSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    Map<String, dynamic> userData =
-        userSnapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
     return userData['userType'];
   }
 }

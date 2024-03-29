@@ -6,11 +6,14 @@ import 'package:foresty/authentication/screens/components/show_password_confirma
 import 'package:foresty/authentication/screens/welcome_page.dart';
 import 'package:foresty/authentication/services/auth_service.dart';
 import 'package:foresty/components/my_drawer.dart';
+import 'package:foresty/firestore_batch/models/batch.dart';
 
 class AdmPage extends StatefulWidget {
   final User user;
+  final List<ProductBatch> listBatchs; // Adicione este parâmetro
 
-  const AdmPage({Key? key, required this.user}) : super(key: key);
+  const AdmPage({Key? key, required this.user, required this.listBatchs})
+      : super(key: key);
 
   @override
   State<AdmPage> createState() => _AdmPageState();
@@ -29,6 +32,7 @@ class _AdmPageState extends State<AdmPage> {
         backgroundColor: Color.fromARGB(255, 0, 90, 3),
       ),
       drawer: MyDrawer(
+        listBatchs: [],
         user: widget.user,
         onLogout: () => handleLogout(context),
         onRemoveAccount: (email) {

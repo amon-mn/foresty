@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.grey.shade100,
       drawer: MyDrawer(
         user: widget.user,
+        listBatchs: listBatchs,
         onLogout: () => handleLogout(context),
         onRemoveAccount: (email) {
           showDialog(

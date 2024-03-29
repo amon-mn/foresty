@@ -7,6 +7,8 @@ class EtiquetaProduto extends StatelessWidget {
   final String dataExpedicao;
   final String endereco;
   final String cpfCnpj;
+  static const String urlQrCode =
+      'https://forest-traceability.web.app/?userId=';
   final String dataQrCode;
   final ValueNotifier<double> valor;
   final ValueNotifier<String> unidade;
@@ -86,7 +88,7 @@ class EtiquetaProduto extends StatelessWidget {
               ),
               SizedBox(width: 16.0),
               QrImageView(
-                data: dataQrCode,
+                data: '$urlQrCode$dataQrCode',
                 version: QrVersions.auto,
                 size: 90.0,
               ),

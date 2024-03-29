@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_qr_codes/screens/tags_page.dart';
 import 'package:image_picker/image_picker.dart';
 import '../authentication/screens/components/show_password_confirmation_dialog.dart';
 
@@ -11,13 +13,15 @@ class MyDrawer extends StatelessWidget {
   final Function(String) onRemoveAccount;
   final String? profileImageUrl;
   final Function(String)? onUpdateProfileImage;
+  final List<ProductBatch> listBatchs;
 
   const MyDrawer({
     required this.user,
     required this.onLogout,
     required this.onRemoveAccount,
     this.profileImageUrl,
-    this.onUpdateProfileImage, // Certifique-se de que esta linha está presente
+    this.onUpdateProfileImage,
+    required this.listBatchs, // Certifique-se de que esta linha está presente
   });
 
   Future<void> _pickImage(BuildContext context) async {
@@ -110,6 +114,18 @@ class MyDrawer extends StatelessWidget {
                 builder: (context) {
                   return PasswordConfirmationDialog(email: user.email!);
                 },
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.qr_code),
+            title: const Text('Códigos QR'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TagScreen(listBatchs: listBatchs),
+                ),
               );
             },
           ),

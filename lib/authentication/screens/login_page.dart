@@ -124,8 +124,10 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    AdmPage(user: FirebaseAuth.instance.currentUser!),
+                builder: (context) => AdmPage(
+                  user: FirebaseAuth.instance.currentUser!,
+                  listBatchs: [],
+                ),
               ),
             );
           } else {
