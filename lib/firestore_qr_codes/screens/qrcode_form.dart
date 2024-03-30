@@ -7,7 +7,7 @@ import 'package:foresty/components/my_textfield.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_batch/services/batch_service.dart';
 import 'package:foresty/firestore_qr_codes/models/qrCode.dart';
-import 'package:foresty/firestore_qr_codes/screens/components/label_generator.dart';
+import 'package:foresty/firestore_qr_codes/screens/components/tag_generator.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart'; // Importe a biblioteca intl
 
@@ -258,7 +258,7 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
                 dataExpedicao: DateFormat('dd/MM/yyyy').format(DateTime.now()),
                 endereco: address, // Usando o endereço recuperado
                 cpfCnpj: cpfCnpj, // Usando o CPF/CNPJ recuperado
-                dataQrCode: widget.user.uid,
+                dataQrCode: "RASTECH",
                 valor: _saleAmount,
                 showImage: showImage, // Passando o valor atualizado
                 // Substitua pelo caminho real da imagem

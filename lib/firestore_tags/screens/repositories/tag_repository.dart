@@ -11,6 +11,7 @@ class TagsRepository extends StatelessWidget {
       body: ListView(
         children: [
           TagWidget(
+            dataQrCode: 'RASTECH',
             title: 'Lote 1',
             subtitle: 'Descrição do Lote 1',
             batchId: '1',
@@ -22,6 +23,7 @@ class TagsRepository extends StatelessWidget {
             },
           ),
           TagWidget(
+            dataQrCode: 'RASTECH',
             title: 'Lote 2',
             subtitle: 'Descrição do Lote 2',
             batchId: '2',
@@ -33,6 +35,7 @@ class TagsRepository extends StatelessWidget {
             },
           ),
           TagWidget(
+            dataQrCode: 'RASTECH',
             title: 'Lote 3',
             subtitle: 'Descrição do Lote 3',
             batchId: '3',

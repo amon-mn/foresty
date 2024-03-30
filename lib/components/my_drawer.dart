@@ -3,7 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
-import 'package:foresty/firestore_qr_codes/screens/tags_page.dart';
+import 'package:foresty/firestore_tags/screens/tags_page.dart';
 import 'package:image_picker/image_picker.dart';
 import '../authentication/screens/components/show_password_confirmation_dialog.dart';
 
@@ -119,12 +119,15 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.qr_code),
-            title: const Text('Códigos QR'),
+            title: const Text('Etiquetas'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TagScreen(listBatchs: listBatchs),
+                  builder: (context) => TagScreen(
+                    listBatchs: listBatchs,
+                    user: user,
+                  ),
                 ),
               );
             },

@@ -4,6 +4,11 @@ import 'package:qr_flutter/qr_flutter.dart';
 class TagWidget extends StatelessWidget {
   final String? title;
   final String? subtitle;
+  static const String urlQrCode =
+      'https://forest-traceability.web.app/?userId=';
+  static const String urlBatchId = '&batchId=';
+  final String dataQrCode;
+
   final VoidCallback? onLongPress;
   final VoidCallback? onTap;
   final String? batchId;
@@ -13,7 +18,8 @@ class TagWidget extends StatelessWidget {
     this.subtitle,
     this.onLongPress,
     this.onTap,
-    this.batchId,
+    required this.batchId,
+    required this.dataQrCode,
   });
 
   @override
@@ -116,7 +122,7 @@ class TagWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
                 child: QrImageView(
-                  data: 'RASTECH',
+                  data: '$urlQrCode$dataQrCode$urlBatchId$batchId',
                 ),
               ),
             ),
