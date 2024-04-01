@@ -52,6 +52,10 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   intl: ^0.17.0
   qr_flutter: ^4.1.0
+  printing: ^5.12.0
+  pdf: ^3.10.8
+  path_provider: ^2.1.2
+  open_file: ^3.3.2
   
 
 dev_dependencies:
