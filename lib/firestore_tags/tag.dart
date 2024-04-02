@@ -7,8 +7,7 @@ class Tag extends StatelessWidget {
   final String dataExpedicao;
   final String endereco;
   final String cpfCnpj;
-  static const String urlQrCode =
-      'https://forest-traceability.web.app/?userId=';
+  static const String urlQrCode = 'https://rastechoficial.com/?userId=';
   static const String urlBatchId = '&batchId=';
   final String batchId;
   final String userIdQrCode;

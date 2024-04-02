@@ -8,7 +8,7 @@ class EtiquetaProduto extends StatelessWidget {
   final String endereco;
   final String cpfCnpj;
   static const String urlQrCode =
-      'https://forest-traceability.web.app/?userId=';
+      'https://rastechoficial.com/?userId=';
   final String dataQrCode;
   final ValueNotifier<double> valor;
   final ValueNotifier<String> unidade;
