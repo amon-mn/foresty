@@ -77,6 +77,7 @@ async function carregarUsuario() {
     }
 }
 
+// Função para inicializar o mapa
 function initMap(initialLocation) {
     const options = {
         zoom: 16,
@@ -88,15 +89,92 @@ function initMap(initialLocation) {
         options
     );
 
-    // Adiciona um marcador na localização inicial do usuário
-    addMarker(initialLocation);
+    // Adiciona um evento para quando o mapa terminar de carregar
+    google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
+        // Após o mapa ser carregado, obtemos a localização do usuário
+        navigator.geolocation.getCurrentPosition(position => {
+            const userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            // Adiciona um marcador na localização inicial do usuário
+            addMarker(initialLocation, 'icons/marker_rastech.png', 100);
+            // Adiciona um marcador na localização atual do usuário
+            addMarker(userLocation, 'icons/marker_house.png', 100);
+
+            // Traça uma linha reta entre as duas localizações
+            const lineCoordinates = [
+                { lat: initialLocation.lat, lng: initialLocation.lng },
+                userLocation
+            ];
+            const line = new google.maps.Polyline({
+                path: lineCoordinates,
+                geodesic: true,
+                strokeColor: '#006400',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+            line.setMap(map);
+
+            // Move o mapa para a localização atual do usuário
+            map.panTo(userLocation);
+
+            // Desenha a direção
+            drawDirection(initialLocation, userLocation);
+        });
+    });
 }
 
-function addMarker(location) {
+// Função para adicionar marcadores personalizados nos pontos de origem e destino
+function addCustomMarkers(start, end) {
+    addMarker(start, 'icons/marker_rastech.png', 100); // Adiciona marcador personalizado no ponto de origem
+    addMarker(end, 'icons/marker_house.png', 100); // Adiciona marcador personalizado no ponto de destino
+}
+
+// Função para desenhar a direção entre dois pontos
+function drawDirection(start, end) {
+    const directionService = new google.maps.DirectionsService();
+    const directionRenderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: true // Desativa a exibição dos marcadores padrão
+    });
+
+    directionRenderer.setMap(map);
+
+    // Adiciona os marcadores personalizados nos pontos de origem e destino
+    addCustomMarkers(start, end);
+
+    calculationAndDisplayRoute(directionService, directionRenderer, start, end);
+}
+
+// Função para calcular e exibir a rota
+function calculationAndDisplayRoute(directionService, directionRenderer, start, end) {
+    const request = {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.DirectionsTravelMode.DRIVING
+    };
+
+    directionService.route(request, function (response, status) {
+       if( status === google.maps.DirectionsStatus.OK ) {
+           directionRenderer.setDirections(response);
+       }
+    });
+}
+
+
+// Função para adicionar marcador no mapa com ícone personalizado e tamanho ajustável
+function addMarker(location, iconUrl, size) {
     if (location) {
         new google.maps.Marker({
             position: location,
-            map: map
+            map: map,
+            icon: {
+                url: iconUrl, // URL do ícone personalizado
+                scaledSize: new google.maps.Size(size, size), // Tamanho do ícone (largura x altura)
+                origin: new google.maps.Point(0, 0), // Origem do ícone
+                anchor: new google.maps.Point(size / 2, size / 2) // Ponto de ancoragem do ícone (centro)
+            }
         });
     }
 }
