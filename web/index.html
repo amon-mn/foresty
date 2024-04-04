@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informações do QRCode</title>
     <link rel="stylesheet" type="text/css" href="index.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVfxVjh98O_6-hstZA6A2pO2qUNEbtfY&callback=initMap"
+            async defer></script>
+
     <!-- Importar o SDK do Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -26,9 +29,11 @@
                 <img src="icons\rastech_logo_with_name.png" id="logo" alt="Rastech Logo">
             </div>
         </div>
-        <div class="row">
-            <button onclick="carregarUsuarioELotes()">Carregar</button>
+        <div id="map">
+
         </div>
+        
+        <p id="directions"></p>
     </div>
 
     <script src="index.js"></script>
