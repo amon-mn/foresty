@@ -87,7 +87,7 @@ class BatchWidget extends StatelessWidget {
                                       title ?? '',
                                       style: const TextStyle(
                                         fontSize: 20,
-                                        overflow: TextOverflow.fade,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ),
@@ -159,37 +159,40 @@ class BatchWidget extends StatelessWidget {
             Positioned(
               left: screenWidth / 3,
               bottom: 5,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: onEditPressed,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: onCreateActivityPressed,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.check),
-                    onPressed: onHarvestPressed,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.qr_code),
-                    onPressed: onQrCodePressed,
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Color.fromARGB(255, 217, 0, 0),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: onEditPressed,
                     ),
-                    onPressed: () async {
-                      if (batchId != null) {
-                        await BatchService().removeBatch(batchId: batchId!);
-                      }
-                    },
-                  ),
-                ],
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: onCreateActivityPressed,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.check),
+                      onPressed: onHarvestPressed,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.qr_code),
+                      onPressed: onQrCodePressed,
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Color.fromARGB(255, 217, 0, 0),
+                      ),
+                      onPressed: () async {
+                        if (batchId != null) {
+                          await BatchService().removeBatch(batchId: batchId!);
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

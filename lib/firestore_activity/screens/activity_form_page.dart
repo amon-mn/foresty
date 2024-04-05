@@ -61,8 +61,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
       ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoCapina = ValueNotifier<String>('Selecione');
   ValueNotifier<String> selectedTipoTrato = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoUnid1 = ValueNotifier<String>('Selecione');
-  ValueNotifier<String> selectedTipoUnid2 = ValueNotifier<String>('Selecione');
+  final TextEditingController selectedTipoUnid1 = TextEditingController();
+  final TextEditingController selectedTipoUnid2 = TextEditingController();
   ValueNotifier<String> selectedTipoColeta = ValueNotifier<String>('Selecione');
 
   // Variável para armazenar a data selecionada
@@ -460,9 +460,11 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         Row(
                           children: [
                             Expanded(
-                              flex: 10, // Define a proporção do primeiro componente
+                              flex:
+                                  10, // Define a proporção do primeiro componente
                               child: SizedBox(
-                                width: double.infinity, // Para ocupar todo o espaço disponível
+                                width: double
+                                    .infinity, // Para ocupar todo o espaço disponível
                                 child: Column(
                                   children: [
                                     MyTextFieldWrapper(
@@ -470,7 +472,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                         filter: {"#": RegExp(r'[0-9xX]')},
                                         type: MaskAutoCompletionType.lazy,
                                       ),
-                                      controller: _quantidade2, // Use um novo controller
+                                      controller:
+                                          _quantidade2, // Use um novo controller
                                       hintText: 'Quantidade',
                                       obscureText: false,
                                       validator: (value) {},
@@ -478,9 +481,10 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                   ],
                                 ),
                               ),
-                            ),// Adiciona espaço entre os componentes
+                            ), // Adiciona espaço entre os componentes
                             Expanded(
-                              flex: 1, // Define a proporção do segundo componente
+                              flex:
+                                  1, // Define a proporção do segundo componente
                               child: Column(
                                 children: [
                                   Text('ml'),
@@ -601,14 +605,10 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               const SizedBox(height: 4),
                               SizedBox(
                                 width: double.infinity,
-                                child: MyDropdownFormField(
-                                  selectedValueNotifier: selectedTipoUnid1,
-                                  itemsList: itemListTipoUnid,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedTipoUnid1.value = value!;
-                                    });
-                                  },
+                                child: MyTextFieldWrapper(
+                                  controller: selectedTipoUnid1,
+                                  hintText: 'Unidade',
+                                  obscureText: false,
                                 ),
                               ),
                             ],
@@ -733,7 +733,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             )
                           ],
                         ),
-
                       ],
                     ),
                 ],
@@ -831,7 +830,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 SizedBox(
-                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  width: double
+                                      .infinity, // Define a largura para ocupar todo o espaço disponível
                                   child: MyTextFieldWrapper(
                                     hintText: 'Número',
                                     controller: _quantidade1,
@@ -860,15 +860,12 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 SizedBox(
-                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
-                                  child: MyDropdownFormField(
-                                    selectedValueNotifier: selectedTipoUnid1,
-                                    itemsList: itemListTipoUnid,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedTipoUnid1.value = value!;
-                                      });
-                                    },
+                                  width: double
+                                      .infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyTextFieldWrapper(
+                                    controller: selectedTipoUnid1,
+                                    hintText: 'Unidade',
+                                    obscureText: false,
                                   ),
                                 ),
                               ],
@@ -897,7 +894,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 SizedBox(
-                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  width: double
+                                      .infinity, // Define a largura para ocupar todo o espaço disponível
                                   child: MyTextFieldWrapper(
                                     hintText: 'Número',
                                     controller: _quantidade2,
@@ -926,15 +924,12 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 SizedBox(
-                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
-                                  child: MyDropdownFormField(
-                                    selectedValueNotifier: selectedTipoUnid2,
-                                    itemsList: itemListTipoUnid,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedTipoUnid2.value = value!;
-                                      });
-                                    },
+                                  width: double
+                                      .infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyTextFieldWrapper(
+                                    controller: selectedTipoUnid2,
+                                    hintText: 'Unidade',
+                                    obscureText: false,
                                   ),
                                 ),
                               ],
@@ -1020,7 +1015,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 SizedBox(
-                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  width: double
+                                      .infinity, // Define a largura para ocupar todo o espaço disponível
                                   child: MyTextFieldWrapper(
                                     hintText: 'Número',
                                     controller: _quantidade1,
@@ -1049,15 +1045,12 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 SizedBox(
-                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
-                                  child: MyDropdownFormField(
-                                    selectedValueNotifier: selectedTipoUnid1,
-                                    itemsList: itemListTipoUnid,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedTipoUnid1.value = value!;
-                                      });
-                                    },
+                                  width: double
+                                      .infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyTextFieldWrapper(
+                                    controller: selectedTipoUnid1,
+                                    hintText: 'Unidade',
+                                    obscureText: false,
                                   ),
                                 ),
                               ],
@@ -1086,7 +1079,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 SizedBox(
-                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
+                                  width: double
+                                      .infinity, // Define a largura para ocupar todo o espaço disponível
                                   child: MyTextFieldWrapper(
                                     hintText: 'Número',
                                     controller: _quantidade2,
@@ -1115,15 +1109,12 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 SizedBox(
-                                  width: double.infinity, // Define a largura para ocupar todo o espaço disponível
-                                  child: MyDropdownFormField(
-                                    selectedValueNotifier: selectedTipoUnid2,
-                                    itemsList: itemListTipoUnid,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedTipoUnid2.value = value!;
-                                      });
-                                    },
+                                  width: double
+                                      .infinity, // Define a largura para ocupar todo o espaço disponível
+                                  child: MyTextFieldWrapper(
+                                    controller: selectedTipoUnid2,
+                                    hintText: 'Unidade',
+                                    obscureText: false,
                                   ),
                                 ),
                               ],
@@ -1423,7 +1414,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                       filter: {"#": RegExp(r'[0-9xX]')},
                                       type: MaskAutoCompletionType.lazy,
                                     ),
-                                    controller: _quantidade1, // Use um novo controller
+                                    controller:
+                                        _quantidade1, // Use um novo controller
                                     hintText: 'Quantidade',
                                     obscureText: false,
                                     validator: (value) {},
@@ -1551,14 +1543,10 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               const SizedBox(height: 4),
                               SizedBox(
                                 width: double.infinity,
-                                child: MyDropdownFormField(
-                                  selectedValueNotifier: selectedTipoUnid1,
-                                  itemsList: itemListTipoUnid,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedTipoUnid1.value = value!;
-                                    });
-                                  },
+                                child: MyTextFieldWrapper(
+                                  controller: selectedTipoUnid1,
+                                  hintText: 'Unidade',
+                                  obscureText: false,
                                 ),
                               ),
                             ],
@@ -1566,12 +1554,12 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                         ),
                       ],
                     ),
+                  SizedBox(height: 16)
                 ],
               ),
             if (selectedAtividade.value == 'Capina')
               Column(
                 children: [
-                  const SizedBox(height: 8),
                   Container(
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(left: 10),
@@ -1643,7 +1631,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                       filter: {"#": RegExp(r'[0-9xX]')},
                                       type: MaskAutoCompletionType.lazy,
                                     ),
-                                    controller: _quantidade1, // Use um novo controller
+                                    controller:
+                                        _quantidade1, // Use um novo controller
                                     hintText: 'Quantidade',
                                     obscureText: false,
                                     validator: (value) {},
@@ -1785,7 +1774,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                     child: MyButton(
                       onTap: () async {
                         // Crie o objeto BatchActivity com base nas informações do formulário e do lote
-                        BatchActivity batchActivity = createBatchActivityObject();
+                        BatchActivity batchActivity =
+                            createBatchActivityObject();
 
                         // Adicione o objeto ao banco de dados usando o serviço
                         await batchService.addBatchActivity(
@@ -1825,7 +1815,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                 : selectedTipoAduboQuimico.value,
         tipoAdubacao: selectedAdubacao.value,
         quantidade: _quantidade3.text,
-        unidade: selectedTipoUnid1.value,
+        unidade: selectedTipoUnid1.text,
         produtoUtilizado:
             selectedAdubacao.value == 'Química' ? _produtoUtilizado.text : '',
         doseAplicada:
@@ -1884,7 +1874,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         quantidade: selectedAdubacao.value == 'Química'
             ? _quantidade1.text
             : _quantidade2.text,
-        unidade: selectedTipoUnid1.value,
+        unidade: selectedTipoUnid1.text,
         produtoUtilizado:
             selectedAdubacao.value == 'Química' ? _produtoUtilizado.text : '',
         doseAplicada:
@@ -1904,8 +1894,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         nomeAgrotoxico: _nomeAgrotoxico.text,
         quantidadeRecomendadaAgrotoxico: _quantidade1.text,
         quantidadeAplicadaAgrotoxico: _quantidade2.text,
-        unidadeRecomendadaAgrotoxico: selectedTipoUnid1.value,
-        unidadeAplicadaAgrotoxico: selectedTipoUnid2.value,
+        unidadeRecomendadaAgrotoxico: selectedTipoUnid1.text,
+        unidadeAplicadaAgrotoxico: selectedTipoUnid2.text,
       );
     } else if (selectedTipoManejoPragas.value == 'Controle natural') {
       manejoPragas = ManejoPragas(
@@ -1915,8 +1905,8 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
         nomeDefensivoNatural: _nomeOuTipo.text,
         quantidadeRecomendadaDefensivoNatural: _quantidade1.text,
         quantidadeAplicadaDefensivoNatural: _quantidade2.text,
-        unidadeRecomendadaDefensivoNatural: selectedTipoUnid1.value,
-        unidadeAplicadaDefensivoNatural: selectedTipoUnid2.value,
+        unidadeRecomendadaDefensivoNatural: selectedTipoUnid1.text,
+        unidadeAplicadaDefensivoNatural: selectedTipoUnid2.text,
         tipoColeta: selectedTipoColeta.value,
         nomeInimigoNatural: _nomeInimigoNatural.text,
         formaUsoInimigoNatural: _formaUsoInimigoNatural.text,

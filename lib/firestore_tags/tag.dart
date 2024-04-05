@@ -32,6 +32,9 @@ class Tag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String maskedCpfCnpj =
+        '${'*' * 3}.${'*' * 3}${cpfCnpj.substring(cpfCnpj.length - 7)}';
+
     return Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -76,7 +79,7 @@ class Tag extends StatelessWidget {
                     ),
                     SizedBox(height: 4.0),
                     Text(
-                      'CPF/CNPJ: $cpfCnpj',
+                      'CPF/CNPJ: $maskedCpfCnpj',
                       style: const TextStyle(fontSize: 10),
                     ),
                   ],
