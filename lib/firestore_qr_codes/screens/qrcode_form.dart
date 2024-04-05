@@ -52,6 +52,16 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
 
   String address = ''; // Variável para armazenar o endereço
   String cpfCnpj = ''; // Variável para armazenar o CPF/CNPJ
+  bool _isLoading = false;
+
+  Widget _buildLoadingIndicator() {
+    return Container(
+      color: Colors.black.withOpacity(0.5), // Fundo semi-transparente
+      child: Center(
+        child: CircularProgressIndicator(), // Indicador de loading centralizado
+      ),
+    );
+  } // Adicione esta variável de estado
 
   @override
   void initState() {
@@ -113,209 +123,227 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
       ),
       body: Form(
         key: _formKey,
-        child: Container(
-          alignment: Alignment.topLeft,
-          child: ListView(
-            shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
-            padding: EdgeInsets.all(16.0),
-            children: [
-              const SizedBox(height: 16),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  'Tipo de venda',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[900],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 4),
-              MyDropdownFormField(
-                selectedValueNotifier: selectedSaleType,
-                itemsList: _saleTypeItems,
-                onChanged: (value) {
-                  setState(() {
-                    selectedSaleType.value = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  'Quantidade de venda',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[900],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 4),
-              SizedBox(
-                width: 180,
-                child: MyTextFieldWrapper(
-                  hintText: 'Número',
-                  controller: _quantitySold,
-                  obscureText: false,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, informe a quantidade vendida';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  'Unidade de medida',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[900],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 4),
-              MyDropdownFormField(
-                selectedValueNotifier: selectedUnit,
-                itemsList: _unitOfMeasurementItems,
-                onChanged: (value) {
-                  setState(() {
-                    selectedUnit.value = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  'Valor de venda',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[900],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 4),
-              SizedBox(
-                width: 180,
-                child: MyTextFieldWrapper(
-                  hintText: 'Número',
-                  controller: _labelValue,
-                  obscureText: false,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, informe o valor que irá na etiqueta';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  'O produto é orgânico?',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[900],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 4),
-              Row(
+        child: Stack(
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              child: ListView(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                padding: EdgeInsets.all(16.0),
                 children: [
-                  Checkbox(
-                    value: showImage,
+                  const SizedBox(height: 16),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Tipo de venda',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  MyDropdownFormField(
+                    selectedValueNotifier: selectedSaleType,
+                    itemsList: _saleTypeItems,
                     onChanged: (value) {
                       setState(() {
-                        showImage = value!;
+                        selectedSaleType.value = value!;
                       });
                     },
                   ),
-                  const Text('Sim'),
-                ],
-              ),
-              const SizedBox(height: 16),
-              EtiquetaProduto(
-                nomeDoProduto: widget.batch?.nomeProduto.toString() ?? '',
-                peso: _quantitySoldValue,
-                unidade: selectedUnit,
-                lote: widget.batch?.nomeLote.toString() ?? '',
-                dataExpedicao: DateFormat('dd/MM/yyyy').format(DateTime.now()),
-                endereco: address, // Usando o endereço recuperado
-                cpfCnpj: cpfCnpj, // Usando o CPF/CNPJ recuperado
-                dataQrCode: "RASTECH",
-                valor: _saleAmount,
-                showImage: showImage, // Passando o valor atualizado
-                // Substitua pelo caminho real da imagem
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                  const SizedBox(height: 16),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Quantidade de venda',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.43,
-                    child: MyButton(
-                      textButton: 'Descartar',
-                      isRed: true,
-                      onTap: () {
-                        Navigator.pop(context);
+                    width: 180,
+                    child: MyTextFieldWrapper(
+                      hintText: 'Número',
+                      controller: _quantitySold,
+                      obscureText: false,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, informe a quantidade vendida';
+                        }
+                        return null;
                       },
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(height: 16),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Unidade de medida',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  MyDropdownFormField(
+                    selectedValueNotifier: selectedUnit,
+                    itemsList: _unitOfMeasurementItems,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedUnit.value = value!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'Valor de venda',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.43,
-                    child: MyButton(
-                      onTap: () async {
-                        BatchQrCode batchQrCode = BatchQrCode(
-                          id: Uuid().v4(),
-                          tipoDeVenda: selectedSaleType.value,
-                          pesoDaVenda: _quantitySoldValue.value.toString(),
-                          unidadeDeMedida: selectedUnit.value,
-                          etiqueta: Etiqueta(
-                            peso: _quantitySoldValue.value.toString(),
-                            unidade: selectedUnit.value,
-                            codLote: widget.batch?.nomeLote.toString() ?? '',
-                            dataExpedicao:
-                                DateFormat('dd/MM/yyyy').format(DateTime.now()),
-                            endereco: address,
-                            cpfCnpj: cpfCnpj,
-                            dataQrCode: widget.user.uid,
-                            valor: _saleAmount.value.toString(),
-                            nomeDoProduto:
-                                widget.batch?.nomeProduto.toString() ?? '',
-                          ),
-                          isOrganico: showImage,
-                        ); // Feche o formulário ou faça qualquer outra ação necessária
+                    width: 180,
+                    child: MyTextFieldWrapper(
+                      hintText: 'Número',
+                      controller: _labelValue,
+                      obscureText: false,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, informe o valor que irá na etiqueta';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      'O produto é orgânico?',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: showImage,
+                        onChanged: (value) {
+                          setState(() {
+                            showImage = value!;
+                          });
+                        },
+                      ),
+                      const Text('Sim'),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  EtiquetaProduto(
+                    nomeDoProduto: widget.batch?.nomeProduto.toString() ?? '',
+                    peso: _quantitySoldValue,
+                    unidade: selectedUnit,
+                    lote: widget.batch?.nomeLote.toString() ?? '',
+                    dataExpedicao:
+                        DateFormat('dd/MM/yyyy').format(DateTime.now()),
+                    endereco: address, // Usando o endereço recuperado
+                    cpfCnpj: cpfCnpj, // Usando o CPF/CNPJ recuperado
+                    dataQrCode: "RASTECH",
+                    valor: _saleAmount,
+                    showImage: showImage, // Passando o valor atualizado
+                    // Substitua pelo caminho real da imagem
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.43,
+                        child: MyButton(
+                          textButton: 'Descartar',
+                          isRed: true,
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.43,
+                        child: MyButton(
+                          onTap: () async {
+                            setState(() {
+                              _isLoading =
+                                  true; // Ativar o indicador de loading
+                            });
 
-                        batchService.addQrCode(
-                            batch: widget.batch!, batchQrCode: batchQrCode);
-                        Navigator.pop(context);
-                      },
-                      textButton: 'Salvar',
-                    ),
+                            BatchQrCode batchQrCode = BatchQrCode(
+                              id: Uuid().v4(),
+                              tipoDeVenda: selectedSaleType.value,
+                              pesoDaVenda: _quantitySoldValue.value.toString(),
+                              unidadeDeMedida: selectedUnit.value,
+                              etiqueta: Etiqueta(
+                                peso: _quantitySoldValue.value.toString(),
+                                unidade: selectedUnit.value,
+                                codLote:
+                                    widget.batch?.nomeLote.toString() ?? '',
+                                dataExpedicao: DateFormat('dd/MM/yyyy')
+                                    .format(DateTime.now()),
+                                endereco: address,
+                                cpfCnpj: cpfCnpj,
+                                dataQrCode: widget.user.uid,
+                                valor: _saleAmount.value.toString(),
+                                nomeDoProduto:
+                                    widget.batch?.nomeProduto.toString() ?? '',
+                              ),
+                              isOrganico: showImage,
+                            ); // Feche o formulário ou faça qualquer outra ação necessária
+
+                            batchService.addQrCode(
+                                batch: widget.batch!, batchQrCode: batchQrCode);
+                            setState(() {
+                              _isLoading =
+                                  false; // Ativar o indicador de loading
+                            });
+
+                            Navigator.pop(context);
+                          },
+                          textButton: 'Salvar',
+                        ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 16),
                 ],
               ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+            if (_isLoading) // Condição para mostrar o indicador de loading
+              _buildLoadingIndicator(),
+          ],
         ),
       ),
     );
