@@ -33,27 +33,90 @@ async function carregarUsuario() {
         const userRef = await db.collection('users').doc(userId).get();
         if (userRef.exists) {
             const userData = userRef.data();
-            const userName = userData.name;
-
-            // Inserindo o nome do usuário no elemento de usuário
-            document.getElementById('userName').textContent = "Usuário: " + userName;
-
+            const propertyName = userData.propertyName || userData.name;
+            const address = userData.street + ', ' + userData.neighborhood + ' - ' + userData.city + ', ' + userData.state + ' - ' + userData.cep;
+            const cpf = userData.cpf;
             // Recuperar os dados específicos do lote
             const loteRef = userRef.ref.collection('lotes').doc(batchId);
             const loteDoc = await loteRef.get();
             if (loteDoc.exists) {
-                const nomeLote = loteDoc.data().nomeLote;
                 const nomeProduto = loteDoc.data().nomeProduto;
                 const etiqueta = loteDoc.data().qrcode ? loteDoc.data().qrcode.etiqueta : null;
                 const peso = etiqueta ? etiqueta.peso || "Sem informação" : "Sem informação";
                 const unidade = etiqueta ? etiqueta.unidade || "Sem informação" : "Sem informação";
+                const colheita = loteDoc.data().colheita;
+                const dataDaColheita = colheita ? colheita.dataDaColheita || "Sem informação" : "Sem informação";
+                const tipoCultivo = loteDoc.data().tipoCultivo;
+                const qrcode = loteDoc.data().qrcode;
+                const isOrganico = qrcode ? qrcode.isOrganico || "Sem informação" : "Sem informação";
+
+                // Função para extrair apenas os números do CPF/CNPJ
+                function extrairNumeros(cpfCnpj) {
+                    return cpfCnpj.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+                }
+
+                // Função para mascarar parcialmente o CPF/CNPJ
+                function mascararCpfCnpj(cpfCnpj) {
+                    const numeros = extrairNumeros(cpfCnpj); // Extrai apenas os números
+                    if (numeros.length === 11) { // Se for um CPF
+                        return '***.' + numeros.substring(3, 6) + '.' + numeros.substring(6, 9) + '-' + '**';
+                    } else if (numeros.length === 14) { // Se for um CNPJ
+                        return numeros.substring(0, 2) + '.***.***/' + numeros.substring(8, 12) + '*';
+                    } else {
+                        return 'CPF/CNPJ inválido';
+                    }
+                }
+
+
+                // Acessando a data da atividade
+                let dataDaAtividade = "Sem informação"; // Define um valor padrão
+                const atividades = loteDoc.data().atividades;
+                if (atividades && atividades.length > 0) {
+                    // Se existirem atividades, encontre a data da atividade
+                    for (let i = 0; i < atividades.length; i++) {
+                        const atividade = atividades[i];
+                        if (atividade.dataDaAtividade) {
+                            dataDaAtividade = atividade.dataDaAtividade;
+                            break; // Para de procurar assim que encontrar a primeira data de atividade
+                        }
+                    }
+                }
+
+                // Função para formatar a data no formato DD/MM/AAAA
+                function formatarData(data) {
+                    const dataObj = new Date(data);
+                    dataObj.setDate(dataObj.getDate() + 1); // Adiciona um dia à data
+                    const dia = String(dataObj.getDate()).padStart(2, '0'); // Garante que o dia tenha dois dígitos
+                    const mes = String(dataObj.getMonth() + 1).padStart(2, '0'); // Garante que o mês tenha dois dígitos
+                    const ano = dataObj.getFullYear();
+                    return `${dia}/${mes}/${ano}`;
+                }
                 
                 // Exibindo as informações do lote
                 const loteLi = document.createElement('li');
-                loteLi.innerHTML = "<span class='bullet'>ID do Lote:</span> " + batchId + "<br>" +
-                    "<span class='bullet'>Nome do Lote:</span> " + nomeLote + "<br>" +
-                    "<span class='bullet'>Nome do Produto:</span> " + nomeProduto + "<br>" +
-                    "<span class='bullet'>Peso:</span> " + peso + "  <span class='bullet'>Unidade:</span> " + unidade;
+                loteLi.innerHTML = 
+                    "<span class='bullet'>Produto:</span> " + nomeProduto + "<br>" +
+                    "<span class='bullet'>Peso:</span> " + peso + "  <span class='bullet'> </span> " + unidade + "<br>" +
+                    "<span class='bullet'>ID do Lote:</span> " + batchId + "<br>" +
+                    "<span class='bullet'>Nome da Propriedade:</span> " + propertyName + "<br>" +
+                    "<span class='bullet'>Endereço:</span> " + address + "<br>" +
+                    "<span class='bullet'>CPF/CNPJ:</span> " + mascararCpfCnpj(cpf) + "<br>" +
+                    "<span class='bullet'>Data de Plantio:</span> " + formatarData(dataDaAtividade) + "<br>" +
+                    "<span class='bullet'>Data da Colheita:</span> " + formatarData(dataDaColheita) + "<br>" ;
+                    // Verifica se o tipo de cultivo é 'Orgânico' ou 'Agroecológico' e adiciona a frase apropriada
+                    // Verifica se é orgânico e adiciona a imagem apropriada
+                    if (isOrganico === true) {
+                        // Adiciona a imagem com o tamanho desejado
+                        loteLi.innerHTML += "<img src='icons/logo_produto_organico.png' alt='Orgânico' style='width: 150px'>";
+                    } else {
+                        // Adiciona a linha de tipo de cultivo apenas se não for orgânico
+                        if (tipoCultivo === 'Orgânico' || tipoCultivo === 'Agroecológico') {
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo:</span> Cultivado de forma orgânica/agroecológica sem uso de agroquímicos.<br>";
+                        } else {
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo:</span> " + tipoCultivo + "<br>";
+                        }
+                    }
+
                 loteLi.classList.add('lote');
                 document.getElementById('users').innerHTML = ''; // Limpar a lista antes de adicionar os novos lotes
                 document.getElementById('users').appendChild(loteLi);
@@ -119,9 +182,6 @@ function initMap(initialLocation) {
 
             // Move o mapa para a localização atual do usuário
             map.panTo(userLocation);
-
-            // Desenha a direção
-            drawDirection(initialLocation, userLocation);
         });
     });
 }
@@ -130,36 +190,6 @@ function initMap(initialLocation) {
 function addCustomMarkers(start, end) {
     addMarker(start, 'icons/marker_rastech.png', 100); // Adiciona marcador personalizado no ponto de origem
     addMarker(end, 'icons/marker_house.png', 100); // Adiciona marcador personalizado no ponto de destino
-}
-
-// Função para desenhar a direção entre dois pontos
-function drawDirection(start, end) {
-    const directionService = new google.maps.DirectionsService();
-    const directionRenderer = new google.maps.DirectionsRenderer({
-        suppressMarkers: true // Desativa a exibição dos marcadores padrão
-    });
-
-    directionRenderer.setMap(map);
-
-    // Adiciona os marcadores personalizados nos pontos de origem e destino
-    addCustomMarkers(start, end);
-
-    calculationAndDisplayRoute(directionService, directionRenderer, start, end);
-}
-
-// Função para calcular e exibir a rota
-function calculationAndDisplayRoute(directionService, directionRenderer, start, end) {
-    const request = {
-        origin: start,
-        destination: end,
-        travelMode: google.maps.DirectionsTravelMode.DRIVING
-    };
-
-    directionService.route(request, function (response, status) {
-       if( status === google.maps.DirectionsStatus.OK ) {
-           directionRenderer.setDirections(response);
-       }
-    });
 }
 
 
