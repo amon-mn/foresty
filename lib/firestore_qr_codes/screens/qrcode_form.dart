@@ -239,7 +239,7 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      'O produto é orgânico?',
+                      'Possui selo de produtor orgânico?',
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,

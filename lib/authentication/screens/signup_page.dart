@@ -5,6 +5,9 @@ import '../../components/my_button.dart';
 import '../../components/show_snackbar.dart';
 import '../../home_page.dart';
 import '../services/auth_service.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -235,17 +238,21 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            text:
-                                "Ao clicar em 'Cadastrar' você concorda com nossos ",
-                            style: TextStyle(
-                                color: Color.fromRGBO(120, 131, 137, 1)),
+                            text: "Ao clicar em 'Cadastrar' você concorda com nossos ",
+                            style: TextStyle(color: Color.fromRGBO(120, 131, 137, 1)),
                             children: [
                               TextSpan(
-                                //recognizer: ,
+                                // recognizer: ,
                                 text: "Termos de Uso",
                                 style: TextStyle(
                                   color: Colors.green[800],
+                                  decoration: TextDecoration.underline, // Adicionando sublinhado
                                 ),
+                                // Adicionando ação ao TextSpan
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    _showTermsDialog(context); // Função para mostrar os termos em um dialog
+                                  },
                               ),
                             ],
                           ),
@@ -457,4 +464,48 @@ class _SignupScreenState extends State<SignupScreen> {
 
     super.dispose();
   }
+
+Future<String> _loadTermsText() async {
+  return await rootBundle.loadString('lib/authentication/screens/components/termos.txt');
+}
+
+  void _showTermsDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Termos de Uso"),
+        content: SingleChildScrollView(
+          child: Text(
+            "Termos de Uso do Aplicativo RASTECH\n\n"
+            "Bem-vindo ao RASTECH! Estes Termos de Uso regem o uso do nosso aplicativo móvel e dos serviços relacionados. Ao baixar, instalar ou usar nosso aplicativo, você concorda em ficar vinculado a estes Termos de Uso. Por favor, leia-os com atenção.\n\n"
+            "1. Aceitação dos Termos de Uso\n"
+            "Ao acessar ou usar nosso aplicativo, você concorda em cumprir estes Termos de Uso. Se você não concordar com algum dos termos aqui apresentados, não poderá usar nosso aplicativo.\n\n"
+            "2. Uso do Aplicativo\n"
+            "Nosso aplicativo é fornecido para seu uso pessoal e comercial. Você concorda em usar o aplicativo somente para fins legais e de acordo com estes Termos de Uso. Ao gerar um QR Code dentro do aplicativo, você concorda que as informações fornecidas, como nome, endereço, CPF/CNPJ, datas, nome da propriedade e nome do produto, podem ser compartilhadas por meio do link gerado pelo QR Code.\n\n"
+            "3. Propriedade Intelectual\n"
+            "O conteúdo do aplicativo, incluindo textos, gráficos, logotipos, imagens, vídeos, áudios e software, é de nossa propriedade ou licenciado para nós e está protegido por leis de propriedade intelectual. Você concorda em não reproduzir, distribuir, modificar ou criar trabalhos derivados baseados no conteúdo do aplicativo.\n\n"
+            "4. Privacidade\n"
+            "Respeitamos sua privacidade e estamos empenhados em proteger suas informações pessoais. Nossa Política de Privacidade explica como coletamos, usamos e divulgamos suas informações quando você usa nosso aplicativo. Ao usar nosso aplicativo, você concorda com nossa Política de Privacidade.\n\n"
+            "5. Limitação de Responsabilidade\n"
+            "Em nenhuma circunstância seremos responsáveis por quaisquer danos diretos, indiretos, incidentais, especiais ou consequenciais decorrentes do uso ou incapacidade de usar nosso aplicativo.\n\n"
+            "6. Modificações nos Termos de Uso\n"
+            "Reservamos o direito de modificar estes Termos de Uso a qualquer momento, mediante aviso prévio. É sua responsabilidade revisar periodicamente os Termos de Uso para estar ciente de quaisquer alterações. O uso contínuo do aplicativo após as alterações significará sua aceitação dos novos termos.\n\n"
+            "7. Lei Aplicável\n"
+            "Estes Termos de Uso serão regidos e interpretados de acordo com as leis do Brasil, com exclusão de seus princípios de conflitos de leis. Você concorda irrevogavelmente que os tribunais competentes em Manaus, estado do Amazonas, terão jurisdição exclusiva sobre qualquer litígio decorrente ou relacionado a estes Termos de Uso.\n\n"
+            "Se você tiver alguma dúvida sobre estes Termos de Uso, entre em contato conosco em rastechoficial@gmail.com",
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Fechar"),
+          ),
+        ],
+      );
+    },
+  );
+}
 }

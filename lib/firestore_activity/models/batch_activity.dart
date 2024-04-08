@@ -160,8 +160,9 @@ class Plantio {
   Plantio.fromMap(Map<String, dynamic> map)
       : tipo = map['tipo'],
         quantidade = map['quantidade'],
-        largura = map['largura'],
-        comprimento = map['comprimento'];
+        largura = map['largura'].toDouble(), // Converter para double
+        comprimento = map['comprimento'].toDouble(); // Converter para double
+
 
   Map<String, dynamic> toMap() {
     return {
@@ -198,7 +199,7 @@ class ManejoDoencas {
       : nomeDoenca = map['nomeDoenca'],
         tipoControle = map['tipoControle'],
         tipoVetor = map['tipoVetor'],
-        doseAplicada = map['doseAplicada'],
+        doseAplicada = map['doseAplicada'].toDouble(),
         produtoUtilizado = map['produtoUtilizado'];
 
   Map<String, dynamic> toMap() {
@@ -289,7 +290,7 @@ class Capina {
   Capina.fromMap(Map<String, dynamic> map)
       : tipo = map['tipo'],
         nomeProduto = map['nomeProduto'],
-        quantidadeAplicada = map['quantidadeAplicada'],
+        quantidadeAplicada = map['quantidadeAplicada'].toDouble(),
         dimensao = map['dimensao'];
 
   Map<String, dynamic> toMap() {
@@ -421,51 +422,3 @@ class TratosCulturais {
     return {'tipoControle': tipoControle, 'outroTipo': outroTipo};
   }
 }
-
-
-/*
-class Adubacao {
-  String tipoAdubo;
-  String? tipoAdubacao;
-  String? quantidade;
-  String? unidade;
-  String? produtoUtilizado;
-  String? doseAplicada;
-
-  Adubacao({
-    required this.tipoAdubo,
-    this.tipoAdubacao,
-    this.quantidade,
-    this.unidade,
-    this.produtoUtilizado,
-    this.doseAplicada,
-  });
-
-  Adubacao.empty()
-      : tipoAdubo = '',
-        tipoAdubacao = '',
-        quantidade = '0',
-        unidade = '',
-        doseAplicada = '0',
-        produtoUtilizado = '';
-
-  Adubacao.fromMap(Map<String, dynamic> map)
-      : tipoAdubo = map['tipoAdubo'],
-        tipoAdubacao = map['tipoAdubacao'],
-        quantidade = map['quantidade'],
-        unidade = map['unidade'],
-        doseAplicada = map['doseAplicada'],
-        produtoUtilizado = map['produtoUtilizado'];
-
-  Map<String, dynamic> toMap() {
-    return {
-      'tipoAdubo': tipoAdubo,
-      'tipoAdubacao': tipoAdubacao,
-      'quantidade': quantidade,
-      'unidade': unidade,
-      'doseAplicada': doseAplicada,
-      'produtoUtilizado': produtoUtilizado,
-    };
-  }
-}
-*/
