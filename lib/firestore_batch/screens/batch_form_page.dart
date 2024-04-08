@@ -550,60 +550,68 @@ class _BatchFormPageState extends State<BatchFormPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: 131,
-                          child: MyButton(
-                            isRed: true,
-                            textButton: 'Descartar',
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 9),
+                            child: MyButton(
+                              isRed: true,
+                              textButton: 'Descartar',
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                            ),
                           ),
                         ),
                         SizedBox(width: 18),
-                        SizedBox(
-                          width: 131,
-                          child: MyButton(
-                            onTap: () {
-                              ProductBatch batch = ProductBatch(
-                                id: widget.batch?.id ?? Uuid().v4(),
-                                nomeLote: _batchNameController.text,
-                                largura: double.parse(_larguraController.text),
-                                comprimento:
-                                    double.parse(_comprimentoController.text),
-                                area: double.parse(_larguraController.text) *
-                                    double.parse(_comprimentoController.text),
-                                latitude: _latBatch,
-                                longitude: _longBatch,
-                                finalidade:
-                                    _selectedValueNotifierFinalidade.value,
-                                outraFinalidade:
-                                    _selectedValueNotifierFinalidade.value ==
-                                            'Outro (Especificar)'
-                                        ? _especificarFinalidadeController.text
-                                        : '',
-                                ambiente: _selectedValueNotifierAmbiente.value,
-                                outroAmbiente:
-                                    _selectedValueNotifierAmbiente.value ==
-                                            'Outro (Especificar)'
-                                        ? _especificarAmbienteController.text
-                                        : '',
-                                tipoCultivo:
-                                    _selectedValueNotifierTipoCultivo.value,
-                                outroTipoCultivo:
-                                    _selectedValueNotifierTipoCultivo.value ==
-                                            'Outro (Especificar)'
-                                        ? _especificarTipoCultivoController.text
-                                        : '',
-                                nomeProduto: _productNameController.text,
-                                atividades: widget.batch?.atividades ?? [],
-                              );
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 9),
+                            child: MyButton(
+                              onTap: () {
+                                ProductBatch batch = ProductBatch(
+                                  id: widget.batch?.id ?? Uuid().v4(),
+                                  nomeLote: _batchNameController.text,
+                                  largura:
+                                      double.parse(_larguraController.text),
+                                  comprimento:
+                                      double.parse(_comprimentoController.text),
+                                  area: double.parse(_larguraController.text) *
+                                      double.parse(_comprimentoController.text),
+                                  latitude: _latBatch,
+                                  longitude: _longBatch,
+                                  finalidade:
+                                      _selectedValueNotifierFinalidade.value,
+                                  outraFinalidade:
+                                      _selectedValueNotifierFinalidade.value ==
+                                              'Outro (Especificar)'
+                                          ? _especificarFinalidadeController
+                                              .text
+                                          : '',
+                                  ambiente:
+                                      _selectedValueNotifierAmbiente.value,
+                                  outroAmbiente:
+                                      _selectedValueNotifierAmbiente.value ==
+                                              'Outro (Especificar)'
+                                          ? _especificarAmbienteController.text
+                                          : '',
+                                  tipoCultivo:
+                                      _selectedValueNotifierTipoCultivo.value,
+                                  outroTipoCultivo:
+                                      _selectedValueNotifierTipoCultivo.value ==
+                                              'Outro (Especificar)'
+                                          ? _especificarTipoCultivoController
+                                              .text
+                                          : '',
+                                  nomeProduto: _productNameController.text,
+                                  atividades: widget.batch?.atividades ?? [],
+                                );
 
-                              batchService.addBatch(batch: batch);
+                                batchService.addBatch(batch: batch);
 
-                              Navigator.pop(context);
-                            },
-                            textButton: 'Salvar',
+                                Navigator.pop(context);
+                              },
+                              textButton: 'Salvar',
+                            ),
                           ),
                         ),
                       ],

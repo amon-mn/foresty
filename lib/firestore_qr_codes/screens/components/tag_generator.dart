@@ -7,8 +7,7 @@ class EtiquetaProduto extends StatelessWidget {
   final String dataExpedicao;
   final String endereco;
   final String cpfCnpj;
-  static const String urlQrCode =
-      'https://rastechoficial.com/?userId=';
+  static const String urlQrCode = 'https://rastechoficial.com/?userId=';
   final String dataQrCode;
   final ValueNotifier<double> valor;
   final ValueNotifier<String> unidade;
@@ -31,6 +30,8 @@ class EtiquetaProduto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String maskedCpfCnpj =
+        '${'*' * 3}.${'*' * 3}${cpfCnpj.substring(cpfCnpj.length - 7)}';
     return Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -80,7 +81,7 @@ class EtiquetaProduto extends StatelessWidget {
                     ),
                     SizedBox(height: 4.0),
                     Text(
-                      'CPF/CNPJ: $cpfCnpj',
+                      'CPF/CNPJ: $maskedCpfCnpj',
                       style: const TextStyle(fontSize: 10),
                     ),
                   ],
