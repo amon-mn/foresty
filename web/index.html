@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informações do QRCode</title>
     <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVfxVjh98O_6-hstZA6A2pO2qUNEbtfY&callback=initMap"
             async defer></script>
 
@@ -13,27 +16,35 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Informações do QRCode</h2>
+    <header class="app-bar">
         <div class="row">
-            <div class="column">
-                <!-- Adiciona um campo oculto para armazenar o ID do usuário -->
-                <input type="hidden" id="userId">
-                <ul>
-                    <li class="users-label" id="userName"></li>
-                    <ul id="users"></ul>
-                </ul>
-            </div>
-            <div class="column">
-                <!-- Imagem do logo -->
-                <img src="icons\rastech_logo_with_name.png" id="logo" alt="Rastech Logo">
-            </div>
+            <img src="icons\rastech_name.png" class="app-logo">
+            <img src="icons\rastechlogo.png" class="rastech" alt="Rastech Logo">
         </div>
-        <div id="map">
+    </header>
+    
+    <div class="container">
+        <h2>INFORMAÇÕES QRCODE</h2>
+        <div>
+            <img src="icons\produtoRastreado.png" id="produto_rastreado" alt="Produto Rastreado">
+            <input type="hidden" id="userId">
+            <ul>
+                <li class="users-label" id="userName"></li>
+                <ul id="users"></ul>
+            </ul>
+        </div>
+        <div id="map"></div>
 
+        <div class="legend">
+            <div class="legend-item">
+                <img src="icons/marker_rastech.png" alt="Local de origem do produto", style='width: 50px'>
+                <span>Local de origem do produto</span>
+            </div>
+            <div class="legend-item">
+                <img src="icons/marker_house.png" alt="Seu local atual", style='width: 50px'>
+                <span>Seu local atual</span>
+            </div>
         </div>
-        
-        <p id="directions"></p>
     </div>
 
     <script src="index.js"></script>

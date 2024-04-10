@@ -34,7 +34,7 @@ async function carregarUsuario() {
         if (userRef.exists) {
             const userData = userRef.data();
             const propertyName = userData.propertyName || userData.name;
-            const address = userData.street + ', ' + userData.neighborhood + ' - ' + userData.city + ', ' + userData.state + ' - ' + userData.cep;
+            const address = userData.street + ', ' + userData.neighborhood + ' - <br>' + userData.city + ', ' + userData.state + ' - ' + userData.cep;
             const cpf = userData.cpf;
             // Recuperar os dados específicos do lote
             const loteRef = userRef.ref.collection('lotes').doc(batchId);
@@ -48,7 +48,8 @@ async function carregarUsuario() {
                 const dataDaColheita = colheita ? colheita.dataDaColheita || "Sem informação" : "Sem informação";
                 const tipoCultivo = loteDoc.data().tipoCultivo;
                 const qrcode = loteDoc.data().qrcode;
-                const isOrganico = qrcode ? qrcode.isOrganico || "Sem informação" : "Sem informação";
+                const isOrganico = qrcode ? qrcode.isOrganico || "Sem informação" : "Sem informação"; 
+                const atividades = loteDoc.data().atividades;
 
                 // Função para extrair apenas os números do CPF/CNPJ
                 function extrairNumeros(cpfCnpj) {
@@ -70,7 +71,6 @@ async function carregarUsuario() {
 
                 // Acessando a data da atividade
                 let dataDaAtividade = "Sem informação"; // Define um valor padrão
-                const atividades = loteDoc.data().atividades;
                 if (atividades && atividades.length > 0) {
                     // Se existirem atividades, encontre a data da atividade
                     for (let i = 0; i < atividades.length; i++) {
@@ -78,6 +78,22 @@ async function carregarUsuario() {
                         if (atividade.dataDaAtividade) {
                             dataDaAtividade = atividade.dataDaAtividade;
                             break; // Para de procurar assim que encontrar a primeira data de atividade
+                        }
+                    }
+                }
+                
+                // Acessando o nome do agrotoxico dentro da atividade manejoPragas
+                let nomeAgrotoxico = "Teste"; // Inicialize com um valor padrão
+                if (atividades && atividades.length > 0) {
+                    // Se existirem atividades, encontre o nome do agrotóxico dentro da atividade manejoPragas
+                    for (let i = 0; i < atividades.length; i++) {
+                        const atividade = atividades[i];
+                        if (atividade.manejoPragas) {
+                            const manejoPragas = atividade.manejoPragas; // Corrija o nome da variável para manejoPragas
+                            nomeAgrotoxico = manejoPragas.nomeAgrotoxico;
+                            quantidadeAplicadaAgrotoxico = manejoPragas.quantidadeAplicadaAgrotoxico;
+                            unidadeAplicadaAgrotoxico = manejoPragas.unidadeAplicadaAgrotoxico;
+                            break; // Pare de procurar assim que encontrar o primeiro nome do agrotóxico dentro de manejoPragas
                         }
                     }
                 }
@@ -95,25 +111,40 @@ async function carregarUsuario() {
                 // Exibindo as informações do lote
                 const loteLi = document.createElement('li');
                 loteLi.innerHTML = 
-                    "<span class='bullet'>Produto:</span> " + nomeProduto + "<br>" +
-                    "<span class='bullet'>Peso:</span> " + peso + "  <span class='bullet'> </span> " + unidade + "<br>" +
-                    "<span class='bullet'>ID do Lote:</span> " + batchId + "<br>" +
-                    "<span class='bullet'>Nome da Propriedade:</span> " + propertyName + "<br>" +
-                    "<span class='bullet'>Endereço:</span> " + address + "<br>" +
-                    "<span class='bullet'>CPF/CNPJ:</span> " + mascararCpfCnpj(cpf) + "<br>" +
-                    "<span class='bullet'>Data de Plantio:</span> " + formatarData(dataDaAtividade) + "<br>" +
-                    "<span class='bullet'>Data da Colheita:</span> " + formatarData(dataDaColheita) + "<br>" ;
+                    "<br><span class='bullet'>Produto</span><br>" +
+                    "<span>" + nomeProduto + "</span><br><br>" +
+                    "<span class='bullet'>Peso</span><br>" +
+                    "<span>" + peso + "  </span><span class='bullet'> </span><span>" + unidade + "</span><br><br>" +
+                    "<span class='bullet'>ID do Lote</span><br>" +
+                    "<span>" + batchId + "</span><br><br>" +
+                    "<span class='bullet'>Nome da Propriedade</span><br>" +
+                    "<span>" + propertyName + "</span><br><br>" +
+                    "<span class='bullet'>Endereço</span><br>" +
+                    "<span>" + address + "</span><br><br>" +
+                    "<span class='bullet'>CPF/CNPJ</span><br>" +
+                    "<span>" + mascararCpfCnpj(cpf) + "</span><br><br>" +
+                    "<span class='bullet'>Data de Plantio</span><br>" +
+                    "<span>" + formatarData(dataDaAtividade) + "</span><br><br>" +
+                    "<span class='bullet'>Data da Colheita</span><br>" +
+                    "<span>" + formatarData(dataDaColheita) + "</span><br><br>";                
                     // Verifica se o tipo de cultivo é 'Orgânico' ou 'Agroecológico' e adiciona a frase apropriada
                     // Verifica se é orgânico e adiciona a imagem apropriada
                     if (isOrganico === true) {
-                        // Adiciona a imagem com o tamanho desejado
-                        loteLi.innerHTML += "<img src='icons/logo_produto_organico.png' alt='Orgânico' style='width: 150px'>";
+                        loteLi.innerHTML += "<img src='icons/logo_produto_organico.png' alt='Orgânico' class='organic-image'>";
                     } else {
                         // Adiciona a linha de tipo de cultivo apenas se não for orgânico
                         if (tipoCultivo === 'Orgânico' || tipoCultivo === 'Agroecológico') {
-                            loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo:</span> Cultivado de forma orgânica/agroecológica sem uso de agroquímicos.<br>";
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo</span><br>";
+                            loteLi.innerHTML += "<span>Cultivado de forma orgânica/agroecológica<br> sem uso de agroquímicos.</span><br><br>";
                         } else {
-                            loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo:</span> " + tipoCultivo + "<br>";
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo</span><br>";
+                            loteLi.innerHTML += "<span>" + tipoCultivo + "</span><br><br>";
+                            loteLi.innerHTML += "<span class='bullet'>Agrotóxico Aplicado</span><br>";
+                            loteLi.innerHTML += "<span>" + nomeAgrotoxico + "</span><br><br>";
+                            loteLi.innerHTML += "<span class='bullet'>Quantidade Aplicada</span><br>";
+                            loteLi.innerHTML += "<span>" + quantidadeAplicadaAgrotoxico + "  </span><span class='bullet'> </span><span>" + unidadeAplicadaAgrotoxico + "</span><br><br>";
+                            loteLi.innerHTML += "<span class='bullet'>Data de Aplicação</span><br>";
+                            loteLi.innerHTML += "<span>" + formatarData(dataDaAtividade) + "</span><br>";
                         }
                     }
 
