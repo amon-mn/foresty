@@ -1,16 +1,1 @@
-{
-  "hosting": {
-    "public": "web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
+{"hosting":{"public":"web","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]},"flutter":{"platforms":{"android":{"default":{"projectId":"forest-traceability","appId":"1:883889030916:android:9abdf031b737127cfa7251","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"forest-traceability","configurations":{"android":"1:883889030916:android:9abdf031b737127cfa7251","ios":"1:883889030916:ios:e904fbd95825ded6fa7251","web":"1:883889030916:web:1a9ce44e058b39d7fa7251"}}}}}}

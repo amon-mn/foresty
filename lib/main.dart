@@ -46,7 +46,7 @@ class ProfileImageProvider with ChangeNotifier {
 }
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+  const AuthPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,22 +62,33 @@ class AuthPage extends StatelessWidget {
             final user = snapshot.data!;
 
             // Verifica o tipo de usuário imediatamente após a autenticação
-            getUserType(user.uid).then((String userType) {
-              if (userType == "ADM") {
-                Navigator.pushAndRemoveUntil(
+            getUserType(user.uid).then((userType) {
+              if (userType == 'ADM') {
+                // Redirecionar para a tela de super usuário (AdmPage).
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AdmPage(
-                            user: user,
-                            listBatchs: [],
-                          )),
-                  (route) => false,
+                    builder: (context) => AdmPage(
+                      user: FirebaseAuth.instance.currentUser!,
+                      listBatchs: [],
+                    ),
+                  ),
+                );
+              } else if (userType == 'Producer') {
+                // Redirecionar para a tela regular do usuário (HomePage).
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(user: user),
+                  ),
                 );
               } else {
-                Navigator.pushAndRemoveUntil(
+                // Se o tipo de usuário não for encontrado, redirecione para a página inicial
+                Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage(user: user)),
-                  (route) => false,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(user: user),
+                  ),
                 );
               }
             });
@@ -94,7 +105,14 @@ class AuthPage extends StatelessWidget {
   Future<String> getUserType(String userId) async {
     DocumentSnapshot userSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
-    return userData['userType'];
+
+    if (userSnapshot.exists) {
+      Map<String, dynamic> userData =
+          userSnapshot.data() as Map<String, dynamic>;
+      return userData['userType'];
+    } else {
+      // Se o documento não existir, retorne um valor padrão
+      return 'default';
+    }
   }
 }
