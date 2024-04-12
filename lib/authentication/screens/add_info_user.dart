@@ -9,7 +9,7 @@ import 'package:foresty/home_page.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:validadores/Validador.dart';
 
-import '../../components/my_textfild.dart';
+import '../../components/my_textfield.dart';
 
 class AddInfoGoogleUser extends StatefulWidget {
   final User user;
@@ -291,7 +291,7 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
           widthFactor: 0.9,
           child: Column(
             children: [
-              MyTextField(
+              MyTextFieldWrapper(
                 prefixIcon: Icons.person,
                 controller: _nameController,
                 hintText: 'Nome completo',
@@ -306,7 +306,7 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
                 },
               ),
               const SizedBox(height: 16),
-              MyTextField(
+              MyTextFieldWrapper(
                 inputFormatter: MaskTextInputFormatter(
                     mask: '###.###.###-##',
                     filter: {"#": RegExp(r'[0-9xX]')},

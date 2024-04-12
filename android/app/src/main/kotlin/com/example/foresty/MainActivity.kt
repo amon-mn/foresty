@@ -1,4 +1,4 @@
-package com.example.foresty_app
+package com.example.foresty
 
 import io.flutter.embedding.android.FlutterActivity
 

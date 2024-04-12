@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:foresty/authentication/screens/add_info_user.dart';
 import 'package:foresty/home_page.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../components/my_button.dart';
-import '../../components/my_textfild.dart';
+import '../../components/my_textfield.dart';
 import '../../components/show_snackbar.dart';
 import '../../components/square_tile.dart';
 import '../services/auth_service.dart';
@@ -17,161 +17,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // text editing controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   AuthService authService = AuthService();
   bool _isLoading = false;
+  bool _obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          backgroundColor: Colors.grey[300],
-          body: SingleChildScrollView(
-            reverse: true,
-            child: SafeArea(
-              child: Center(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 46),
-                    const Icon(
-                      Icons.forest,
-                      size: 128,
-                      color: Color.fromARGB(255, 0, 90, 3),
-                    ),
-                    const SizedBox(height: 76),
-                    const Text(
-                      'Bem Vindo!',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 0, 90, 3),
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    FractionallySizedBox(
-                      widthFactor: 0.9,
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            MyTextField(
-                              prefixIcon: Icons.email,
-                              controller: _emailController,
-                              hintText: 'Digite seu email',
-                              obscureText: false,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "O e-mail deve ser preenchido";
-                                }
-                                if (!value.contains("@") ||
-                                    !value.contains(".") ||
-                                    value.length < 4) {
-                                  return "O e-mail precisa ser válido";
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 8),
-                            MyTextField(
-                              prefixIcon: Icons.lock,
-                              controller: _passwordController,
-                              hintText: 'Digite sua senha',
-                              obscureText: true,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "A senha deve ser preenchida";
-                                }
-                                if (value.length < 6) {
-                                  return "A senha deve conter pelo menos 6 caracteres";
-                                }
-                                return null; // Retorna null se a validação for bem-sucedida
-                              },
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 35.0,
-                                vertical: 5.0,
-                              ),
-                              child: TextButton(
-                                onPressed: forgotMyPassword,
-                                child: const Text(
-                                  'Esqueceu a senha?',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ),
-                            ),
-                            MyButton(
-                              onTap: signUserIn,
-                              textButton: 'Entrar',
-                            ),
-                            const SizedBox(height: 50),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(
-                              'Ou continue com',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () => handleGoogleLogin(context),
-                          child: SquareTite(imagePath: 'lib/assets/google.png'),
-                        ),
-                        const SizedBox(width: 15),
-                        GestureDetector(
-                          onTap: signInWithFacebook,
-                          child:
-                              SquareTite(imagePath: 'lib/assets/facebook.png'),
-                        ),
-                        const SizedBox(width: 15),
-                        SquareTite(imagePath: 'lib/assets/yahoo.png'),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        if (_isLoading)
-          Container(
-            color: Colors.black.withOpacity(0.5),
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-      ],
-    );
-  }
 
 // sign google user in method
   void handleGoogleLogin(BuildContext context) {
@@ -205,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-// sign facebook user in method
+  // sign facebook user in method
   signInWithFacebook() async {
     try {
       // Iniciar o fluxo de login
@@ -268,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
 
   forgotMyPassword() {
     String email = _emailController.text;
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
         context: context,
         builder: (context) {
@@ -309,6 +161,184 @@ class _LoginPageState extends State<LoginPage> {
           );
         },
       );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      Scaffold(
+        backgroundColor: Colors.grey[300],
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                children: [
+                  const SizedBox(height: 46),
+                  // logo
+                  const Icon(
+                    Icons.forest,
+                    size: 128,
+                    color: Color.fromARGB(255, 0, 90, 3),
+                  ),
+                  const SizedBox(height: 76),
+                  // welcome
+                  const Text(
+                    'Bem Vindo!',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 0, 90, 3),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  FractionallySizedBox(
+                    widthFactor: 0.9,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          // username textfield
+                          MyTextFieldWrapper(
+                            prefixIcon: Icons.email,
+                            controller: _emailController,
+                            hintText: 'Email',
+                            obscureText: false,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "O e-mail deve ser preenchido";
+                              }
+                              if (!value.contains("@") ||
+                                  !value.contains(".") ||
+                                  value.length < 4) {
+                                return "O e-mail precisa ser válido";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 08),
+                          // password textfield
+                          MyTextFieldWrapper(
+                            prefixIcon: Icons.lock,
+                            suffixIcon: _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            onSuffixIconPressed: togglePasswordVisibility,
+                            controller: _passwordController,
+                            hintText: 'Senha',
+                            obscureText: _obscurePassword,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "A senha deve ser preenchida";
+                              }
+                              if (value.length < 6) {
+                                return "A senha deve conter pelo menos 6 caracteres";
+                              }
+                              return null; // Retorna null se a validação for bem-sucedida
+                            },
+                          ),
+                          // forgot password?
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 35.0,
+                              vertical: 5.0,
+                            ),
+                            child: TextButton(
+                              onPressed: forgotMyPassword,
+                              child: const Text(
+                                'Esqueceu a senha?',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          // sign in button
+                          MyButton(
+                            onTap: signUserIn,
+                            textButton: 'Entrar',
+                          ),
+                          const SizedBox(height: 50),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // or continue with
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            thickness: 0.5,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            'Ou continue com',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            thickness: 0.5,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  // google / facebook / yahoo sign in buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // google button
+                      GestureDetector(
+                        onTap: () => handleGoogleLogin(context),
+                        child:
+                            const SquareTite(content: 'lib/assets/google.png'),
+                      ),
+
+                      const SizedBox(width: 15),
+
+                      // facebook button
+                      GestureDetector(
+                        onTap: signInWithFacebook,
+                        child: SquareTite(content: 'lib/assets/facebook.png'),
+                      ),
+
+                      const SizedBox(width: 15),
+
+                      // yahoo button
+                      const SquareTite(content: 'lib/assets/yahoo.png'),
+                    ],
+                  )
+
+                  // not a member? register now
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      if (_isLoading)
+        Container(
+          color: Colors.black.withOpacity(0.5),
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+    ]);
+  }
+
+  // Função para alternar a visibilidade da senha
+  void togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
     });
   }
 }

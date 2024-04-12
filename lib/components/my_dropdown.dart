@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MyDropdownFormField extends StatelessWidget {
   final ValueNotifier<String> selectedValueNotifier;
   final List<String>? itemsList;
-  final String labelText;
+  final String? labelText;
   final IconData? prefixIcon;
   final String? hint;
   final Function(String?)? onChanged;
@@ -12,7 +12,7 @@ class MyDropdownFormField extends StatelessWidget {
     required this.selectedValueNotifier,
     this.itemsList,
     required this.onChanged,
-    required this.labelText,
+    this.labelText,
     this.prefixIcon,
     this.hint,
   });
@@ -27,12 +27,15 @@ class MyDropdownFormField extends StatelessWidget {
           child: DropdownButtonFormField<String>(
             isExpanded: true,
             value: selectedValue,
-            items: itemsList?.map((item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
+            items: itemsList
+                ?.map((item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item),
+                  );
+                })
+                .toSet()
+                .toList(),
             onChanged: onChanged,
             icon: const Icon(
               Icons.arrow_drop_down_circle,

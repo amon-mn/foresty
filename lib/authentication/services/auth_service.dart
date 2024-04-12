@@ -66,6 +66,13 @@ class AuthService {
     required String cpf,
     required String state,
     required String city,
+    required String propertyName,
+    String? cnpj,
+    required String cep,
+    required String street,
+    required String neighborhood,
+    required String locality,
+    required bool isProducer,
   }) async {
     try {
       UserCredential userCredential =
@@ -74,18 +81,41 @@ class AuthService {
         password: password,
       );
 
-      // Atualizar o perfil do usuário com o nome
-      await userCredential.user!.updateDisplayName(name);
+      String userType = isProducer ? 'Producer' : 'Merchant';
 
-      // Armazenar as informações personalizadas no Firebase Firestore
-      await _firebaseFirestore
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .set({
+      Map<String, dynamic> userData = {
         'name': name,
         'state': state,
         'city': city,
         'cpf': cpf,
+      };
+
+      if (isProducer) {
+        userData.addAll({
+          'propertyName': propertyName,
+          'cep': cep,
+          'street': street,
+          'neighborhood': neighborhood,
+          'locality': locality,
+        });
+      } else {
+        userData.addAll({
+          'propertyName': propertyName,
+          'cnpj': cnpj,
+          'cep': cep,
+          'street': street,
+          'neighborhood': neighborhood,
+          'locality': locality,
+        });
+      }
+
+      // Salvar informações personalizadas no Firebase Firestore com base no tipo de usuário
+      await _firebaseFirestore
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'userType': userType,
+        ...userData,
       });
     } on FirebaseAuthException catch (e) {
       switch (e.code) {

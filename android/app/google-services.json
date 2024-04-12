@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:883889030916:android:9abdf031b737127cfa7251",
         "android_client_info": {
-          "package_name": "com.example.foresty_app"
+          "package_name": "com.example.foresty"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "883889030916-uutl3o7f45ombi0eeul1bdf8f1t6anmv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.foresty_app",
+            "package_name": "com.example.foresty",
             "certificate_hash": "13b04abd53eacdb69d15c5f5e2142e98fac3aee1"
           }
         },
@@ -42,7 +42,7 @@
               "client_id": "883889030916-rhrg32gli7kh20efa6lmn8s1goe71kkg.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foresty_app"
+                "bundle_id": "com.example.foresty"
               }
             }
           ]

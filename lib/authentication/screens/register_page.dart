@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:validadores/Validador.dart';
 import 'package:foresty/components/my_dropdown.dart';
-import 'package:foresty/home_page.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../components/my_button.dart';
-import '../../components/my_textfild.dart';
-import '../../components/show_snackbar.dart';
+import '../../components/my_textfield.dart';
 import '../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -23,6 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmationController = TextEditingController();
   final TextEditingController _cpfController = TextEditingController();
+  bool isProducer = true;
 
   // variables
   List<String> statesList = [
@@ -297,7 +295,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Column(
                           children: [
                             const SizedBox(height: 16),
-                            MyTextField(
+                            MyTextFieldWrapper(
                               prefixIcon: Icons.person,
                               controller: _nameController,
                               hintText: 'Nome completo',
@@ -314,7 +312,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                             ),
                             const SizedBox(height: 8),
-                            MyTextField(
+                            MyTextFieldWrapper(
                               inputFormatter: MaskTextInputFormatter(
                                   mask: '###.###.###-##',
                                   filter: {"#": RegExp(r'[0-9xX]')},
@@ -334,7 +332,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                             ),
                             const SizedBox(height: 8),
-                            MyTextField(
+                            MyTextFieldWrapper(
                               prefixIcon: Icons.email,
                               controller: _emailController,
                               hintText: 'Digite seu e-mail',
@@ -349,7 +347,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                             ),
                             const SizedBox(height: 8),
-                            MyTextField(
+                            MyTextFieldWrapper(
                               prefixIcon: Icons.lock,
                               controller: _passwordController,
                               hintText: 'Defina sua senha',
@@ -365,7 +363,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                             ),
                             const SizedBox(height: 8),
-                            MyTextField(
+                            MyTextFieldWrapper(
                               prefixIcon: Icons.lock,
                               controller: _confirmationController,
                               hintText: 'Confirme sua senha',
@@ -414,7 +412,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             const SizedBox(height: 16),
                             MyButton(
-                              onTap: signUserUp,
+                              onTap: () {},
                               textButton: 'Cadastrar',
                             ),
                           ],
@@ -437,7 +435,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ],
     );
   }
-
+/*
   // Register Method
   void signUserUp() async {
     if (_formKey.currentState!.validate()) {
@@ -481,6 +479,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required String cpf,
     required String state,
     required String city,
+    required String propertyName,
+    String? cnpj,
+    required String cep,
+    required String street,
+    required String neighborhood,
+    required String locality,
+    required bool isProducer,
   }) async {
     try {
       return await authService.registerUser(
@@ -490,9 +495,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
         cpf: cpf,
         state: state,
         city: city,
+        propertyName: propertyName,
+        cnpj: cnpj,
+        cep: cep,
+        street: street,
+        neighborhood: neighborhood,
+        locality: locality,
+        isProducer: isProducer,
       );
     } catch (error) {
       return error.toString();
     }
   }
+  */
 }
