@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do QRCode</title>
+    <link rel="stylesheet" type="text/css" href="qrcode.css">
+    <!-- Importar o SDK do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Informações do QRCode</h2>
+        <div class="row">
+            <div class="column">
+                <!-- Adiciona um campo oculto para armazenar o ID do usuário -->
+                <input type="hidden" id="userId">
+                <ul>
+                    <li class="users-label" id="userName"></li>
+                    <ul id="users"></ul>
+                </ul>
+            </div>
+            <div class="column">
+                <!-- Imagem do logo -->
+                <img src="icons\rastech_logo_with_name.png" id="logo" alt="Rastech Logo">
+            </div>
+        </div>
+        <div class="row">
+            <button onclick="carregarUsuarioELotes()">Carregar</button>
+        </div>
+    </div>
+
+    <script src="qrcode.js"></script>
+</body>
+</html>

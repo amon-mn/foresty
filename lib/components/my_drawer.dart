@@ -2,23 +2,26 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_tags/screens/tags_page.dart';
 import 'package:image_picker/image_picker.dart';
-import 'show_password_confirmation_dialog.dart';
+import '../authentication/screens/components/show_password_confirmation_dialog.dart';
 
 class MyDrawer extends StatelessWidget {
   final User user;
   final VoidCallback onLogout;
   final Function(String) onRemoveAccount;
-  final String profileImageUrl;
-  final Function(String)
-      onUpdateProfileImage; // Função de atualização adicionada
+  final String? profileImageUrl;
+  final Function(String)? onUpdateProfileImage;
+  final List<ProductBatch> listBatchs;
 
   const MyDrawer({
     required this.user,
     required this.onLogout,
     required this.onRemoveAccount,
-    required this.profileImageUrl,
-    required this.onUpdateProfileImage, // Certifique-se de que esta linha está presente
+    this.profileImageUrl,
+    this.onUpdateProfileImage,
+    required this.listBatchs, // Certifique-se de que esta linha está presente
   });
 
   Future<void> _pickImage(BuildContext context) async {
@@ -40,7 +43,10 @@ class MyDrawer extends StatelessWidget {
         String imageUrl = await storageRef.getDownloadURL();
 
         // Atualize a URL da imagem de perfil chamando a função de retorno de chamada
-        onUpdateProfileImage(imageUrl); // Chame a função de retorno de chamada
+        if (onUpdateProfileImage != null) {
+          onUpdateProfileImage!(
+              imageUrl); // Chame a função de retorno de chamada
+        }
 
         Navigator.of(context).pop(); // Feche o Drawer
         ScaffoldMessenger.of(context).showSnackBar(
@@ -61,25 +67,26 @@ class MyDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            currentAccountPicture: GestureDetector(
-              onTap: () {
-                // Chame a função _pickImage quando o usuário tocar na foto de perfil
-                _pickImage(context);
-              },
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: (profileImageUrl.isNotEmpty)
-                    ? NetworkImage(profileImageUrl)
-                    : null,
-                child: profileImageUrl.isEmpty
-                    ? Icon(
-                        Icons.add_a_photo,
-                        size: 40,
-                        color: Colors.white,
-                      )
-                    : null,
-              ),
-            ),
+            currentAccountPicture: (profileImageUrl != null)
+                ? GestureDetector(
+                    onTap: () {
+                      _pickImage(context);
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: (profileImageUrl!.isNotEmpty)
+                          ? NetworkImage(profileImageUrl!)
+                          : null,
+                      child: profileImageUrl!.isEmpty
+                          ? Icon(
+                              Icons.add_a_photo,
+                              size: 40,
+                              color: Colors.white,
+                            )
+                          : null,
+                    ),
+                  )
+                : null,
             accountName: Text(
               (user.displayName != null) ? user.displayName! : "",
             ),
@@ -107,6 +114,21 @@ class MyDrawer extends StatelessWidget {
                 builder: (context) {
                   return PasswordConfirmationDialog(email: user.email!);
                 },
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.qr_code),
+            title: const Text('Etiquetas'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TagScreen(
+                    listBatchs: listBatchs,
+                    user: user,
+                  ),
+                ),
               );
             },
           ),

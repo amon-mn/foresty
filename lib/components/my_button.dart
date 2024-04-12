@@ -30,7 +30,9 @@ class _MyButtonState extends State<MyButton> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double textSize = screenWidth * 0.04; // Ajuste o fator conforme necessário
+
+    // Ajustando o tamanho do texto com base na largura e altura da tela
+    double textSize = screenWidth * 0.043; // Por exemplo, 5% da largura da tela
 
     return SizedBox(
       width: screenWidth,

@@ -48,7 +48,8 @@ class MyDropdownFormField extends StatelessWidget {
                 color: Color.fromARGB(255, 0, 90, 3),
               ),
               border: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.black),
+                borderSide:
+                    const BorderSide(color: Color.fromRGBO(238, 238, 238, 1)),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               focusedBorder: OutlineInputBorder(

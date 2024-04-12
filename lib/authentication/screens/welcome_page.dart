@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foresty/authentication/screens/components/menu_card.dart';
 import 'package:foresty/authentication/screens/signup_page.dart';
 import 'package:foresty/components/my_textButton.dart';
 import '../../components/my_button.dart';
@@ -21,13 +22,11 @@ class WelcomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 16),
-                Icon(
-                  Icons.forest,
-                  color: Color.fromARGB(255, 0, 90, 3),
-                  size: 150,
-                ),
-                const SizedBox(height: 84),
+                MenuCard(
+                    imagePath: 'lib/assets/rastech_logo_with_name.png',
+                    title:
+                        "Gestão e Rastreabilidade de Produtos da Agrobiodiversidade"),
+                const SizedBox(height: 60),
                 MyButton(
                   onTap: () {
                     goToUserLogin(context);

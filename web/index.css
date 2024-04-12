@@ -1,0 +1,125 @@
+body {
+    font-family: "Lora", serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+@media screen and (min-width: 768px) {
+    /* Para telas maiores que 768px (desktops), você pode definir um tamanho máximo para o contêiner */
+    .container {
+        max-width: 800px; /* Defina o tamanho máximo do contêiner para 800px ou o valor desejado */
+        width: auto; /* Remova a largura definida anteriormente */
+    }
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Alinha horizontalmente */
+}
+
+.row img {
+    margin: 0 10px; /* Adiciona margem entre as imagens */
+}
+
+.rastech{
+    width: 50px;
+}
+
+h2 {
+    font-size: 40px;
+    text-transform: uppercase;
+    color: #175500;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    color: #00491d;
+}
+
+.bullet {
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #65d837;
+    letter-spacing: 1px;
+}
+
+#produto_rastreado{
+    width: 50%;
+    max-width: 100%; /* A imagem do produto será redimensionada para caber dentro do contêiner */
+    height: auto;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+}
+
+.legend {
+    margin-top: 5px;
+    padding-top: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.legend-item img {
+    width: 20px; /* Ajuste o tamanho conforme necessário */
+    margin-right: 10px;
+}
+
+.app-bar {
+    background-color: #DBDBDB; /* Cor de fundo da barra de aplicativos */
+    padding: 15px; /* Espaçamento interno da barra de aplicativos */
+    text-align: center; /* Centraliza o conteúdo horizontalmente */
+}
+
+/* Estilos para a imagem do logo na barra de aplicativos */
+.app-logo {
+    width: 200px; /* Define a largura da imagem */
+    display: inline-block; /* Permite centralizar verticalmente */
+}
+
+.organic-image {
+    width: 20%;
+    margin-left: 5px;
+}
+
+@media screen and (max-width: 767px) {
+    .organic-image {
+        width: 30%; /* Ajuste o tamanho da imagem orgânica conforme desejado */
+    }
+
+    #produto_rastreado {
+        width: 70%; /* Ajuste o tamanho da imagem do produto conforme desejado */
+    }
+}

@@ -66,7 +66,8 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
                 )
               : null,
           border: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black),
+            borderSide:
+                const BorderSide(color: Color.fromRGBO(238, 238, 238, 1)),
             borderRadius: BorderRadius.circular(15.0),
           ),
           focusedBorder: OutlineInputBorder(

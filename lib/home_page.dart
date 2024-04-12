@@ -2,59 +2,54 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:foresty/authentication/screens/batch_form_page.dart';
-import 'package:foresty/components/batch_widget.dart';
-import 'package:foresty/models/batch.dart';
+import 'package:foresty/firestore_activity/models/batch_activity.dart';
+import 'package:foresty/firestore_activity/screens/activity_form_page.dart';
+import 'package:foresty/firestore_batch/models/batch.dart';
+import 'package:foresty/firestore_batch/screens/batch_details_page.dart';
+import 'package:foresty/firestore_batch/screens/batch_form_page.dart';
+import 'package:foresty/firestore_batch/screens/components/batch_widget.dart';
+import 'package:foresty/firestore_batch/services/batch_service.dart';
+import 'package:foresty/firestore_harvest/screens/harvest_form_page.dart';
+import 'package:foresty/firestore_qr_codes/screens/qrcode_form.dart';
+
 import 'authentication/services/auth_service.dart';
 import 'components/my_drawer.dart';
-import 'components/show_password_confirmation_dialog.dart';
+import 'authentication/screens/components/show_password_confirmation_dialog.dart';
 import 'authentication/screens/user_page.dart';
 import 'authentication/screens/welcome_page.dart';
-import 'package:foresty/authentication/screens/view_forms_page.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
-  HomePage({super.key, required this.user});
+  BatchActivity? activity;
+  HomePage({super.key, required this.user, this.activity});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  ProductBatch productBatch = ProductBatch(
-      largura: 2,
-      comprimento: 3,
-      latitude: "-40.7473",
-      longitude: "147.2552",
-      finalidade: "Plantio de Hortaliças",
-      ambiente: "Praia",
-      tipoCultivo: "Convencional");
-
   String profileImageUrl = '';
-  final List<ProductBatch> listBatchs = [
-    ProductBatch(
-        largura: 2,
-        comprimento: 3,
-        latitude: "-40.7473",
-        longitude: "147.2552",
-        finalidade: "Plantio de Hortaliças",
-        ambiente: "Praia",
-        tipoCultivo: "Convencional"),
-    ProductBatch(
-        largura: 4,
-        comprimento: 5,
-        latitude: "-40.7473",
-        longitude: "147.2552",
-        finalidade: "Plantio de Frutas",
-        ambiente: "AgroFloresta",
-        tipoCultivo: "Floresta"),
-  ];
+  List<ProductBatch> listBatchs = [];
+  BatchService batchService = BatchService();
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   @override
   void initState() {
-    super.initState();
+    refresh();
     fetchUserData(widget.user.uid);
     fetchProfileImage(); // Obtém a URL da imagem de perfil no início
+    loadBatchs();
+    super.initState();
+  }
+
+  Future<void> loadBatchs() async {
+    List<ProductBatch> batches = await BatchService().readBatchs();
+    if (mounted) {
+      setState(() {
+        listBatchs = batches;
+      });
+    }
   }
 
   @override
@@ -63,6 +58,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.grey.shade100,
       drawer: MyDrawer(
         user: widget.user,
+        listBatchs: listBatchs,
         onLogout: () => handleLogout(context),
         onRemoveAccount: (email) {
           showDialog(
@@ -103,7 +99,13 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BatchFormPage(),
+                builder: (context) => BatchFormPage(
+                  activity: widget.activity,
+                ),
+              )).then((value) => setState(
+                () {
+                  refresh();
+                },
               ));
 
           /*Navigator.push(
@@ -122,18 +124,95 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: (listBatchs.isEmpty)
-          ? const Center(
-              child: Text(
-                "Nenhum lote ainda.\nVamos criar o primeiro?",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
+          ? RefreshIndicator(
+              onRefresh: () {
+                return refresh();
+              },
+              child: const Center(
+                child: Text(
+                  "Nenhum lote ainda.\nVamos criar o primeiro?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             )
-          : ListView(
-              children: List.generate(listBatchs.length, (index) {
-                ProductBatch model = listBatchs[index];
-                return BatchWidget(title: (model.tipoCultivo));
-              }),
+          : RefreshIndicator(
+              onRefresh: () {
+                return refresh();
+              },
+              child: ListView(
+                children: List.generate(listBatchs.length, (index) {
+                  ProductBatch model = listBatchs[index];
+                  // Corrigindo a referência para model.atividades (plural)
+                  String? activityType = model.atividades.isNotEmpty
+                      ? model.atividades.last.tipoAtividade
+                      : null;
+
+                  return BatchWidget(
+                    batchId: model.id,
+                    title: model.nomeLote,
+                    subtitle: model.nomeProduto,
+                    activity: activityType,
+                    onEditPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BatchFormPage(
+                            batch: model,
+                          ),
+                        ),
+                      );
+                    },
+                    onCreateActivityPressed: () {
+                      Navigator.of(context)
+                          .push(
+                        MaterialPageRoute(
+                          builder: (context) => ActivityFormPage(
+                            batch: model,
+                          ),
+                        ),
+                      )
+                          .then((_) async {
+                        // Atualize a lista de lotes após adicionar uma atividade
+                        await loadBatchs();
+                      });
+                    },
+                    onHarvestPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HarvestFormPage(
+                            batch: model,
+                          ),
+                        ),
+                      );
+                    },
+                    onQrCodePressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QrCodeFormPage(
+                            batch: model,
+                            user: widget.user,
+                          ),
+                        ),
+                      );
+                    },
+                    onDeletePressed: () {
+                      remove(model);
+                      refresh();
+                    },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BatchDetailsPage(batch: model),
+                        ),
+                      );
+                    },
+                  );
+                }),
+              ),
             ),
     );
   }
@@ -181,6 +260,23 @@ class _HomePageState extends State<HomePage> {
   void updateProfileImage(String imageUrl) {
     setState(() {
       profileImageUrl = imageUrl;
+    });
+  }
+
+  remove(ProductBatch model) {
+    batchService.removeBatch(batchId: model.id).then((_) {
+      setState(() {
+        // Remove o lote da lista listBatchs com base no ID correspondente ao modelo removido
+        listBatchs.removeWhere((batch) => batch.id == model.id);
+      });
+    });
+  }
+
+  refresh() async {
+    List<ProductBatch> temp = await batchService.readBatchs();
+
+    setState(() {
+      listBatchs = temp;
     });
   }
 }

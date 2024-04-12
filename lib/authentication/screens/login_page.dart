@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Importe o pacote font_awesome_flutter
 import 'package:foresty/authentication/screens/add_info_user.dart';
+import 'package:foresty/authentication/screens/adm_page.dart';
+import 'package:foresty/authentication/screens/components/card_image.dart';
+
 import 'package:foresty/home_page.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfield.dart';
 import '../../components/show_snackbar.dart';
-import '../../components/square_tile.dart';
 import '../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -93,29 +97,69 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // sign user in method
-  void signUserIn() {
+  void signUserIn() async {
     String email = _emailController.text;
     String pass = _passwordController.text;
 
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      authService.loginUser(email: email, password: pass).then((String? erro) {
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+
+        String? erro =
+            await authService.loginUser(email: email, password: pass);
+
         if (erro != null) {
           showSnackBar(context: context, mensagem: erro);
         } else {
-          // Redirecionar para a tela principal após o login
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  HomePage(user: FirebaseAuth.instance.currentUser!),
-            ),
-          );
+          // Obtenha o ID do usuário atualmente autenticado
+          String userId = FirebaseAuth.instance.currentUser!.uid;
+
+          // Verifique o userType do usuário atual
+          String userType = await getUserType(userId);
+
+          if (userType == "ADM") {
+            // Redirecione para a tela de super usuário (AdmPage).
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdmPage(
+                  user: FirebaseAuth.instance.currentUser!,
+                  listBatchs: [],
+                ),
+              ),
+            );
+          } else {
+            // Redirecione para a tela regular do usuário (HomePage).
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    HomePage(user: FirebaseAuth.instance.currentUser!),
+              ),
+            );
+          }
         }
-      });
+      } catch (e) {
+        // Trate exceções, se necessário
+        print("Erro durante o login: $e");
+        showSnackBar(context: context, mensagem: "Erro durante o login");
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
+  }
+
+  Future<String> getUserType(String userId) async {
+    // Use o Firebase para buscar os dados do usuário no banco de dados.
+    // Retorne o valor do campo userType.
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+    return userData['userType'];
   }
 
   forgotMyPassword() {
@@ -175,13 +219,13 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 46),
-                  // logo
-                  const Icon(
-                    Icons.forest,
-                    size: 128,
-                    color: Color.fromARGB(255, 0, 90, 3),
+
+                  ImageCard(
+                    imagePath: 'lib/assets/rastech_logo_with_name.png',
                   ),
+
                   const SizedBox(height: 76),
+
                   // welcome
                   const Text(
                     'Bem Vindo!',
@@ -257,7 +301,7 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: signUserIn,
                             textButton: 'Entrar',
                           ),
-                          const SizedBox(height: 50),
+                          const SizedBox(height: 12),
                         ],
                       ),
                     ),
@@ -290,35 +334,39 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 12),
 
                   // google / facebook / yahoo sign in buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // google button
-                      GestureDetector(
-                        onTap: () => handleGoogleLogin(context),
-                        child:
-                            const SquareTite(content: 'lib/assets/google.png'),
-                      ),
-
-                      const SizedBox(width: 15),
-
-                      // facebook button
-                      GestureDetector(
-                        onTap: signInWithFacebook,
-                        child: SquareTite(content: 'lib/assets/facebook.png'),
-                      ),
-
-                      const SizedBox(width: 15),
-
-                      // yahoo button
-                      const SquareTite(content: 'lib/assets/yahoo.png'),
-                    ],
-                  )
-
-                  // not a member? register now
+                  FractionallySizedBox(
+                    widthFactor: 0.9,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton.icon(
+                            onPressed: () => handleGoogleLogin(context),
+                            icon: FaIcon(
+                              FontAwesomeIcons.google,
+                              color: Colors.white,
+                            ),
+                            label: Text(
+                              'Entrar com Google',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red, // Cor primária
+                              minimumSize: Size(double.infinity, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
                 ],
               ),
             ),

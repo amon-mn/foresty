@@ -11,6 +11,7 @@ import 'package:validadores/Validador.dart';
 
 import '../../components/my_textfield.dart';
 
+
 class AddInfoGoogleUser extends StatefulWidget {
   final User user;
 
@@ -357,6 +358,7 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
               MyButton(
                 onTap: () {
                   _saveAdditionalInfo();
+                
                 },
                 textButton: 'Salvar',
               ),
