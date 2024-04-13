@@ -48,6 +48,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883889030916:android:9d768faa6e827f75fa7251",
+        "android_client_info": {
+          "package_name": "com.example.foresty_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883889030916-ph9719u62bdb80ch1ng8b152tj8r1khj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1WLHtdFen8QLgF2X4vMC_UVGXP2E-R3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883889030916-2jnqkb9bvs8nld3p9po88aq6ciajp4r3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "883889030916-rhrg32gli7kh20efa6lmn8s1goe71kkg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.foresty"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
