@@ -32,9 +32,6 @@ class Tag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String maskedCpfCnpj =
-        '${'*' * 3}.${'*' * 3}${cpfCnpj.substring(cpfCnpj.length - 7)}';
-
     return Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -43,9 +40,18 @@ class Tag extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            nomeDoProduto,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+          Row(
+            children: [
+              Text(
+                nomeDoProduto,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+              ),
+              const SizedBox(width: 8.0),
+              Text(
+                '$peso $unidade',
+                style: const TextStyle(fontSize: 18),
+              ),
+            ],
           ),
           SizedBox(height: 4.0),
           Row(
@@ -56,21 +62,13 @@ class Tag extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$peso $unidade',
-                      style: const TextStyle(fontSize: 16),
+                      'Lote: $lote',
+                      style: const TextStyle(fontSize: 10),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          'Lote: $lote',
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                        const SizedBox(width: 4.0),
-                        Text(
-                          'Data de expedição: $dataExpedicao',
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                      ],
+                    const SizedBox(width: 4.0),
+                    Text(
+                      'Data de expedição: $dataExpedicao',
+                      style: const TextStyle(fontSize: 10),
                     ),
                     SizedBox(height: 4.0),
                     Text(
@@ -79,7 +77,7 @@ class Tag extends StatelessWidget {
                     ),
                     SizedBox(height: 4.0),
                     Text(
-                      'CPF/CNPJ: $maskedCpfCnpj',
+                      'CPF/CNPJ: ${mascararCpfCnpj(cpfCnpj)}',
                       style: const TextStyle(fontSize: 10),
                     ),
                   ],
@@ -89,7 +87,7 @@ class Tag extends StatelessWidget {
               QrImageView(
                 data: '$urlQrCode$userIdQrCode$urlBatchId$batchId',
                 version: QrVersions.auto,
-                size: 90.0,
+                size: 95.0,
               ),
             ],
           ),
@@ -117,7 +115,6 @@ class Tag extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 8.0),
               Visibility(
                 visible: showImage,
                 child: Image.asset(
@@ -131,5 +128,24 @@ class Tag extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String extrairNumeros(String cpfCnpj) {
+    return cpfCnpj.replaceAll(
+        RegExp(r'\D'), ''); // Remove todos os caracteres não numéricos
+  }
+
+// Função para mascarar parcialmente o CPF/CNPJ
+  String mascararCpfCnpj(String cpfCnpj) {
+    final numeros = extrairNumeros(cpfCnpj); // Extrai apenas os números
+    if (numeros.length == 11) {
+      // Se for um CPF
+      return '***.${numeros.substring(3, 6)}.${numeros.substring(6, 9)}-**';
+    } else if (numeros.length == 14) {
+      // Se for um CNPJ
+      return '${numeros.substring(0, 2)}.***.***/${numeros.substring(8, 12)}*';
+    } else {
+      return 'CPF/CNPJ inválido';
+    }
   }
 }
