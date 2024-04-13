@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
+import 'package:foresty/firestore_activity/screens/activity_form_page.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:intl/intl.dart';
 
@@ -77,7 +78,7 @@ class BatchDetailsPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              _buildActivitySection(batch.atividades),
+              _buildActivitySection(context, batch.atividades),
             ],
           ),
         ),
@@ -139,7 +140,8 @@ class BatchDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildActivitySection(List<BatchActivity>? activities) {
+  Widget _buildActivitySection(
+      BuildContext context, List<BatchActivity>? activities) {
     if (activities == null || activities.isEmpty) {
       return Container(
         child: Text(
@@ -163,14 +165,14 @@ class BatchDetailsPage extends StatelessWidget {
         SizedBox(height: 8),
         Column(
           children: activities.map((activity) {
-            return _buildActivityRow(activity);
+            return _buildActivityRow(context, activity);
           }).toList(),
         ),
       ],
     );
   }
 
-  Widget _buildActivityRow(BatchActivity activity) {
+  Widget _buildActivityRow(BuildContext context, BatchActivity activity) {
     DateTime dataAtividade = DateTime.parse(activity.dataDaAtividade);
     String formattedDate = DateFormat('dd/MM/yyyy').format(dataAtividade);
 
@@ -184,9 +186,28 @@ class BatchDetailsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Tipo de Atividade: ${activity.tipoAtividade}',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Tipo de Atividade: ${activity.tipoAtividade}',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ActivityFormPage(
+                        batch: batch,
+                        activity: activity,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
           _buildDetailRow('Data da Atividade', formattedDate),
           _buildDetailRow('Custo da Atividade', activity.custo),

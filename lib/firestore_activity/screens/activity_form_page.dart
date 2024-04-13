@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:foresty/components/my_button.dart';
@@ -11,8 +13,9 @@ import '../../firestore_batch/models/batch.dart';
 
 class ActivityFormPage extends StatefulWidget {
   ProductBatch? batch;
+  BatchActivity? activity;
 
-  ActivityFormPage({Key? key, this.batch}) : super(key: key);
+  ActivityFormPage({Key? key, this.batch, this.activity}) : super(key: key);
 
   @override
   _ActivityFormPageState createState() => _ActivityFormPageState();
@@ -194,6 +197,87 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   @override
   void initState() {
     super.initState();
+
+    // Verifica se uma atividade existente foi fornecida
+    if (widget.activity != null) {
+      // Preenche os campos do formulário com as informações da atividade existente
+      selectedDate = widget.activity!.dataDaAtividade ?? '';
+      selectedAtividade.value = widget.activity!.tipoAtividade ?? 'Selecione';
+      _custo.text = widget.activity!.custo ?? '';
+
+      // Outros campos específicos de cada tipo de atividade
+      if (selectedAtividade.value == 'Preparo do solo') {
+        // Atividade de Preparo do solo
+        var preparoSolo = widget.activity!.preparoSolo;
+        selectedPreparoSolo.value = preparoSolo.tipo ?? 'Selecione';
+        _tamanho1.text = preparoSolo.tamanho ?? '';
+        _selectedRadioValue = preparoSolo.usouCalcario ?? false;
+        _quantidade1.text = preparoSolo.quantidadeCalcario ?? '';
+        selectedAdubacao.value = preparoSolo.tipoAdubacao ?? 'Selecione';
+        selectedTipoAduboOrganico.value = preparoSolo.tipoAdubo ?? 'Selecione';
+        selectedTipoAduboQuimico.value = preparoSolo.tipoAdubo ?? 'Selecione';
+        _quantidade3.text = preparoSolo.quantidade ?? '';
+        selectedTipoUnid1.text = preparoSolo.unidade ?? 'Selecione';
+        _produtoUtilizado.text = preparoSolo.produtoUtilizado ?? '';
+        _quantidade2.text = preparoSolo.doseAplicada ?? '';
+      } else if (selectedAtividade.value == 'Plantio') {
+        // Atividade de Plantio
+        var plantio = widget.activity!.plantio;
+        selectedPlantio.value = plantio.tipo ?? 'Selecione';
+        _quantidade1.text = plantio.quantidade.toString() ?? '';
+        _larguraPlantioController.text = plantio.largura.toString() ?? '';
+        _comprimentoPlantioController.text =
+            plantio.comprimento.toString() ?? '';
+      } else if (selectedAtividade.value == 'Manejo de doenças') {
+        // Atividade de Manejo de doenças
+        var manejoDoencas = widget.activity!.manejoDoencas;
+        _nomeDaDoenca.text = manejoDoencas.nomeDoenca ?? '';
+        selectedTipoControleDoenca.value =
+            manejoDoencas.tipoControle ?? 'Selecione';
+        _selectedRadioValueUnid = manejoDoencas.tipoVetor == 'Químico';
+        _produtoUtilizado.text = manejoDoencas.produtoUtilizado ?? '';
+        _quantidade1.text = manejoDoencas.doseAplicada.toString() ?? '';
+      } else if (selectedAtividade.value == 'Adubação de cobertura') {
+        // Atividade de Adubação de cobertura
+        var adubacaoCobertura = widget.activity!.adubacaoCobertura;
+        selectedAdubacao.value = adubacaoCobertura.tipo ?? 'Selecione';
+        selectedTipoAduboOrganico.value =
+            adubacaoCobertura.tipoAdubo ?? 'Selecione';
+        selectedTipoAduboQuimico.value =
+            adubacaoCobertura.tipoAdubo ?? 'Selecione';
+        _quantidade1.text = adubacaoCobertura.quantidade ?? '';
+        selectedTipoUnid1.text = adubacaoCobertura.unidade ?? 'Selecione';
+        _produtoUtilizado.text = adubacaoCobertura.produtoUtilizado ?? '';
+        _quantidade2.text = adubacaoCobertura.doseAplicada ?? '';
+      } else if (selectedAtividade.value == 'Manejo de pragas') {
+        // Atividade de Manejo de pragas
+        var manejoPragas = widget.activity!.manejoPragas;
+        _nomeDaPraga.text = manejoPragas.nomePraga ?? '';
+        selectedTipoManejoPragas.value = manejoPragas.tipo ?? 'Selecione';
+        _nomeAgrotoxico.text = manejoPragas.nomeAgrotoxico ?? '';
+        _quantidade1.text = manejoPragas.quantidadeRecomendadaAgrotoxico ?? '';
+        _quantidade2.text = manejoPragas.quantidadeAplicadaAgrotoxico ?? '';
+        selectedTipoUnid1.text =
+            manejoPragas.unidadeRecomendadaAgrotoxico ?? 'Selecione';
+        selectedTipoUnid2.text =
+            manejoPragas.unidadeAplicadaAgrotoxico ?? 'Selecione';
+      } else if (selectedAtividade.value == 'Capina') {
+        // Atividade de Capina
+        var capina = widget.activity!.capina;
+        selectedTipoCapina.value = capina.tipo ?? 'Selecione';
+        _produtoUtilizado.text = capina.nomeProduto ?? '';
+        _quantidade1.text = capina.quantidadeAplicada.toString() ?? '';
+        _selectedRadioValueDim = capina.dimensao == 'Parte';
+      } else if (selectedAtividade.value == 'Tratos culturais') {
+        // Atividade de Tratos culturais
+        var tratosCulturais = widget.activity!.tratosCulturais;
+        selectedTipoTrato.value = tratosCulturais.tipoControle ?? 'Selecione';
+        _outroTratoController.text = tratosCulturais.outroTipo ?? '';
+      }
+
+      // Atualiza o estado para refletir as alterações nos campos do formulário
+      setState(() {});
+    }
   }
 
   @override
@@ -1841,7 +1925,15 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
   }
 
   BatchActivity createBatchActivityObject() {
-    String activityId = Uuid().v4();
+    String activityId = widget.activity?.id ??
+        Uuid().v4(); // Use o ID da atividade existente ou gere um novo
+
+    // Preencha os campos com as informações da atividade existente, se ela for fornecida
+    String selectedDate = widget.activity?.dataDaAtividade ?? '';
+    String selectedAtividadeValue =
+        widget.activity?.tipoAtividade ?? 'Selecione';
+    String selectedCusto = widget.activity?.custo ?? '';
+
     PreparoSolo preparoSolo;
 
     if (selectedAtividade.value == 'Preparo do solo') {
