@@ -21,8 +21,17 @@ class BatchService {
   Future<ProductBatch> addBatchActivity(
       {required ProductBatch batch,
       required BatchActivity batchActivity}) async {
-    // Adicione a atividade à lista de atividades no lote
-    batch.addActivity(batchActivity);
+    // Verifique se já existe uma atividade com o mesmo ID
+    int existingIndex = batch.atividades
+        .indexWhere((activity) => activity.id == batchActivity.id);
+
+    if (existingIndex != -1) {
+      // Se já existe uma atividade com o mesmo ID, substitua-a
+      batch.atividades[existingIndex] = batchActivity;
+    } else {
+      // Caso contrário, adicione a atividade à lista de atividades no lote
+      batch.addActivity(batchActivity);
+    }
 
     // Atualize o lote no banco de dados
     await firestore

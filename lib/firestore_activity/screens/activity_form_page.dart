@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:foresty/components/my_button.dart';
 import 'package:foresty/components/my_dropdown.dart';
+import 'package:foresty/components/show_snackbar.dart';
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:foresty/firestore_batch/services/batch_service.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -1889,6 +1890,10 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               // Crie o objeto BatchActivity com base nas informações do formulário e do lote
                               BatchActivity batchActivity =
                                   createBatchActivityObject();
+
+                              // Determine se é uma edição ou criação
+                              bool isEdicao = widget.activity != null;
+
                               // Adicione o objeto ao banco de dados usando o serviço
                               await batchService.addBatchActivity(
                                 batch: widget.batch!,
@@ -1896,6 +1901,15 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               );
                               // Feche o formulário ou faça qualquer outra ação necessária
                               Navigator.pop(context);
+                              // Mostrar snackbar com a mensagem apropriada
+                              String snackBarMessage = isEdicao
+                                  ? "A atividade foi editada com sucesso."
+                                  : "A atividade foi criada com sucesso.";
+                              showSnackBar(
+                                context: context,
+                                mensagem: snackBarMessage,
+                                isErro: false,
+                              );
                             } catch (error) {
                               // Trate qualquer erro aqui, se necessário
                             } finally {

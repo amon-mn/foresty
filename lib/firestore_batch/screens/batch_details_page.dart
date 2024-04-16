@@ -4,86 +4,110 @@ import 'package:foresty/firestore_activity/screens/activity_form_page.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:intl/intl.dart';
 
-class BatchDetailsPage extends StatelessWidget {
+class BatchDetailsPage extends StatefulWidget {
   final ProductBatch batch;
 
   BatchDetailsPage({required this.batch});
 
+  @override
+  State<BatchDetailsPage> createState() => _BatchDetailsPageState();
+}
+
+class _BatchDetailsPageState extends State<BatchDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromRGBO(238, 238, 238, 1),
       appBar: AppBar(
         title: Text(
-          batch.nomeLote ?? 'Nome não disponível',
+          widget.batch.nomeLote ?? 'Nome não disponível',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color.fromARGB(255, 0, 90, 3),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(16.0),
-          color: Color.fromRGBO(238, 238, 238, 1),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Adicione um título para a seção de informações do lote
-              Text(
-                'Informações do Lote:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[900],
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            color: Color.fromRGBO(238, 238, 238, 1),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Adicione um título para a seção de informações do lote
+                Text(
+                  'Informações do Lote:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[900],
+                  ),
                 ),
-              ),
-              SizedBox(height: 8),
-              // Envolve os atributos em um Container
-              Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
+                SizedBox(height: 8),
+                // Envolve os atributos em um Container
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildDetailRow('ID do Lote', widget.batch.id),
+                      _buildDetailRow('Nome do Lote',
+                          widget.batch.nomeLote ?? 'Não disponível'),
+                      _buildDetailRow(
+                          'Largura', widget.batch.largura.toString()),
+                      _buildDetailRow(
+                          'Comprimento', widget.batch.comprimento.toString()),
+                      _buildDetailRow('Área',
+                          widget.batch.area?.toString() ?? 'Não disponível'),
+                      _buildDetailRow(
+                          'Latitude', widget.batch.latitude.toString()),
+                      _buildDetailRow(
+                          'Longitude', widget.batch.longitude.toString()),
+                      _buildDetailRow(
+                          'Finalidade',
+                          widget.batch.finalidade == 'Outro (Especificar)'
+                              ? widget.batch.outraFinalidade!
+                              : widget.batch.finalidade),
+                      _buildDetailRow(
+                          'Ambiente',
+                          widget.batch.ambiente == 'Outro (Especificar)'
+                              ? widget.batch.outroAmbiente!
+                              : widget.batch.ambiente),
+                      _buildDetailRow(
+                          'Tipo de Cultivo',
+                          widget.batch.tipoCultivo == 'Outro (Especificar)'
+                              ? widget.batch.outroTipoCultivo!
+                              : widget.batch.tipoCultivo),
+                      _buildDetailRow('Nome do Produto',
+                          widget.batch.nomeProduto ?? 'Não disponível'),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildDetailRow('ID do Lote', batch.id),
-                    _buildDetailRow(
-                        'Nome do Lote', batch.nomeLote ?? 'Não disponível'),
-                    _buildDetailRow('Largura', batch.largura.toString()),
-                    _buildDetailRow(
-                        'Comprimento', batch.comprimento.toString()),
-                    _buildDetailRow(
-                        'Área', batch.area?.toString() ?? 'Não disponível'),
-                    _buildDetailRow('Latitude', batch.latitude.toString()),
-                    _buildDetailRow('Longitude', batch.longitude.toString()),
-                    _buildDetailRow(
-                        'Finalidade',
-                        batch.finalidade == 'Outro (Especificar)'
-                            ? batch.outraFinalidade!
-                            : batch.finalidade),
-                    _buildDetailRow(
-                        'Ambiente',
-                        batch.ambiente == 'Outro (Especificar)'
-                            ? batch.outroAmbiente!
-                            : batch.ambiente),
-                    _buildDetailRow(
-                        'Tipo de Cultivo',
-                        batch.tipoCultivo == 'Outro (Especificar)'
-                            ? batch.outroTipoCultivo!
-                            : batch.tipoCultivo),
-                    _buildDetailRow('Nome do Produto',
-                        batch.nomeProduto ?? 'Não disponível'),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              _buildActivitySection(context, batch.atividades),
-            ],
+                const SizedBox(height: 16),
+                _buildActivitySection(context, widget.batch.atividades),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _refreshData() async {
+    // Aqui você pode adicionar a lógica para recarregar os dados da tela
+    // por exemplo, você pode recarregar o lote do banco de dados
+    // ou chamar qualquer outra função necessária para atualizar os dados
+
+    // Aguarde a operação de recarregar os dados
+
+    // Após a conclusão, chame setState para reconstruir a interface do usuário
+    setState(() {
+      // Atualize a interface do usuário com os novos dados
+    });
   }
 
   Widget _buildDetailRow(String label, String value) {
@@ -197,14 +221,13 @@ class BatchDetailsPage extends StatelessWidget {
                 icon: Icon(Icons.edit),
                 onPressed: () {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ActivityFormPage(
-                        batch: batch,
-                        activity: activity,
-                      ),
-                    ),
-                  );
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ActivityFormPage(
+                          batch: widget.batch,
+                          activity: activity,
+                        ),
+                      )).then((value) => _refreshData());
                 },
               ),
             ],
