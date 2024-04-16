@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:foresty/authentication/services/auth_service.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_tags/screens/tags_page.dart';
 import 'package:image_picker/image_picker.dart';
+import '../authentication/screens/components/show_password_confirmation_dialog.dart';
 
 class MyDrawer extends StatelessWidget {
   final User user;
@@ -15,7 +15,7 @@ class MyDrawer extends StatelessWidget {
   final Function(String)? onUpdateProfileImage;
   final List<ProductBatch> listBatchs;
 
-  MyDrawer({
+  const MyDrawer({
     required this.user,
     required this.onLogout,
     required this.onRemoveAccount,
@@ -59,8 +59,6 @@ class MyDrawer extends StatelessWidget {
       }
     }
   }
-
-  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -110,13 +108,13 @@ class MyDrawer extends StatelessWidget {
               color: Colors.red,
             ),
             title: const Text("Remover conta"),
-            onTap: () async {
-              String? result =
-                  await _authService.removeAccountWithEmail(context: context);
-              if (result != null) {
-                // Trate o resultado, se necessário
-                print("Erro ao remover a conta: $result");
-              }
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return PasswordConfirmationDialog(email: user.email!);
+                },
+              );
             },
           ),
           ListTile(
