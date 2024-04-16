@@ -18,12 +18,12 @@ class HarvestFormPage extends StatefulWidget {
 }
 
 class _HarvestFormPageState extends State<HarvestFormPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   BatchService batchService = BatchService();
   ValueNotifier<String> selectedUnit = ValueNotifier<String>('Selecione');
   final TextEditingController _quantityProduced = TextEditingController();
 
-  String harvestDate = '';
+  String harvestDate = DateTime.now().toString();
 
   final _unitOfMeasurementItems = [
     'Selecione',
@@ -130,7 +130,7 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                       obscureText: false,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, informe a quantidade vendida';
+                          return 'Por favor, informe a quantidade produzida';
                         }
                         return null;
                       },
@@ -179,27 +179,30 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                         width: MediaQuery.of(context).size.width * 0.43,
                         child: MyButton(
                           onTap: () async {
-                            setState(() {
-                              _isLoading =
-                                  true; // Ativar o indicador de loading
-                            });
+                            if (formKey.currentState != null &&
+                                formKey.currentState!.validate()) {
+                              setState(() {
+                                _isLoading =
+                                    true; // Ativar o indicador de loading
+                              });
 
-                            Harvest harvest = Harvest(
-                              id: Uuid().v4(),
-                              quantidadeProduzida: _quantityProduced.text,
-                              unidade: selectedUnit.value,
-                              dataDaColheita: harvestDate,
-                            );
+                              Harvest harvest = Harvest(
+                                id: Uuid().v4(),
+                                quantidadeProduzida: _quantityProduced.text,
+                                unidade: selectedUnit.value,
+                                dataDaColheita: harvestDate,
+                              );
 
-                            await batchService.addHarvest(
-                                batch: widget.batch!, harvest: harvest);
+                              await batchService.addHarvest(
+                                  batch: widget.batch!, harvest: harvest);
 
-                            setState(() {
-                              _isLoading =
-                                  false; // Desativar o indicador de loading
-                            });
+                              setState(() {
+                                _isLoading =
+                                    false; // Desativar o indicador de loading
+                              });
 
-                            Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
                           },
                           textButton: 'Salvar',
                         ),
