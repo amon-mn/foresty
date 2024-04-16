@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foresty/firestore_activity/screens/activity_form_page.dart';
 import 'package:foresty/firestore_batch/services/batch_service.dart';
+import 'package:foresty/components/show_snackbar.dart';
 
 class BatchWidget extends StatelessWidget {
   final String? title;
@@ -188,6 +189,12 @@ class BatchWidget extends StatelessWidget {
                       onPressed: () async {
                         if (batchId != null) {
                           await BatchService().removeBatch(batchId: batchId!);
+                          showSnackBar(
+                            context: context,
+                            mensagem:
+                                'Lote deletado. Arraste para baixo para atualizar a página.',
+                            isErro: false,
+                          );
                         }
                       },
                     ),

@@ -35,7 +35,7 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
   final TextEditingController _cnpjController = TextEditingController();
 
   final ValueNotifier<String> _selectedUserType = ValueNotifier('Selecione');
-
+  final GlobalKey<FormState> infoKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -67,38 +67,41 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
       ),
       body: SingleChildScrollView(
         reverse: true,
-        child: Center(
-          child: FractionallySizedBox(
-            widthFactor: 0.9,
-            child: Column(
-              children: [
-                const SizedBox(height: 24),
-                MyDropdownFormField(
-                  selectedValueNotifier: _selectedUserType,
-                  itemsList: const ['Selecione', 'Produtor', 'Comerciante'],
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedUserType.value = newValue!;
-                    });
-                  },
-                  labelText: 'Tipo de Usuário',
-                  prefixIcon: Icons.person,
-                ),
-                const SizedBox(height: 16),
-                // Mostrar ou ocultar campos com base no tipo de usuário
-                if (_selectedUserType.value != 'Selecione')
-                  _selectedUserType.value == 'Produtor'
-                      ? _buildProducerForm()
-                      : _buildMerchantForm(),
-                const SizedBox(height: 16),
-                MyButton(
-                  onTap: () {
-                    _saveAdditionalInfo();
-                  },
-                  textButton: 'Salvar',
-                ),
-                const SizedBox(height: 16),
-              ],
+        child: Form(
+          key: infoKey,
+          child: Center(
+            child: FractionallySizedBox(
+              widthFactor: 0.9,
+              child: Column(
+                children: [
+                  const SizedBox(height: 24),
+                  MyDropdownFormField(
+                    selectedValueNotifier: _selectedUserType,
+                    itemsList: const ['Selecione', 'Produtor', 'Comerciante'],
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedUserType.value = newValue!;
+                      });
+                    },
+                    labelText: 'Tipo de Usuário',
+                    prefixIcon: Icons.person,
+                  ),
+                  const SizedBox(height: 16),
+                  // Mostrar ou ocultar campos com base no tipo de usuário
+                  if (_selectedUserType.value != 'Selecione')
+                    _selectedUserType.value == 'Produtor'
+                        ? _buildProducerForm()
+                        : _buildMerchantForm(),
+                  const SizedBox(height: 16),
+                  MyButton(
+                    onTap: () {
+                      _saveAdditionalInfo();
+                    },
+                    textButton: 'Salvar',
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
         ),
@@ -153,8 +156,8 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
             if (value == null || value.isEmpty) {
               return "O Estado deve ser preenchido";
             }
-            if (value.length < 5) {
-              return "O Estado está incorreto";
+            if (value.length < 2) {
+              return "Informe o nome do estado ou sua sigla";
             }
             return null;
           },
@@ -292,39 +295,48 @@ class _AddInfoGoogleUserState extends State<AddInfoGoogleUser> {
   }
 
   Future<void> _saveAdditionalInfo() async {
-    try {
-      // Referência ao documento do usuário no Firestore
-      final userDocRef =
-          FirebaseFirestore.instance.collection('users').doc(widget.user.uid);
+    if (infoKey.currentState != null && infoKey.currentState!.validate()) {
+      try {
+        // Referência ao documento do usuário no Firestore
+        final userDocRef =
+            FirebaseFirestore.instance.collection('users').doc(widget.user.uid);
 
-      // Dados a serem salvos
-      final data = {
-        'name': _nameController.text,
-        'cpf': _cpfController.text,
-        'state': _stateController.text,
-        'city': _cityController.text,
-        'userType': _selectedUserType.value,
-        if (_selectedUserType.value == 'Comerciante')
-          'cnpj': _cnpjController.text,
-        'cep': _cepController.text,
-        'locality': _localityController.text,
-        'neighborhood': _neighborhoodController.text,
-        'propertyName': _propertyNameController.text,
-        'street': _streetController.text,
-      };
+        // Dados a serem salvos
+        final data = {
+          'name': _nameController.text,
+          'cpf': _cpfController.text,
+          'state': _stateController.text,
+          'city': _cityController.text,
+          'userType': _selectedUserType.value,
+          if (_selectedUserType.value == 'Comerciante')
+            'cnpj': _cnpjController.text,
+          'cep': _cepController.text,
+          'locality': _localityController.text,
+          'neighborhood': _neighborhoodController.text,
+          'propertyName': _propertyNameController.text,
+          'street': _streetController.text,
+        };
 
-      // Salvar os dados no Firestore
-      await userDocRef.set(data, SetOptions(merge: true)).then((_) {
+        // Salvar os dados no Firestore
+        await userDocRef.set(data, SetOptions(merge: true));
+
         // Redirecionar o usuário para a página inicial
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomePage(user: widget.user)),
           (route) => false,
         );
-      });
-    } catch (error) {
-      // Lidar com erros, como exibir uma mensagem de erro para o usuário
-      print('Erro ao salvar informações adicionais: $error');
+      } catch (error) {
+        // Lidar com erros, como exibir uma mensagem de erro para o usuário
+        print('Erro ao salvar informações adicionais: $error');
+        // Exibir uma mensagem de erro para o usuário
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Erro ao salvar informações adicionais. Por favor, tente novamente.'),
+          ),
+        );
+      }
     }
   }
 

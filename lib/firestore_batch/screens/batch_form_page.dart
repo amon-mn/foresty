@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foresty/components/my_dropdown.dart';
+import 'package:foresty/components/show_snackbar.dart';
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_batch/models/batch_location_controller.dart';
@@ -45,7 +46,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
   double _latBatch = 0.0;
   double _longBatch = 0.0;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final _selectedValueNotifierFinalidade = ValueNotifier<String>('Selecione');
   final _selectedValueNotifierAmbiente = ValueNotifier<String>('Selecione');
@@ -144,7 +145,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
           child: Column(
             children: [
               Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   children: [
                     Container(
@@ -163,6 +164,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
                       hintText: 'Nome',
                       controller: _batchNameController,
                       obscureText: false,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Informe o nome do lote.";
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                     const SizedBox(height: 8),
                     Container(
@@ -190,7 +198,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                 controller: _larguraController,
                                 hintText: 'Largura',
                                 obscureText: false,
-                                validator: (value) {},
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Informe a largura do lote.";
+                                  } else {
+                                    return null;
+                                  }
+                                },
                               ),
                               SizedBox(height: 8),
                               MyTextFieldWrapper(
@@ -201,7 +215,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                 controller: _comprimentoController,
                                 hintText: 'Comprimento',
                                 obscureText: false,
-                                validator: (value) {},
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Informe o comprimento do lote.";
+                                  } else {
+                                    return null;
+                                  }
+                                },
                               ),
                             ],
                           ),
@@ -428,7 +448,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
                             controller: _especificarFinalidadeController,
                             hintText: 'Especificar',
                             obscureText: false,
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Especifique a finalidade.";
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                         ],
                       ),
@@ -476,7 +502,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
                             controller: _especificarAmbienteController,
                             hintText: 'Especificar',
                             obscureText: false,
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Especifique o ambiente.";
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                         ],
                       ),
@@ -524,7 +556,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
                             controller: _especificarTipoCultivoController,
                             hintText: 'Especificar',
                             obscureText: false,
-                            validator: (value) {},
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Especifique o tipo de cultivo.";
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                         ],
                       ),
@@ -544,6 +582,13 @@ class _BatchFormPageState extends State<BatchFormPage> {
                       hintText: 'Ex: Tomate',
                       controller: _productNameController,
                       obscureText: false,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Informe o nome do produto.";
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                     SizedBox(height: 16),
                     Row(
@@ -568,47 +613,68 @@ class _BatchFormPageState extends State<BatchFormPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 9),
                             child: MyButton(
                               onTap: () {
-                                ProductBatch batch = ProductBatch(
-                                  id: widget.batch?.id ?? Uuid().v4(),
-                                  nomeLote: _batchNameController.text,
-                                  largura:
-                                      double.parse(_larguraController.text),
-                                  comprimento:
-                                      double.parse(_comprimentoController.text),
-                                  area: double.parse(_larguraController.text) *
-                                      double.parse(_comprimentoController.text),
-                                  latitude: _latBatch,
-                                  longitude: _longBatch,
-                                  finalidade:
-                                      _selectedValueNotifierFinalidade.value,
-                                  outraFinalidade:
-                                      _selectedValueNotifierFinalidade.value ==
-                                              'Outro (Especificar)'
-                                          ? _especificarFinalidadeController
-                                              .text
-                                          : '',
-                                  ambiente:
-                                      _selectedValueNotifierAmbiente.value,
-                                  outroAmbiente:
-                                      _selectedValueNotifierAmbiente.value ==
-                                              'Outro (Especificar)'
-                                          ? _especificarAmbienteController.text
-                                          : '',
-                                  tipoCultivo:
-                                      _selectedValueNotifierTipoCultivo.value,
-                                  outroTipoCultivo:
-                                      _selectedValueNotifierTipoCultivo.value ==
-                                              'Outro (Especificar)'
-                                          ? _especificarTipoCultivoController
-                                              .text
-                                          : '',
-                                  nomeProduto: _productNameController.text,
-                                  atividades: widget.batch?.atividades ?? [],
-                                );
+                                if (formKey.currentState != null &&
+                                    formKey.currentState!.validate()) {
+                                  if (Text('Longitude: $_longBatch').data ==
+                                      'Longitude: 0.0') {
+                                    showSnackBar(
+                                        context: context,
+                                        mensagem:
+                                            'Clique no botão de Geolocalização, para informar a localização do lote.',
+                                        isErro: true);
+                                  } else {
+                                    ProductBatch batch = ProductBatch(
+                                      id: widget.batch?.id ?? Uuid().v4(),
+                                      nomeLote: _batchNameController.text,
+                                      largura:
+                                          double.parse(_larguraController.text),
+                                      comprimento: double.parse(
+                                          _comprimentoController.text),
+                                      area: double.parse(
+                                              _larguraController.text) *
+                                          double.parse(
+                                              _comprimentoController.text),
+                                      latitude: _latBatch,
+                                      longitude: _longBatch,
+                                      finalidade:
+                                          _selectedValueNotifierFinalidade
+                                              .value,
+                                      outraFinalidade:
+                                          _selectedValueNotifierFinalidade
+                                                      .value ==
+                                                  'Outro (Especificar)'
+                                              ? _especificarFinalidadeController
+                                                  .text
+                                              : '',
+                                      ambiente:
+                                          _selectedValueNotifierAmbiente.value,
+                                      outroAmbiente:
+                                          _selectedValueNotifierAmbiente
+                                                      .value ==
+                                                  'Outro (Especificar)'
+                                              ? _especificarAmbienteController
+                                                  .text
+                                              : '',
+                                      tipoCultivo:
+                                          _selectedValueNotifierTipoCultivo
+                                              .value,
+                                      outroTipoCultivo:
+                                          _selectedValueNotifierTipoCultivo
+                                                      .value ==
+                                                  'Outro (Especificar)'
+                                              ? _especificarTipoCultivoController
+                                                  .text
+                                              : '',
+                                      nomeProduto: _productNameController.text,
+                                      atividades:
+                                          widget.batch?.atividades ?? [],
+                                    );
 
-                                batchService.addBatch(batch: batch);
+                                    batchService.addBatch(batch: batch);
 
-                                Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
+                                }
                               },
                               textButton: 'Salvar',
                             ),
