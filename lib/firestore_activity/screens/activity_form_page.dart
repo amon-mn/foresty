@@ -1348,6 +1348,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           });
                         },
                       ),
+                      const SizedBox(height: 16),
                       if (selectedTipoControleDoenca.value ==
                           'Controle de vetores')
                         Row(
@@ -1377,6 +1378,9 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             Text('Natural'),
                           ],
                         ),
+                      const SizedBox(
+                        height: 16,
+                      )
                     ],
                   ),
                 if (_selectedRadioValueUnid == true &&
@@ -1446,6 +1450,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           ),
                         ],
                       ),
+                      SizedBox(height: 16)
                     ],
                   ),
                 if (selectedAtividade.value == 'Adubação de cobertura')
@@ -1801,6 +1806,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                           Text('Todo'),
                         ],
                       ),
+                      const SizedBox(height: 16)
                     ],
                   ),
                 if (selectedAtividade.value == 'Tratos culturais')
