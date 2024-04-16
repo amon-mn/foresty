@@ -17,8 +17,8 @@ const db = firebase.firestore();
 function getUserAndLoteIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('userId');
-    const batchId = urlParams.get('batchId'); 
-    return { userId, batchId }; 
+    const batchId = urlParams.get('batchId');
+    return { userId, batchId };
 }
 
 // Função para carregar e exibir as informações do produto, do produtor e do usuário
@@ -48,7 +48,7 @@ async function carregarUsuario() {
                 const dataDaColheita = colheita ? colheita.dataDaColheita || "Sem informação" : "Sem informação";
                 const tipoCultivo = loteDoc.data().tipoCultivo;
                 const qrcode = loteDoc.data().qrcode;
-                const isOrganico = qrcode ? qrcode.isOrganico || "Sem informação" : "Sem informação"; 
+                const isOrganico = qrcode ? qrcode.isOrganico || "Sem informação" : "Sem informação";
                 const atividades = loteDoc.data().atividades;
 
                 // Função para extrair apenas os números do CPF/CNPJ
@@ -81,22 +81,75 @@ async function carregarUsuario() {
                         }
                     }
                 }
-                
-                // Acessando o nome do agrotoxico dentro da atividade manejoPragas
-                let nomeAgrotoxico = "Teste"; // Inicialize com um valor padrão
-                if (atividades && atividades.length > 0) {
-                    // Se existirem atividades, encontre o nome do agrotóxico dentro da atividade manejoPragas
-                    for (let i = 0; i < atividades.length; i++) {
-                        const atividade = atividades[i];
-                        if (atividade.manejoPragas) {
-                            const manejoPragas = atividade.manejoPragas; // Corrija o nome da variável para manejoPragas
-                            nomeAgrotoxico = manejoPragas.nomeAgrotoxico;
-                            quantidadeAplicadaAgrotoxico = manejoPragas.quantidadeAplicadaAgrotoxico;
-                            unidadeAplicadaAgrotoxico = manejoPragas.unidadeAplicadaAgrotoxico;
-                            break; // Pare de procurar assim que encontrar o primeiro nome do agrotóxico dentro de manejoPragas
+
+                function obterDetalhesAgrotoxico(atividades) {
+                    nomePraga = null;
+                    quantidadePraga = null;
+                    unidadePraga = null;
+
+                    nomeSolo = null;
+                    quantidadeSolo = null;
+
+                    nomeDoencas = null;
+                    quandidadeDoencas = null;
+
+                    nomeAdubacao = null;
+                    quantidadeAdubacao = null;
+
+                    nomeCapina = null;
+                    quantidadeCapina = null;
+
+                    if (atividades && atividades.length > 0) {
+                        for (let i = 0; i < atividades.length; i++) {
+                            const atividade = atividades[i];
+                            if (atividade.manejoPragas && atividade.manejoPragas.nomeAgrotoxico !== "") {
+                                const manejoPragas = atividade.manejoPragas;
+                                nomePraga = manejoPragas.nomeAgrotoxico;
+                                quantidadePraga = manejoPragas.quantidadeAplicadaAgrotoxico;
+                                unidadePraga = manejoPragas.unidadeAplicadaAgrotoxico;
+                            }
+                            if (atividade.preparoSolo && atividade.preparoSolo.produtoUtilizado !== "") {
+                                const preparoSolo = atividade.preparoSolo;
+                                nomeSolo = preparoSolo.produtoUtilizado;
+                                quantidadeSolo = preparoSolo.doseAplicada;
+                            }
+                            if (atividade.manejoDoencas && atividade.manejoDoencas.nomeDoenca !== "" && atividade.manejoDoencas.tipoVetor == "Químico") {
+                                const manejoDoencas = atividade.manejoDoencas;
+                                nomeDoencas = manejoDoencas.produtoUtilizado;
+                                quandidadeDoencas = manejoDoencas.doseAplicada;
+                            }
+                            if (atividade.adubacaoCobertura && atividade.adubacaoCobertura.produtoUtilizado != "" && atividade.adubacaoCobertura.tipoAdubacao == "Química") {
+                                const adubacaoCobertura = atividade.adubacaoCobertura;
+                                nomeAdubacao = adubacaoCobertura.produtoUtilizado;
+                                quantidadeAdubacao = adubacaoCobertura.doseAplicada;
+                            }
+                            if (atividade.capina && atividade.capina.nomeProduto !== "" && atividade.capina.tipo == "Química") {
+                                const capina = atividade.capina;
+                                nomeCapina = capina.nomeProduto;
+                                quantidadeCapina = capina.quantidadeAplicada;
+                            }
                         }
                     }
+
+                    return {
+                        nomePraga,
+                        quantidadePraga,
+                        unidadePraga,
+
+                        nomeSolo,
+                        quantidadeSolo,
+
+                        nomeDoencas,
+                        quandidadeDoencas,
+
+                        nomeAdubacao,
+                        quantidadeAdubacao,
+
+                        nomeCapina,
+                        quantidadeCapina,
+                    };
                 }
+
 
                 // Função para formatar a data no formato DD/MM/AAAA
                 function formatarData(data) {
@@ -107,13 +160,15 @@ async function carregarUsuario() {
                     const ano = dataObj.getFullYear();
                     return `${dia}/${mes}/${ano}`;
                 }
-                
+
                 // Exibindo as informações do lote
                 const loteLi = document.createElement('li');
-                loteLi.innerHTML = 
+                const detalhesAgrotoxico = obterDetalhesAgrotoxico(atividades); // Obter detalhes do agrotóxico
+
+                loteLi.innerHTML =
                     "<br><span class='bullet'>Produto</span><br>" +
                     "<span>" + nomeProduto + "</span><br><br>" +
-                    "<span class='bullet'>Peso</span><br>" +
+                    "<span class='bullet'>Quantidade</span><br>" +
                     "<span>" + peso + "  </span><span class='bullet'> </span><span>" + unidade + "</span><br><br>" +
                     "<span class='bullet'>ID do Lote</span><br>" +
                     "<span>" + batchId + "</span><br><br>" +
@@ -126,27 +181,85 @@ async function carregarUsuario() {
                     "<span class='bullet'>Data de Plantio</span><br>" +
                     "<span>" + formatarData(dataDaAtividade) + "</span><br><br>" +
                     "<span class='bullet'>Data da Colheita</span><br>" +
-                    "<span>" + formatarData(dataDaColheita) + "</span><br><br>";                
-                    // Verifica se o tipo de cultivo é 'Orgânico' ou 'Agroecológico' e adiciona a frase apropriada
-                    // Verifica se é orgânico e adiciona a imagem apropriada
-                    if (isOrganico === true) {
-                        loteLi.innerHTML += "<img src='icons/logo_produto_organico.png' alt='Orgânico' class='organic-image'>";
+                    "<span>" + formatarData(dataDaColheita) + "</span><br><br>";
+
+                // Verifica se o tipo de cultivo é 'Orgânico' ou 'Agroecológico' e adiciona a frase apropriada
+                // Verifica se é orgânico e adiciona a imagem apropriada
+                if (isOrganico === true) {
+                    loteLi.innerHTML += "<img src='icons/logo_produto_organico.png' alt='Orgânico' class='organic-image'>";
+                } else {
+                    // Adiciona a linha de tipo de cultivo apenas se não for orgânico
+                    if (tipoCultivo === 'Orgânico' || tipoCultivo === 'Agroecológico') {
+                        loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo</span><br>";
+                        loteLi.innerHTML += "<span>Cultivado de forma orgânica/agroecológica<br> sem uso de agroquímicos.</span><br><br>";
                     } else {
-                        // Adiciona a linha de tipo de cultivo apenas se não for orgânico
-                        if (tipoCultivo === 'Orgânico' || tipoCultivo === 'Agroecológico') {
-                            loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo</span><br>";
-                            loteLi.innerHTML += "<span>Cultivado de forma orgânica/agroecológica<br> sem uso de agroquímicos.</span><br><br>";
-                        } else {
-                            loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo</span><br>";
-                            loteLi.innerHTML += "<span>" + tipoCultivo + "</span><br><br>";
+                        loteLi.innerHTML += "<span class='bullet'>Tipo de Cultivo</span><br>";
+                        loteLi.innerHTML += "<span>" + tipoCultivo + "</span><br><br>";
+                        loteLi.innerHTML += "<span class='bullet'>Data de Aplicação</span><br>";
+                        loteLi.innerHTML += "<span>" + formatarData(dataDaAtividade) + "</span><br><br>";
+                        if (nomePraga != null) {
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Atividade</span><br>";
+                            loteLi.innerHTML += "<span>" + 'Manejo de Pragas' + "</span><br><br>";
+
                             loteLi.innerHTML += "<span class='bullet'>Agrotóxico Aplicado</span><br>";
-                            loteLi.innerHTML += "<span>" + nomeAgrotoxico + "</span><br><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.nomePraga + "</span><br><br>";
+
                             loteLi.innerHTML += "<span class='bullet'>Quantidade Aplicada</span><br>";
-                            loteLi.innerHTML += "<span>" + quantidadeAplicadaAgrotoxico + "  </span><span class='bullet'> </span><span>" + unidadeAplicadaAgrotoxico + "</span><br><br>";
-                            loteLi.innerHTML += "<span class='bullet'>Data de Aplicação</span><br>";
-                            loteLi.innerHTML += "<span>" + formatarData(dataDaAtividade) + "</span><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.quantidadePraga + "  </span><span class='bullet'> </span><span>" + detalhesAgrotoxico.unidadePraga + "</span><br><br>";
+                        }
+                        if (nomeSolo != null) {
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Atividade</span><br>";
+                            loteLi.innerHTML += "<span>" + 'Preparo de Solo' + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Adubação pré-plantio</span><br>";
+                            loteLi.innerHTML += "<span>" + 'Química' + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Produto Utilizado</span><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.nomeSolo + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Dose Aplicada</span><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.quantidadeSolo + "</span><br><br>";
+                        }
+                        if (nomeDoencas != null) {
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Atividade</span><br>";
+                            loteLi.innerHTML += "<span>" + 'Manejo de Doenças' + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Controle de vetores</span><br>";
+                            loteLi.innerHTML += "<span>" + 'Químico' + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Produto Utilizado</span><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.nomeDoencas + "</span><br><br>";
+                            loteLi.innerHTML += "<span class='bullet'>Dose Aplicada</span><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.quandidadeDoencas + "</span><br><br>";
+                        }
+                        if (nomeAdubacao != null) {
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Atividade</span><br>";
+                            loteLi.innerHTML += "<span>" + 'Adubação de Cobertura' + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Adubação pós-plantio</span><br>";
+                            loteLi.innerHTML += "<span>" + 'Química' + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Produto Utilizado</span><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.nomeAdubacao + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Dose Aplicada</span><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.quantidadeAdubacao + "</span><br><br>";
+                        }
+                        if (nomeCapina != null) {
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Atividade</span><br>";
+                            loteLi.innerHTML += "<span>" + 'Capina' + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Tipo de Capina</span><br>";
+                            loteLi.innerHTML += "<span>" + 'Química' + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Produto Utilizado</span><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.nomeCapina + "</span><br><br>";
+
+                            loteLi.innerHTML += "<span class='bullet'>Dose Aplicada</span><br>";
+                            loteLi.innerHTML += "<span>" + detalhesAgrotoxico.quantidadeCapina + "</span><br><br>";
                         }
                     }
+                }
 
                 loteLi.classList.add('lote');
                 document.getElementById('users').innerHTML = ''; // Limpar a lista antes de adicionar os novos lotes
@@ -176,7 +289,7 @@ function initMap(initialLocation) {
     const options = {
         zoom: 16,
         center: initialLocation
-    }; 
+    };
 
     map = new google.maps.Map(
         document.getElementById('map'),
@@ -184,7 +297,7 @@ function initMap(initialLocation) {
     );
 
     // Adiciona um evento para quando o mapa terminar de carregar
-    google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
+    google.maps.event.addListenerOnce(map, 'tilesloaded', function () {
         // Após o mapa ser carregado, obtemos a localização do usuário
         navigator.geolocation.getCurrentPosition(position => {
             const userLocation = {
