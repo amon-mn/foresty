@@ -30,10 +30,6 @@ class EtiquetaProduto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*
-    String maskedCpfCnpj =
-        '${'*' * 3}.${'*' * 3}${cpfCnpj.substring(cpfCnpj.length - 7)}';
-    */
     return Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -110,7 +106,7 @@ class EtiquetaProduto extends StatelessWidget {
                         return Column(
                           children: [
                             Text(
-                              'Valor: R\$ ${valorAtual.toStringAsFixed(2)}', // Usando valorAtual
+                              'Valor: R\$ ${formatarValor(valorAtual)}', // Usando valorAtual
                               style: TextStyle(fontSize: 18.0),
                             ),
                             Text(
@@ -141,12 +137,18 @@ class EtiquetaProduto extends StatelessWidget {
     );
   }
 
+  // Função para formatar o valor para exibição
+  String formatarValor(double valor) {
+    // Utilizando formatação de string para substituir o ponto pela vírgula
+    return '${valor.toStringAsFixed(2).replaceAll('.', ',')}';
+  }
+
   String extrairNumeros(String cpfCnpj) {
     return cpfCnpj.replaceAll(
         RegExp(r'\D'), ''); // Remove todos os caracteres não numéricos
   }
 
-// Função para mascarar parcialmente o CPF/CNPJ
+  // Função para mascarar parcialmente o CPF/CNPJ
   String mascararCpfCnpj(String cpfCnpj) {
     final numeros = extrairNumeros(cpfCnpj); // Extrai apenas os números
     if (numeros.length == 11) {

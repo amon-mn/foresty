@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class MyTextFieldWrapper extends StatefulWidget {
@@ -24,10 +25,10 @@ class MyTextFieldWrapper extends StatefulWidget {
     this.inputFormatter,
     this.onSuffixIconPressed,
     this.onChanged,
-    this.initialValue, // Adicione esta linha
+    this.initialValue,
   }) : super(key: key) {
     if (initialValue != null) {
-      controller.text = initialValue!; // Defina o valor inicial do controlador
+      controller.text = initialValue!;
     }
   }
 
@@ -47,11 +48,13 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
       width: MediaQuery.of(context).size.width,
       child: TextFormField(
         style: TextStyle(fontSize: 16 * textScaleFactor),
-        inputFormatters:
-            widget.inputFormatter != null ? [widget.inputFormatter!] : [],
+        inputFormatters: [
+          if (widget.inputFormatter != null) widget.inputFormatter!,
+        ],
         controller: widget.controller,
-        obscureText: widget
-            .obscureText, // Use o valor fornecido pela propriedade obscureText
+        obscureText: widget.obscureText,
+        keyboardType: TextInputType.numberWithOptions(
+            decimal: true), // Definir o teclado como número decimal
         decoration: InputDecoration(
           prefixIcon: Icon(
             widget.prefixIcon,
@@ -61,8 +64,7 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
               ? IconButton(
                   icon: Icon(widget.suffixIcon),
                   color: Color.fromARGB(255, 0, 90, 3),
-                  onPressed: widget
-                      .onSuffixIconPressed, // Chame a função fornecida aqui
+                  onPressed: widget.onSuffixIconPressed,
                 )
               : null,
           border: OutlineInputBorder(
@@ -101,10 +103,21 @@ class _MyTextFieldWrapperState extends State<MyTextFieldWrapper> {
           setState(() {
             isFilled = value.isNotEmpty;
           });
-          widget.onChanged
-              ?.call(value); // Chame a função onChanged se estiver definida
+          widget.onChanged?.call(value);
         },
       ),
+    );
+  }
+}
+
+class _CustomTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final newFormattedValue = newValue.text.replaceAll('.', ',');
+    return TextEditingValue(
+      text: newFormattedValue,
+      selection: newValue.selection,
     );
   }
 }
