@@ -187,15 +187,43 @@ class BatchWidget extends StatelessWidget {
                         color: Color.fromARGB(255, 217, 0, 0),
                       ),
                       onPressed: () async {
-                        if (batchId != null) {
-                          await BatchService().removeBatch(batchId: batchId!);
-                          showSnackBar(
-                            context: context,
-                            mensagem:
-                                'Lote deletado. Arraste para baixo para atualizar a página.',
-                            isErro: false,
-                          );
-                        }
+                        // Mostra um diálogo de confirmação antes de deletar o lote
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Confirmar exclusão"),
+                              content: Text(
+                                  "Tem certeza de que deseja excluir o lote $title?\nTodas as informações relacionadas a ele, como atividades, colheita e etiquetas, serão removidas do banco de dados."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Fecha o diálogo
+                                  },
+                                  child: Text("Cancelar"),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    if (batchId != null) {
+                                      await BatchService()
+                                          .removeBatch(batchId: batchId!);
+                                      showSnackBar(
+                                        context: context,
+                                        mensagem:
+                                            'Lote deletado. Arraste para baixo para atualizar a página.',
+                                        isErro: false,
+                                      );
+                                      Navigator.of(context)
+                                          .pop(); // Fecha o diálogo
+                                    }
+                                  },
+                                  child: Text("Confirmar"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     ),
                   ],

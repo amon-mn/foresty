@@ -584,8 +584,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               Row(
                                 children: [
                                   Expanded(
-                                    flex:
-                                        10, // Define a proporção do primeiro componente
                                     child: SizedBox(
                                       width: double
                                           .infinity, // Para ocupar todo o espaço disponível
@@ -614,17 +612,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                       ),
                                     ),
                                   ), // Adiciona espaço entre os componentes
-                                  Expanded(
-                                    flex:
-                                        1, // Define a proporção do segundo componente
-                                    child: Column(
-                                      children: [
-                                        Text('ml'),
-                                        Text('/'),
-                                        Text('L'),
-                                      ],
-                                    ),
-                                  )
                                 ],
                               ),
                               const SizedBox(height: 16),
@@ -1388,6 +1375,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 16),
                           ],
                         ),
                       ],
@@ -1419,6 +1407,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             });
                           },
                         ),
+                        const SizedBox(height: 16),
                       ],
                     ),
                   if (selectedTipoControlePragas.value ==
@@ -1478,6 +1467,7 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                             }
                           },
                         ),
+                        const SizedBox(height: 16),
                       ],
                     ),
                   if (selectedAtividade.value == 'Manejo de doenças')
@@ -1638,14 +1628,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                 ],
                               ),
                             ),
-                            SizedBox(width: 16),
-                            Column(
-                              children: [
-                                Text('ml'),
-                                Text('/'),
-                                Text('L'),
-                              ],
-                            ),
                           ],
                         ),
                         SizedBox(height: 16)
@@ -1749,14 +1731,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(width: 16),
-                                  Column(
-                                    children: [
-                                      Text('ml'),
-                                      Text('/'),
-                                      Text('L'),
-                                    ],
-                                  )
                                 ],
                               )
                             ],
@@ -1997,14 +1971,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(width: 16),
-                                  Column(
-                                    children: [
-                                      Text('ml'),
-                                      Text('/'),
-                                      Text('L'),
-                                    ],
-                                  )
                                 ],
                               ),
                             ],

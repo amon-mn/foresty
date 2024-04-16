@@ -213,9 +213,11 @@ class _BatchDetailsPageState extends State<BatchDetailsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Tipo de Atividade: ${activity.tipoAtividade}',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              Expanded(
+                child: Text(
+                  'Tipo de Atividade: ${activity.tipoAtividade}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
               IconButton(
                 icon: Icon(Icons.edit),

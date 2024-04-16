@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:foresty/authentication/screens/components/ask_for_password.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -182,5 +186,66 @@ class AuthService {
       return e.code;
     }
     return null;
+  }
+
+  Future<String?> removeAccountWithEmail(
+      {required BuildContext context}) async {
+    try {
+      // Verifique se o usuário está autenticado com o provedor de e-mail/senha
+      if (_firebaseAuth.currentUser != null &&
+          _firebaseAuth.currentUser!.providerData
+              .any((provider) => provider.providerId == 'password')) {
+        // Se o usuário foi autenticado com e-mail/senha, solicite a senha
+        String? senha;
+        await showDialog(
+          context: context,
+          builder: (context) => AskForPassword(
+            onPasswordEntered: (password) {
+              senha = password;
+            },
+          ),
+        );
+
+        if (senha != null) {
+          await _firebaseAuth.signInWithEmailAndPassword(
+            email: _firebaseAuth.currentUser!.email!,
+            password: senha!,
+          );
+          await _firebaseAuth.currentUser!.delete();
+        } else {
+          return "Operação de exclusão de conta cancelada.";
+        }
+      } else {
+        // Se o usuário não foi autenticado com e-mail/senha,
+        // envie um e-mail de confirmação para confirmar a exclusão da conta.
+        String? email = _firebaseAuth.currentUser?.email;
+        if (email != null) {
+          await _sendDeleteAccountConfirmationEmail(email);
+        }
+        return "Um e-mail de confirmação foi enviado para a exclusão da conta.";
+      }
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+    return null;
+  }
+
+  Future<void> _sendDeleteAccountConfirmationEmail(String userEmail) async {
+    final smtpServer = gmail('your.email@gmail.com', 'yourpassword');
+
+    final message = Message()
+      ..from = Address('seu.email@gmail.com', 'Seu Nome')
+      ..recipients.add(userEmail)
+      ..subject = 'Confirme a exclusão da sua conta'
+      ..html =
+          '<p>Clique no link abaixo para confirmar a exclusão da sua conta:</p>'
+              '<p><a href="https://yourwebsite.com/delete-account?email=$userEmail">Confirmar exclusão da conta</a></p>';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } catch (e) {
+      print('Error sending email: $e');
+    }
   }
 }
