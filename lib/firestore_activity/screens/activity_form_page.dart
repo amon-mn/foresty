@@ -590,11 +590,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                       child: Column(
                                         children: [
                                           MyTextFieldWrapper(
-                                            inputFormatter:
-                                                MaskTextInputFormatter(
-                                              filter: {"#": RegExp(r'[0-9xX]')},
-                                              type: MaskAutoCompletionType.lazy,
-                                            ),
                                             controller:
                                                 _quantidade2, // Use um novo controller
                                             hintText: 'Quantidade',
@@ -797,10 +792,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               ),
                               const SizedBox(height: 4),
                               MyTextFieldWrapper(
-                                inputFormatter: MaskTextInputFormatter(
-                                  filter: {"#": RegExp(r'[0-9xX]')},
-                                  type: MaskAutoCompletionType.lazy,
-                                ),
                                 controller: _quantidade1,
                                 hintText: 'Quantidade',
                                 obscureText: false,
@@ -1610,10 +1601,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                               child: Column(
                                 children: [
                                   MyTextFieldWrapper(
-                                    inputFormatter: MaskTextInputFormatter(
-                                      filter: {"#": RegExp(r'[0-9xX]')},
-                                      type: MaskAutoCompletionType.lazy,
-                                    ),
                                     controller: _quantidade1,
                                     hintText: 'Quantidade',
                                     obscureText: false,
@@ -1710,11 +1697,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         MyTextFieldWrapper(
-                                          inputFormatter:
-                                              MaskTextInputFormatter(
-                                            filter: {"#": RegExp(r'[0-9xX]')},
-                                            type: MaskAutoCompletionType.lazy,
-                                          ),
                                           controller:
                                               _quantidade1, // Use um novo controller
                                           hintText: 'Quantidade',
@@ -1950,11 +1932,6 @@ class _ActivityFormPageState extends State<ActivityFormPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         MyTextFieldWrapper(
-                                          inputFormatter:
-                                              MaskTextInputFormatter(
-                                            filter: {"#": RegExp(r'[0-9xX]')},
-                                            type: MaskAutoCompletionType.lazy,
-                                          ),
                                           controller:
                                               _quantidade1, // Use um novo controller
                                           hintText: 'Quantidade',

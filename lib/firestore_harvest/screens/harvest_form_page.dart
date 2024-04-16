@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foresty/components/my_button.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/components/my_textfield.dart';
+import 'package:foresty/components/show_snackbar.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_batch/services/batch_service.dart';
 import 'package:foresty/firestore_harvest/models/harvest.dart';
@@ -202,6 +203,10 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                               });
 
                               Navigator.pop(context);
+                              showSnackBar(
+                                  context: context,
+                                  mensagem: 'Colheita registrada com sucesso.',
+                                  isErro: false);
                             }
                           },
                           textButton: 'Salvar',

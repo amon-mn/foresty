@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:foresty/components/my_button.dart';
 import 'package:foresty/components/my_dropdown.dart';
 import 'package:foresty/components/my_textfield.dart';
+import 'package:foresty/components/show_snackbar.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_batch/services/batch_service.dart';
 import 'package:foresty/firestore_qr_codes/models/qrCode.dart';
@@ -336,6 +337,11 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
                               });
 
                               Navigator.pop(context);
+                              showSnackBar(
+                                  context: context,
+                                  mensagem:
+                                      'QrCode criado com sucesso. Acesse a página de Etiquetas para visualiza-lo.',
+                                  isErro: false);
                             }
                           },
                           textButton: 'Salvar',
