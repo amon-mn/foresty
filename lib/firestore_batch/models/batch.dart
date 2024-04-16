@@ -1,7 +1,6 @@
 import 'package:foresty/firestore_activity/models/batch_activity.dart';
 import 'package:foresty/firestore_harvest/models/harvest.dart';
 import 'package:foresty/firestore_qr_codes/models/qrCode.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class ProductBatch {
   String id;

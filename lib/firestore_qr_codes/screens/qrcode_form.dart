@@ -22,7 +22,7 @@ class QrCodeFormPage extends StatefulWidget {
 }
 
 class _QrCodeFormPageState extends State<QrCodeFormPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   ValueNotifier<String> selectedSaleType = ValueNotifier<String>('Selecione');
   final TextEditingController _labelValue = TextEditingController();
   final TextEditingController _quantitySold = TextEditingController();
@@ -116,13 +116,13 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: Text('Gerar QR Code'),
       ),
       body: Form(
-        key: _formKey,
+        key: formKey,
         child: Stack(
           children: [
             Container(
@@ -228,7 +228,7 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
                       obscureText: false,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, informe o valor que irá na etiqueta';
+                          return 'Por favor, informe um valor para a venda';
                         }
                         return null;
                       },
@@ -296,41 +296,47 @@ class _QrCodeFormPageState extends State<QrCodeFormPage> {
                         width: MediaQuery.of(context).size.width * 0.43,
                         child: MyButton(
                           onTap: () async {
-                            setState(() {
-                              _isLoading =
-                                  true; // Ativar o indicador de loading
-                            });
+                            if (formKey.currentState != null &&
+                                formKey.currentState!.validate()) {
+                              setState(() {
+                                _isLoading =
+                                    true; // Ativar o indicador de loading
+                              });
 
-                            BatchQrCode batchQrCode = BatchQrCode(
-                              id: Uuid().v4(),
-                              tipoDeVenda: selectedSaleType.value,
-                              pesoDaVenda: _quantitySoldValue.value.toString(),
-                              unidadeDeMedida: selectedUnit.value,
-                              etiqueta: Etiqueta(
-                                peso: _quantitySoldValue.value.toString(),
-                                unidade: selectedUnit.value,
-                                codLote:
-                                    widget.batch?.nomeLote.toString() ?? '',
-                                dataExpedicao: DateFormat('dd/MM/yyyy')
-                                    .format(DateTime.now()),
-                                endereco: address,
-                                cpfCnpj: cpfCnpj,
-                                dataQrCode: widget.user.uid,
-                                valor: _saleAmount.value.toString(),
-                                nomeDoProduto:
-                                    widget.batch?.nomeProduto.toString() ?? '',
-                              ),
-                              isOrganico: showImage,
-                            ); // Feche o formulário ou faça qualquer outra ação necessária
+                              BatchQrCode batchQrCode = BatchQrCode(
+                                id: Uuid().v4(),
+                                tipoDeVenda: selectedSaleType.value,
+                                pesoDaVenda:
+                                    _quantitySoldValue.value.toString(),
+                                unidadeDeMedida: selectedUnit.value,
+                                etiqueta: Etiqueta(
+                                  peso: _quantitySoldValue.value.toString(),
+                                  unidade: selectedUnit.value,
+                                  codLote:
+                                      widget.batch?.nomeLote.toString() ?? '',
+                                  dataExpedicao: DateFormat('dd/MM/yyyy')
+                                      .format(DateTime.now()),
+                                  endereco: address,
+                                  cpfCnpj: cpfCnpj,
+                                  dataQrCode: widget.user.uid,
+                                  valor: _saleAmount.value.toString(),
+                                  nomeDoProduto:
+                                      widget.batch?.nomeProduto.toString() ??
+                                          '',
+                                ),
+                                isOrganico: showImage,
+                              ); // Feche o formulário ou faça qualquer outra ação necessária
 
-                            batchService.addQrCode(
-                                batch: widget.batch!, batchQrCode: batchQrCode);
-                            setState(() {
-                              _isLoading =
-                                  false; // Ativar o indicador de loading
-                            });
+                              batchService.addQrCode(
+                                  batch: widget.batch!,
+                                  batchQrCode: batchQrCode);
+                              setState(() {
+                                _isLoading =
+                                    false; // Ativar o indicador de loading
+                              });
 
-                            Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
                           },
                           textButton: 'Salvar',
                         ),

@@ -63,22 +63,19 @@ class Tag extends StatelessWidget {
                   children: [
                     Text(
                       'Lote: $lote',
-                      style: const TextStyle(fontSize: 10),
+                      style: const TextStyle(fontSize: 12),
                     ),
-                    const SizedBox(width: 4.0),
                     Text(
                       'Data de expedição: $dataExpedicao',
-                      style: const TextStyle(fontSize: 10),
+                      style: const TextStyle(fontSize: 12),
                     ),
-                    SizedBox(height: 4.0),
                     Text(
                       endereco,
-                      style: const TextStyle(fontSize: 10),
+                      style: const TextStyle(fontSize: 12),
                     ),
-                    SizedBox(height: 4.0),
                     Text(
                       'CPF/CNPJ: ${mascararCpfCnpj(cpfCnpj)}',
-                      style: const TextStyle(fontSize: 10),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ],
                 ),
