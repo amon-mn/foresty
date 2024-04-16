@@ -130,7 +130,7 @@ class _BatchFormPageState extends State<BatchFormPage> {
         padding: EdgeInsets.all(16.0),
         child: Container(
           padding: EdgeInsets.all(20),
-          margin: EdgeInsets.symmetric(horizontal: 20),
+          margin: EdgeInsets.symmetric(horizontal: 6),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
@@ -673,6 +673,10 @@ class _BatchFormPageState extends State<BatchFormPage> {
                                     batchService.addBatch(batch: batch);
 
                                     Navigator.pop(context);
+                                    showSnackBar(
+                                        context: context,
+                                        mensagem: 'Lote criado com sucesso.',
+                                        isErro: false);
                                   }
                                 }
                               },
