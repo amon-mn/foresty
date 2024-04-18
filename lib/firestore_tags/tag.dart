@@ -41,15 +41,29 @@ class Tag extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                nomeDoProduto,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+              Row(
+                children: [
+                  Text(
+                    nomeDoProduto,
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+                  ),
+                  const SizedBox(width: 8.0),
+                  Text(
+                    '$peso $unidade',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                ],
               ),
-              const SizedBox(width: 8.0),
-              Text(
-                '$peso $unidade',
-                style: const TextStyle(fontSize: 18),
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: Image.asset(
+                  'lib/assets/bw_rastech.png',
+                  height: 50,
+                  width: 50,
+                ),
               ),
             ],
           ),

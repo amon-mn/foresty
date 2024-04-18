@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foresty/authentication/screens/about_screen.dart';
 import 'package:foresty/firestore_batch/models/batch.dart';
 import 'package:foresty/firestore_tags/screens/tags_page.dart';
 import 'package:image_picker/image_picker.dart';
@@ -128,6 +129,18 @@ class MyDrawer extends StatelessWidget {
                     listBatchs: listBatchs,
                     user: user,
                   ),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text('Sobre'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AboutScreen(),
                 ),
               );
             },

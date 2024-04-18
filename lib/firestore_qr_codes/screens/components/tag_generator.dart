@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:qr_flutter/qr_flutter.dart'; // Importe a biblioteca qr_flutter
 
 class EtiquetaProduto extends StatelessWidget {
@@ -39,20 +40,31 @@ class EtiquetaProduto extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                nomeDoProduto,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
-              ),
-              const SizedBox(width: 8.0),
-              ValueListenableBuilder<double>(
-                valueListenable: peso,
-                builder: (context, pesoAtual, _) {
-                  return Text(
-                    '$pesoAtual ${unidade.value}',
-                    style: const TextStyle(fontSize: 18),
-                  );
-                },
+              Row(children: [
+                Text(
+                  nomeDoProduto,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+                ),
+                const SizedBox(width: 8.0),
+                ValueListenableBuilder<double>(
+                  valueListenable: peso,
+                  builder: (context, pesoAtual, _) {
+                    return Text(
+                      '$pesoAtual ${unidade.value}',
+                      style: const TextStyle(fontSize: 18),
+                    );
+                  },
+                ),
+              ]),
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: Image.asset(
+                  'lib/assets/bw_rastech.png',
+                  height: 50,
+                  width: 50,
+                ),
               ),
             ],
           ),
@@ -87,7 +99,7 @@ class EtiquetaProduto extends StatelessWidget {
               QrImageView(
                 data: '$urlQrCode$dataQrCode',
                 version: QrVersions.auto,
-                size: 100.0,
+                size: 90.0,
               ),
             ],
           ),

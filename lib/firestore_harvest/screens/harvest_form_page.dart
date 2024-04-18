@@ -23,6 +23,7 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
   BatchService batchService = BatchService();
   ValueNotifier<String> selectedUnit = ValueNotifier<String>('Selecione');
   final TextEditingController _quantityProduced = TextEditingController();
+  final TextEditingController _harvestCost = TextEditingController();
 
   String harvestDate = DateTime.now().toString();
 
@@ -114,6 +115,31 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
+                      'Custo da Colheita',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                  MyTextFieldWrapper(
+                    hintText: 'Digite um número',
+                    controller: _harvestCost,
+                    obscureText: false,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Informe o custo da atividade.";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
                       'Quantidade produzida',
                       style: TextStyle(
                         fontSize: 18.0,
@@ -189,6 +215,7 @@ class _HarvestFormPageState extends State<HarvestFormPage> {
 
                               Harvest harvest = Harvest(
                                 id: Uuid().v4(),
+                                custo: _harvestCost.text,
                                 quantidadeProduzida: _quantityProduced.text,
                                 unidade: selectedUnit.value,
                                 dataDaColheita: harvestDate,
